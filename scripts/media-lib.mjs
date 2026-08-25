@@ -108,8 +108,19 @@ export async function writeManifest(assets) {
   return sorted;
 }
 
-export const publicBase = () =>
-  (process.env.PUBLIC_MEDIA_BASE_URL || "").replace(/\/+$/, "");
+/**
+ * Origen público del bucket. `src/lib/assets.ts` es la fuente única de esa URL;
+ * leerla de ahí evita que CI dependa de configurar una variable más y evita que
+ * las dos copias se desincronicen en silencio.
+ */
+export async function publicBase() {
+  const configured = process.env.PUBLIC_MEDIA_BASE_URL;
+  if (configured) return configured.replace(/\/+$/, "");
+
+  const source = await readFile(path.join(ROOT, "src", "lib", "assets.ts"), "utf8");
+  const match = /DEFAULT_BASE\s*=\s*"([^"]+)"/.exec(source);
+  return (match?.[1] ?? "").replace(/\/+$/, "");
+}
 
 export const bytes = (n) =>
   n >= 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.round(n / 1024)} KB`;

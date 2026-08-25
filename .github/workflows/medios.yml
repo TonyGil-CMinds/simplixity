@@ -61,7 +61,9 @@ jobs:
           git push
 
       - name: Verificar que el manifest coincide con el bucket
-        # No usa dependencias ni credenciales: solo la URL pública.
+        # No usa dependencias ni credenciales: toma la URL pública de
+        # src/lib/assets.ts. La variable solo hace falta para apuntar a otro
+        # bucket sin tocar el código.
         run: node scripts/media-verify.mjs
         env:
           PUBLIC_MEDIA_BASE_URL: ${{ vars.PUBLIC_MEDIA_BASE_URL }}

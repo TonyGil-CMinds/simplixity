@@ -9,7 +9,7 @@ import { loadEnv, bytes, pool, publicBase, readManifest } from "./media-lib.mjs"
 
 await loadEnv();
 
-const base = publicBase();
+const base = await publicBase();
 if (!base) {
   console.error("PUBLIC_MEDIA_BASE_URL no está definida.");
   process.exit(1);

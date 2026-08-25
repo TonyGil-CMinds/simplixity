@@ -10,7 +10,7 @@ import { bytes, hashFile, loadEnv, localPath, pool, publicBase, readManifest } f
 
 await loadEnv();
 
-const base = publicBase();
+const base = await publicBase();
 if (!base) {
   console.error("PUBLIC_MEDIA_BASE_URL no está definida.");
   process.exit(1);
