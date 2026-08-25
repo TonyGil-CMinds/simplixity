@@ -288,7 +288,7 @@ export const narrativeProjects: readonly NarrativeProject[] = [
     slug: "oceanos-vitales",
     word: "Océanos Vitales",
     title: "Océanos Vitales",
-    credits: "SIMPLIXITY / C MINDS / SEAMINES",
+    credits: "C MINDS / BID LAB / FUNDES",
     date: "03 / bitácora · Baja California",
     note: "Una red de comunidades, ciencia e instituciones para convertir historias del mar en Áreas Marinas Protegidas.",
     tags: ["Océano", "Comunidades", "Inteligencia artificial"],
