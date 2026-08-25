@@ -22,7 +22,7 @@ import {
   readManifest,
   writeManifest,
 } from "./media-lib.mjs";
-import { connect, hasCredentials, upload } from "./media-r2.mjs";
+import { connect, explainMissing, hasCredentials, upload } from "./media-r2.mjs";
 
 const INBOX = path.join(ROOT, "media-inbox");
 

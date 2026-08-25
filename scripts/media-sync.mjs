@@ -20,7 +20,7 @@ import {
   walkMedia,
   writeManifest,
 } from "./media-lib.mjs";
-import { connect, hasCredentials, listRemote, remove, upload } from "./media-r2.mjs";
+import { connect, explainMissing, hasCredentials, listRemote, remove, upload } from "./media-r2.mjs";
 
 const flags = new Set(process.argv.slice(2));
 const dryRun = flags.has("--dry-run");
@@ -35,7 +35,7 @@ if (!hasCredentials()) {
     // Caso normal de quien solo edita código: no hay nada que hacer.
     process.exit(0);
   }
-  console.error("Faltan credenciales de R2 (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET).");
+  console.error(explainMissing());
   console.error("Si no las tienes, deja el archivo en media-inbox/ y haz push: CI lo publica.");
   process.exit(1);
 }
