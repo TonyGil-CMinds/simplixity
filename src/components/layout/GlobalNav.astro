@@ -1,0 +1,143 @@
+---
+import { site } from "../../data/site";
+
+const isHome = Astro.url.pathname === "/";
+const sectionHref = (id: string) => isHome ? `#${id}` : `/#${id}`;
+---
+
+<a
+  href={isHome ? "#contacto" : "/"}
+  class="fixed top-[26px] left-7 z-[70] block h-[43px] w-[37px] transition-opacity hover:opacity-75"
+  aria-label={`${site.name}, ir a contacto`}
+>
+  <img src="/brand/logos/isotipo-pink.svg" alt="" class="absolute inset-0 size-full" />
+  <img
+    src="/brand/logos/isotipo-white.svg"
+    alt=""
+    class="absolute inset-0 size-full opacity-0 transition-opacity duration-300"
+    data-logo-white
+  />
+</a>
+
+<button
+  type="button"
+  class="menu-toggle fixed top-7 right-7 z-[70] flex size-[54px] flex-col items-center justify-center gap-1 rounded-full border-0 text-navy shadow-[0_4px_18px_rgba(14,42,71,.18)] transition-[background,color,transform] duration-300 hover:rotate-3"
+  aria-label="Abrir menú"
+  aria-controls="site-menu"
+  aria-expanded="false"
+  data-menu-toggle
+>
+  <span class="block h-0.5 w-[18px] bg-current"></span>
+  <span class="block h-0.5 w-[18px] bg-current"></span>
+  <span class="block h-0.5 w-[18px] bg-current"></span>
+</button>
+
+<aside
+  id="site-menu"
+  class="site-menu fixed inset-0 z-[80] overflow-hidden bg-navy text-white"
+  aria-hidden="true"
+  data-menu
+>
+  <div class="halftone-light opacity-[0.18]"></div>
+  <img
+    src="/brand/logos/isotipo-pink.svg"
+    alt=""
+    class="pointer-events-none absolute top-1/2 left-1/2 h-[78vh] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-90"
+  />
+
+  <button
+    type="button"
+    class="absolute top-7 right-7 z-10 grid size-[54px] place-items-center rounded-full border-0 bg-pink text-2xl font-light text-white transition-colors hover:bg-white hover:text-navy"
+    aria-label="Cerrar menú"
+    data-menu-close
+  >
+    ×
+  </button>
+
+  <div class="relative grid h-full grid-cols-1 content-center gap-12 px-[clamp(28px,5vw,80px)] py-28 lg:grid-cols-[1fr_.5fr_1fr] lg:items-center">
+    <nav class="menu-links flex flex-col gap-0" aria-label="Navegación principal">
+      <a href={sectionHref("trabajo")}>Trabajo</a>
+      <a href={sectionHref("servicios")}>Servicios</a>
+      <a href={sectionHref("metodo")}>Método</a>
+      <a href={isHome ? "/narrativas" : "#bitacora"}>Narrativas</a>
+      <a href={sectionHref("contacto")}>Contacto</a>
+    </nav>
+    <div class="hidden lg:block"></div>
+    <div class="menu-contact flex max-w-md flex-col items-start gap-4">
+      <p class="font-display m-0 text-[clamp(30px,3.4vw,52px)] leading-none">¿Nos escribimos?</p>
+      <p class="m-0 max-w-[34ch] text-base leading-normal text-muted">
+        Cuéntanos qué quieres hacer posible. Respondemos rápido, con ideas claras y sin rodeos.
+      </p>
+      <a
+        href={`mailto:${site.email}`}
+        class="rounded-[10px] bg-yellow px-[22px] py-[13px] text-[15px] font-bold text-navy transition-transform hover:-translate-y-0.5"
+      >
+        {site.email}
+      </a>
+    </div>
+  </div>
+
+  <div class="menu-social absolute bottom-8 left-[clamp(28px,5vw,80px)] flex gap-[22px] text-[13px] font-semibold text-muted">
+    <a href={sectionHref("trabajo")}>Instagram</a>
+    <a href={sectionHref("trabajo")}>YouTube</a>
+    <a href={sectionHref("trabajo")}>LinkedIn</a>
+  </div>
+</aside>
+
+<style>
+  .menu-toggle { background: var(--color-cyan); }
+  .menu-toggle[data-tone="solid"] { background: white; }
+  .menu-toggle:hover { background: var(--color-navy); color: white; }
+
+  .site-menu {
+    visibility: hidden;
+    transform: translateY(-100%);
+    transition:
+      transform 620ms var(--ease-overlay),
+      visibility 620ms;
+  }
+
+  .site-menu.is-open {
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .menu-links a {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5vw, 4.875rem);
+    font-weight: 900;
+    line-height: 0.98;
+    transition: color 220ms ease, translate 280ms var(--ease-studio);
+  }
+
+  .menu-links a:hover,
+  .menu-links a:focus-visible { translate: 0.16em 0; }
+  .menu-links a:nth-child(1):hover { color: var(--color-pink); }
+  .menu-links a:nth-child(2):hover { color: var(--color-yellow); }
+  .menu-links a:nth-child(3):hover { color: var(--color-lilac); }
+  .menu-links a:nth-child(4):hover { color: var(--color-pink); }
+  .menu-links a:nth-child(5):hover { color: var(--color-cyan); }
+
+  .site-menu .menu-links,
+  .site-menu .menu-contact,
+  .site-menu .menu-social {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 480ms ease, transform 620ms var(--ease-studio);
+  }
+
+  .site-menu.is-open .menu-links,
+  .site-menu.is-open .menu-contact,
+  .site-menu.is-open .menu-social {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .site-menu.is-open .menu-contact { transition-delay: 120ms; }
+  .site-menu.is-open .menu-social { transition-delay: 180ms; }
+
+  @media (max-height: 680px) {
+    .menu-links a { font-size: clamp(2rem, 7vh, 3.4rem); }
+    .menu-social { display: none; }
+  }
+</style>

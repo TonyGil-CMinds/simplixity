@@ -1,0 +1,37 @@
+---
+import { services } from "../../data/site";
+---
+
+<section
+  id="servicios"
+  class="story-panel z-[5] grid grid-cols-[1fr_auto_1fr] content-center items-center gap-[clamp(24px,4vw,64px)] bg-lilac px-[var(--section-inline)] py-[var(--section-block)] max-lg:grid-cols-[.85fr_1.15fr] max-md:grid-cols-1"
+  data-tone="solid"
+  aria-labelledby="services-title"
+>
+  <div class="halftone-dark opacity-30"></div>
+  <div class="relative">
+    <h2 id="services-title" class="font-display m-0 text-[clamp(44px,5.6vw,92px)] leading-[.86] text-navy" data-title-reveal>
+      Pensar claro<br /><span class="text-white">para crear<br />mejor.</span>
+    </h2>
+    <p class="mt-[clamp(14px,3vh,30px)] mb-0 max-w-[46ch] text-[clamp(14px,2.6vh,19px)] leading-[1.4] font-medium text-navy">
+      Diseñamos experiencias que hacen entendibles ideas complejas y las convierten en algo que las personas pueden vivir, recordar y compartir.
+    </p>
+  </div>
+
+  <div class="media-stripes relative grid h-[clamp(330px,44vw,560px)] w-[clamp(230px,26vw,400px)] place-items-center rounded-[22px] text-[11px] font-semibold text-white max-lg:hidden" data-reveal="1" data-parallax="5">
+    laboratorio creativo 4:5
+  </div>
+
+  <div class="relative flex flex-col gap-[clamp(12px,3.4vh,26px)]" data-reveal="2">
+    {services.map((service) => (
+      <article class="border-t border-navy/25 pt-[clamp(8px,2vh,16px)]">
+        <h3 class="font-display m-0 text-[clamp(20px,min(2.4vw,4.6vh),40px)] leading-[.94] text-white">{service.name}</h3>
+        <div class="mt-[clamp(6px,1.6vh,14px)] flex flex-wrap gap-2">
+          {service.items.map((item) => (
+            <span class="rounded-full bg-navy px-[13px] py-[clamp(4px,1.1vh,7px)] text-[clamp(11px,1.9vh,13px)] font-medium text-white">{item}</span>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

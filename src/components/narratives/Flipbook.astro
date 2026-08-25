@@ -1,0 +1,490 @@
+---
+import { narrativeProjects } from "../../data/narratives";
+import NarrativePage from "./NarrativePage.astro";
+import SpreadTemplates from "./SpreadTemplates.astro";
+import DoodleArrow from "./DoodleArrow.astro";
+
+const firstProject = narrativeProjects[0];
+const firstSpread = firstProject.spreads[0];
+const clientData = narrativeProjects.map((project) => ({
+  slug: project.slug,
+  word: project.word,
+  title: project.title,
+  context: project.credits ?? project.kind,
+  spreads: project.spreads.map(({ id, label }) => ({ id, label })),
+}));
+---
+
+<section id="bitacora" class="flipbook-section" aria-labelledby="bitacora-title" data-flipbook>
+  <div class="flipbook-heading">
+    <p class="project-context" data-project-context>{firstProject.credits ?? firstProject.kind}</p>
+    <h1 id="bitacora-title" class="sr-only" data-project-title>{firstProject.title}</h1>
+    <p class="project-word font-display" aria-hidden="true" data-project-word>{firstProject.word}</p>
+  </div>
+
+  <div class="book-controls">
+    <button class="turn-button" type="button" data-book-prev aria-label="Página anterior">
+      <DoodleArrow variant="left" class="turn-arrow" />
+    </button>
+
+    <div class="book-shell">
+      <div class="book" data-book-stage>
+        <div class="book-base" data-book-base>
+          <div class="book-half book-half--left" data-base-left>
+            <NarrativePage project={firstProject} projectIndex={0} spreadIndex={0} side="left" />
+          </div>
+          <div class="book-half book-half--right" data-base-right>
+            <NarrativePage project={firstProject} projectIndex={0} spreadIndex={0} side="right" />
+          </div>
+        </div>
+
+        <div class="turning-page" data-turning-page hidden aria-hidden="true">
+          <div class="page-face page-face--front" data-turn-front></div>
+          <div class="page-face page-face--back" data-turn-back></div>
+        </div>
+        <span class="book-spine" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <button class="turn-button" type="button" data-book-next aria-label="Página siguiente">
+      <DoodleArrow variant="right" class="turn-arrow" />
+    </button>
+  </div>
+
+  <div class="book-caption">
+    <p class="spread-label" data-spread-label>{firstSpread.label}</p>
+    <p class="spread-count" data-spread-count>Pliego 1 de {firstProject.spreads.length}</p>
+    <div class="spread-dots" data-spread-dots aria-label="Páginas de la bitácora"></div>
+    <p class="sr-only" aria-live="polite" data-book-live>{firstProject.title}, {firstSpread.label}</p>
+  </div>
+
+  <script is:inline type="application/json" data-flipbook-data set:html={JSON.stringify(clientData)} />
+  <SpreadTemplates />
+</section>
+
+<script>
+  import gsap from "gsap";
+
+  type ProjectMeta = {
+    slug: string;
+    word: string;
+    title: string;
+    context: string;
+    spreads: { id: string; label: string }[];
+  };
+
+  const root = document.querySelector<HTMLElement>("[data-flipbook]");
+
+  if (root) {
+    const dataNode = root.querySelector<HTMLScriptElement>("[data-flipbook-data]");
+    const projects: ProjectMeta[] = JSON.parse(dataNode?.textContent || "[]");
+    const stage = root.querySelector<HTMLElement>("[data-book-stage]")!;
+    const baseLeft = root.querySelector<HTMLElement>("[data-base-left]")!;
+    const baseRight = root.querySelector<HTMLElement>("[data-base-right]")!;
+    const turningPage = root.querySelector<HTMLElement>("[data-turning-page]")!;
+    const turnFront = root.querySelector<HTMLElement>("[data-turn-front]")!;
+    const turnBack = root.querySelector<HTMLElement>("[data-turn-back]")!;
+    const previousButton = root.querySelector<HTMLButtonElement>("[data-book-prev]")!;
+    const nextButton = root.querySelector<HTMLButtonElement>("[data-book-next]")!;
+    const projectWord = root.querySelector<HTMLElement>("[data-project-word]")!;
+    const projectTitle = root.querySelector<HTMLElement>("[data-project-title]")!;
+    const projectContext = root.querySelector<HTMLElement>("[data-project-context]")!;
+    const spreadLabel = root.querySelector<HTMLElement>("[data-spread-label]")!;
+    const spreadCount = root.querySelector<HTMLElement>("[data-spread-count]")!;
+    const spreadDots = root.querySelector<HTMLElement>("[data-spread-dots]")!;
+    const liveRegion = root.querySelector<HTMLElement>("[data-book-live]")!;
+    const singlePageQuery = window.matchMedia("(max-width: 639px)");
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let currentProject = 0;
+    let currentSpread = 0;
+    let currentSide: 0 | 1 = 0;
+    let isTurning = false;
+    let pointerStart: number | null = null;
+
+    const isSinglePage = () => singlePageQuery.matches;
+    const spreadTotal = () => projects[currentProject]?.spreads.length || 1;
+    const pageTotal = () => spreadTotal() * 2;
+    const pageIndex = () => currentSpread * 2 + currentSide;
+
+    const clonePage = (projectIndex: number, spreadIndex: number, side: "left" | "right") => {
+      const template = root.querySelector<HTMLTemplateElement>(
+        `template[data-spread-template][data-project="${projectIndex}"][data-spread="${spreadIndex}"][data-side="${side}"]`,
+      );
+      return template?.content.cloneNode(true) as DocumentFragment | undefined;
+    };
+
+    const mountPage = (slot: HTMLElement, projectIndex: number, spreadIndex: number, side: "left" | "right") => {
+      slot.replaceChildren();
+      const page = clonePage(projectIndex, spreadIndex, side);
+      if (page) slot.append(page);
+    };
+
+    const mountBlank = (slot: HTMLElement) => slot.replaceChildren();
+
+    const renderRestingState = () => {
+      mountPage(baseLeft, currentProject, currentSpread, "left");
+      if (isSinglePage()) {
+        if (currentSide === 1) mountPage(baseLeft, currentProject, currentSpread, "right");
+        mountBlank(baseRight);
+      } else {
+        mountPage(baseRight, currentProject, currentSpread, "right");
+      }
+      turningPage.hidden = true;
+      turningPage.removeAttribute("style");
+      turnFront.replaceChildren();
+      turnBack.replaceChildren();
+      window.dispatchEvent(new CustomEvent("simplixity:pagesmounted"));
+    };
+
+    const updateDots = () => {
+      const count = isSinglePage() ? pageTotal() : spreadTotal();
+      const active = isSinglePage() ? pageIndex() : currentSpread;
+      spreadDots.replaceChildren();
+
+      for (let index = 0; index < count; index += 1) {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "spread-dot";
+        dot.dataset.pageTarget = String(index);
+        dot.setAttribute("aria-label", `${isSinglePage() ? "Página" : "Pliego"} ${index + 1}`);
+        if (index === active) dot.setAttribute("aria-current", "page");
+        spreadDots.append(dot);
+      }
+    };
+
+    const updateUI = () => {
+      const project = projects[currentProject];
+      const spread = project.spreads[currentSpread];
+      const atStart = isSinglePage() ? pageIndex() === 0 : currentSpread === 0;
+      const atEnd = isSinglePage() ? pageIndex() === pageTotal() - 1 : currentSpread === spreadTotal() - 1;
+
+      projectWord.textContent = project.word;
+      projectTitle.textContent = project.title;
+      projectContext.textContent = project.context;
+      spreadLabel.textContent = isSinglePage()
+        ? `${spread.label} · ${currentSide === 0 ? "izquierda" : "derecha"}`
+        : spread.label;
+      spreadCount.textContent = isSinglePage()
+        ? `Página ${pageIndex() + 1} de ${pageTotal()}`
+        : `Pliego ${currentSpread + 1} de ${spreadTotal()}`;
+      liveRegion.textContent = `${project.title}, ${spreadLabel.textContent}`;
+      previousButton.disabled = atStart || isTurning;
+      nextButton.disabled = atEnd || isTurning;
+      updateDots();
+
+      document.querySelectorAll<HTMLElement>("[data-open-project]").forEach((card) => {
+        const active = Number(card.dataset.openProject) === currentProject;
+        if (active) card.setAttribute("aria-current", "true");
+        else card.removeAttribute("aria-current");
+      });
+    };
+
+    const setFromFlatPage = (flatIndex: number) => {
+      currentSpread = Math.floor(flatIndex / 2);
+      currentSide = (flatIndex % 2) as 0 | 1;
+    };
+
+    const prepareTurn = (direction: 1 | -1) => {
+      turningPage.hidden = false;
+      turningPage.classList.toggle("turning-page--previous", direction === -1);
+      turningPage.classList.toggle("turning-page--single", isSinglePage());
+      turningPage.style.setProperty("--fold-shadow", "0");
+
+      if (isSinglePage()) {
+        const targetFlat = pageIndex() + direction;
+        const targetSpread = Math.floor(targetFlat / 2);
+        const targetSide = targetFlat % 2 === 0 ? "left" : "right";
+        const currentSideName = currentSide === 0 ? "left" : "right";
+        mountPage(baseLeft, currentProject, targetSpread, targetSide);
+        mountPage(turnFront, currentProject, currentSpread, currentSideName);
+        mountPage(turnBack, currentProject, targetSpread, targetSide);
+        mountBlank(baseRight);
+        return;
+      }
+
+      const targetSpread = currentSpread + direction;
+      if (direction === 1) {
+        mountPage(baseLeft, currentProject, currentSpread, "left");
+        mountPage(baseRight, currentProject, targetSpread, "right");
+        mountPage(turnFront, currentProject, currentSpread, "right");
+        mountPage(turnBack, currentProject, targetSpread, "left");
+      } else {
+        mountPage(baseLeft, currentProject, targetSpread, "left");
+        mountPage(baseRight, currentProject, currentSpread, "right");
+        mountPage(turnFront, currentProject, currentSpread, "left");
+        mountPage(turnBack, currentProject, targetSpread, "right");
+      }
+    };
+
+    const completeTurn = (direction: 1 | -1) => {
+      if (isSinglePage()) {
+        setFromFlatPage(pageIndex() + direction);
+      } else {
+        currentSpread += direction;
+        const finalSlot = direction === 1 ? baseLeft : baseRight;
+        mountPage(finalSlot, currentProject, currentSpread, direction === 1 ? "left" : "right");
+      }
+
+      requestAnimationFrame(() => {
+        turningPage.hidden = true;
+        turningPage.removeAttribute("style");
+        turnFront.replaceChildren();
+        turnBack.replaceChildren();
+        isTurning = false;
+        updateUI();
+        window.dispatchEvent(new CustomEvent("simplixity:pagesmounted"));
+        window.dispatchEvent(new CustomEvent("simplixity:spreadchange", {
+          detail: { projectIndex: currentProject, spreadIndex: currentSpread, side: currentSide },
+        }));
+      });
+    };
+
+    const turn = (direction: 1 | -1) => {
+      if (isTurning) return;
+      const nextIndex = isSinglePage() ? pageIndex() + direction : currentSpread + direction;
+      const max = isSinglePage() ? pageTotal() - 1 : spreadTotal() - 1;
+      if (nextIndex < 0 || nextIndex > max) return;
+
+      isTurning = true;
+      updateUI();
+      prepareTurn(direction);
+
+      if (reducedMotionQuery.matches) {
+        gsap.fromTo(stage, { opacity: 0.55 }, {
+          opacity: 1,
+          duration: 0.18,
+          ease: "power1.out",
+          onComplete: () => completeTurn(direction),
+        });
+        return;
+      }
+
+      gsap.set(turningPage, {
+        rotationY: 0,
+        transformOrigin: direction === 1 ? "left center" : "right center",
+      });
+      gsap.to(turningPage, {
+        rotationY: direction === 1 ? -180 : 180,
+        "--fold-shadow": 1,
+        duration: 0.82,
+        ease: "power2.inOut",
+        onComplete: () => completeTurn(direction),
+      });
+    };
+
+    const selectProject = (projectIndex: number, updateHash = true) => {
+      if (!projects[projectIndex] || isTurning) return;
+      currentProject = projectIndex;
+      currentSpread = 0;
+      currentSide = 0;
+      renderRestingState();
+      updateUI();
+      if (updateHash) history.replaceState(null, "", `#${projects[projectIndex].slug}`);
+      window.dispatchEvent(new CustomEvent("simplixity:projectchange", { detail: { projectIndex } }));
+      root.scrollIntoView({ behavior: reducedMotionQuery.matches ? "auto" : "smooth", block: "start" });
+    };
+
+    previousButton.addEventListener("click", () => turn(-1));
+    nextButton.addEventListener("click", () => turn(1));
+
+    spreadDots.addEventListener("click", (event) => {
+      const dot = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-page-target]");
+      if (!dot || isTurning) return;
+      const target = Number(dot.dataset.pageTarget);
+      if (isSinglePage()) {
+        setFromFlatPage(target);
+      } else {
+        currentSpread = target;
+        currentSide = 0;
+      }
+      renderRestingState();
+      updateUI();
+    });
+
+    document.addEventListener("click", (event) => {
+      const card = (event.target as HTMLElement).closest<HTMLElement>("[data-open-project]");
+      if (!card) return;
+      event.preventDefault();
+      selectProject(Number(card.dataset.openProject));
+    });
+
+    stage.addEventListener("pointerdown", (event) => {
+      const target = event.target as HTMLElement;
+      if (target.closest("button, input, a, label")) return;
+      pointerStart = event.clientX;
+      stage.setPointerCapture(event.pointerId);
+    });
+
+    stage.addEventListener("pointerup", (event) => {
+      if (pointerStart === null) return;
+      const distance = event.clientX - pointerStart;
+      pointerStart = null;
+      if (Math.abs(distance) > 48) turn(distance < 0 ? 1 : -1);
+    });
+
+    stage.addEventListener("pointercancel", () => { pointerStart = null; });
+
+    window.addEventListener("keydown", (event) => {
+      const target = event.target as HTMLElement;
+      if (target.matches("input, textarea, select, [contenteditable]")) return;
+      if (event.key === "ArrowRight") turn(1);
+      if (event.key === "ArrowLeft") turn(-1);
+      if (event.key === "Home") {
+        currentSpread = 0;
+        currentSide = 0;
+        renderRestingState();
+        updateUI();
+      }
+      if (event.key === "End") {
+        currentSpread = spreadTotal() - 1;
+        currentSide = isSinglePage() ? 1 : 0;
+        renderRestingState();
+        updateUI();
+      }
+    });
+
+    singlePageQuery.addEventListener("change", () => {
+      currentSide = 0;
+      renderRestingState();
+      updateUI();
+    });
+
+    const hashProject = projects.findIndex(({ slug }) => slug === window.location.hash.slice(1));
+    if (hashProject >= 0) currentProject = hashProject;
+    renderRestingState();
+    updateUI();
+  }
+</script>
+
+<style>
+  .flipbook-section {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    padding: clamp(96px, 11vh, 132px) var(--section-inline) clamp(70px, 9vh, 110px);
+    background:
+      radial-gradient(circle at 16% 8%, rgb(255 193 7 / .24), transparent 25%),
+      radial-gradient(rgb(14 42 71 / .035) .65px, transparent .8px),
+      linear-gradient(180deg, #f7f3e9 0%, #eeedf0 100%);
+    background-size: auto, 8px 8px, auto;
+  }
+  .flipbook-heading { position: relative; z-index: 1; display: grid; min-height: clamp(62px, 7.4vw, 94px); place-items: start center; margin: 0 auto clamp(-16px, -1.2vw, -8px); max-width: 1180px; text-align: center; pointer-events: none; }
+  .project-context { position: relative; z-index: 2; margin: 0; color: #667888; font-size: clamp(8px, .72vw, 11px); font-weight: 500; letter-spacing: .27em; line-height: 1.5; text-transform: uppercase; }
+  .project-word {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    margin: 0;
+    translate: -50% -42%;
+    filter: blur(clamp(4px, .46vw, 8px));
+    color: rgb(35 94 210 / .33);
+    font-size: clamp(72px, 12vw, 172px);
+    font-weight: 900;
+    letter-spacing: -.045em;
+    line-height: .78;
+    white-space: nowrap;
+  }
+  .book-controls { display: grid; grid-template-columns: 58px minmax(0, auto) 58px; align-items: center; justify-content: center; gap: clamp(10px, 2vw, 26px); }
+  .book-shell { position: relative; }
+  .book {
+    position: relative;
+    width: min(1120px, 82vw, calc((100svh - 245px) * 1.547));
+    aspect-ratio: 1728 / 1117;
+    perspective: 2400px;
+    transform-style: preserve-3d;
+    touch-action: pan-y;
+    user-select: none;
+  }
+  .book-base { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid rgb(14 42 71 / .12); border-radius: 7px 10px 8px 6px; background: #f8f4e9; box-shadow: 0 26px 36px rgb(14 42 71 / .18), 0 4px 0 rgb(255 255 255 / .72); }
+  .book-half { min-width: 0; min-height: 0; overflow: hidden; container-type: inline-size; }
+  .book-half > :global(.book-page),
+  .page-face > :global(.book-page) { width: 100%; height: 100%; }
+  .book-half--left { border-radius: 8px 0 0 8px; }
+  .book-half--right { border-radius: 0 8px 8px 0; }
+  .book-spine {
+    position: absolute;
+    z-index: 8;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 34px;
+    translate: -50% 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgb(14 42 71 / .18) 42%, rgb(255 255 255 / .34) 51%, rgb(14 42 71 / .06) 58%, transparent);
+    mix-blend-mode: multiply;
+  }
+  .turning-page {
+    --fold-shadow: 0;
+    position: absolute;
+    z-index: 6;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .turning-page--previous { right: auto; left: 0; }
+  .page-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background: #f8f7f3;
+    container-type: inline-size;
+    transform: rotateY(0deg) translateZ(.1px);
+  }
+  .page-face--front { box-shadow: calc(-18px * var(--fold-shadow)) 0 30px rgb(14 42 71 / calc(.23 * var(--fold-shadow))); }
+  .page-face--back { transform: rotateY(180deg) translateZ(.1px); box-shadow: calc(18px * var(--fold-shadow)) 0 30px rgb(14 42 71 / calc(.2 * var(--fold-shadow))); }
+  .turn-button {
+    position: relative;
+    display: grid;
+    width: 58px;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 2px solid rgb(14 42 71 / .72);
+    border-radius: 48% 52% 44% 56% / 53% 46% 54% 47%;
+    background: rgb(255 251 238 / .76);
+    color: #0e2a47;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 180ms ease, background 180ms ease, opacity 180ms ease;
+  }
+  .turn-button::after { content: ""; position: absolute; inset: 4px -3px -3px 3px; border: 1px solid rgb(14 42 71 / .28); border-radius: 52% 48% 57% 43% / 45% 56% 44% 55%; rotate: -5deg; pointer-events: none; }
+  .turn-button:hover:not(:disabled) { transform: scale(1.06) rotate(-2deg); background: #ffe29a; }
+  .turn-button:disabled { opacity: .24; cursor: not-allowed; }
+  :global(.turn-arrow) { width: 32px; height: 22px; }
+  .book-caption { display: grid; justify-items: center; margin-top: 22px; }
+  .spread-label { margin: 0; font-family: var(--font-hand); font-size: clamp(18px, 1.65vw, 24px); line-height: 1; }
+  .spread-count { margin: 7px 0 12px; color: #617381; font-family: var(--font-hand); font-size: 13px; letter-spacing: .035em; }
+  .spread-dots { display: flex; gap: 8px; }
+  :global(.spread-dot) { width: 17px; height: 7px; padding: 0; border: 1px solid rgb(14 42 71 / .38); border-radius: 48% 52% 44% 56%; background: transparent; rotate: -2deg; cursor: pointer; transition: width 180ms ease, background 180ms ease, rotate 180ms ease; }
+  :global(.spread-dot:nth-child(even)) { rotate: 3deg; }
+  :global(.spread-dot[aria-current="page"]) { width: 31px; background: #0e2a47; rotate: -1deg; }
+
+  @media (max-width: 639px) {
+    .flipbook-section { padding-inline: 14px; }
+    .flipbook-heading { min-height: 62px; margin-bottom: 0; }
+    .project-context { max-width: 34ch; font-size: 7px; letter-spacing: .19em; }
+    .project-word { font-size: clamp(54px, 18vw, 82px); }
+    .book-controls { position: relative; display: block; }
+    .book-shell { width: max-content; margin-inline: auto; }
+    .turn-button { position: absolute; z-index: 10; top: 50%; width: 34px; translate: 0 -50%; font-size: 18px; }
+    .turn-button:first-child { left: 0; }
+    .turn-button:last-child { right: 0; }
+    .book { width: min(74vw, calc((100svh - 210px) * .7735)); aspect-ratio: 864 / 1117; }
+    .book-base { grid-template-columns: 1fr; }
+    .book-half--right { display: none; }
+    .book-spine { display: none; }
+    .turning-page,
+    .turning-page--previous,
+    .turning-page--single { right: 0; left: 0; width: 100%; }
+    .book-caption { margin-top: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .turn-button, :global(.spread-dot) { transition: none; }
+  }
+</style>

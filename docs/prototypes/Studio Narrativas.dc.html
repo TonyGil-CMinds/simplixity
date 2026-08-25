@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Neulis Cursive'; src: url('../../public/brand/fonts/neulis-cursive-regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+  html, body { margin: 0; padding: 0; background: #F4F4F6; }
+  body { font-family: 'Hanken Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #29B6F6; text-decoration: none; }
+  a:hover { color: #FF4FA3; }
+</style>
+</helmet>
+
+<div style="position: relative; background: #F4F4F6; color: #0E2A47; overflow-x: hidden;">
+
+  <a href="Studio Landing.dc.html" style="position: fixed; top: 26px; left: 28px; z-index: 60; display: block; height: 62px;" style-hover="opacity: 0.7"><img src="../../public/brand/logos/isotipo-navy.svg" alt="Studio" style="height: 62px; width: auto; display: block;"></a>
+
+  <div style="display: none;">
+    <div style="width: 40px; height: 40px; border-radius: 10px; background: #FFC107; color: #0E2A47; display: grid; place-items: center; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; font-size: 20px; letter-spacing: 0em;">S</div>
+  </div>
+
+  <a href="#portafolios" style="position: fixed; top: 28px; right: 28px; z-index: 60; height: 54px; padding: 0 22px; border-radius: 9999px; background: #29B6F6; color: #0E2A47; display: inline-flex; align-items: center; font-weight: 800; font-size: 14px;" style-hover="background: #FFC107">Portafolios</a>
+
+  <section data-screen-label="Bitácora — flipbook" style="position: relative; min-height: 100vh; padding: 104px clamp(24px, 4vw, 56px) 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; overflow: hidden;">
+    <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: #5A6B78;">Narrativas / biblioteca interactiva / bitácora visual</div>
+
+    <div style="position: absolute; top: 13vh; left: 0; right: 0; text-align: center; font-size: clamp(80px, 12vw, 210px); line-height: 0.85; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #29B6F6; filter: blur(7px); opacity: 0.5; pointer-events: none; user-select: none;">{{ activeWord }}</div>
+
+    <div style="position: relative; width: min(1040px, 92vw); display: flex; align-items: center; justify-content: center; gap: clamp(10px, 3vw, 40px);">
+      <button onClick="{{ prev }}" style="flex: none; width: 46px; height: 46px; border: none; border-radius: 9999px; background: transparent; color: #0E2A47; font-size: 24px; font-weight: 300; cursor: pointer;" style-hover="background: #FFFFFF">‹</button>
+
+      <div style="position: relative; flex: 1 1 auto; max-width: 780px; aspect-ratio: 3 / 2; perspective: 2400px;">
+        <div style="position: absolute; inset: 0; display: flex; border-radius: 6px; overflow: hidden; box-shadow: 0 34px 70px rgba(14,42,71,0.22);">
+          <div style="flex: 1; background: #FBF7EF; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(14,42,71,0.12);">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #8A8578;">{{ activeDate }}</div>
+            <div style="flex: 1; margin: 16px 0; border-radius: 4px; background: repeating-linear-gradient(135deg, #EDE6D8 0 10px, #FBF7EF 10px 20px); display: grid; place-items: center;">
+              <span style="font-size: 12px; font-weight: 600; color: #8A8578;">boceto / recorte de proceso</span>
+            </div>
+            <div style="font-size: 14px; font-weight: 500; line-height: 1.45; color: #4A4638; max-width: 34ch;">{{ activeNote }}</div>
+          </div>
+          <div style="flex: 1; background: #FBF7EF; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: inset 18px 0 30px -22px rgba(14,42,71,0.35);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div style="font-size: 22px; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #0E2A47;">{{ activeTitle }}</div>
+              <div style="width: 34px; height: 34px; border-radius: 6px; background: #FF4FA3; color: #FFFFFF; display: grid; place-items: center; font-size: 11px; font-weight: 700;">{{ activeIndexLabel }}</div>
+            </div>
+            <div style="flex: 1; margin: 16px 0; border-radius: 4px; background: repeating-linear-gradient(135deg, #E6EDF2 0 10px, #F4F8FA 10px 20px); display: grid; place-items: center;">
+              <span style="font-size: 12px; font-weight: 600; color: #6B7C88;">ilustración del recorrido</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <sc-for list="{{ activeTags }}" as="t" hint-placeholder-count="3">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: #EBF1E9; color: #0E2A47; padding: 6px 11px; border-radius: 9999px;">{{ t }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="position: absolute; top: 0; bottom: 0; left: 50%; width: 50%; transform-origin: left center; background: #FBF7EF; border-radius: 0 6px 6px 0; box-shadow: -8px 0 30px rgba(14,42,71,0.18); transition: transform 560ms cubic-bezier(.4,.05,.2,1); transform: {{ flipTransform }}; opacity: {{ flipOpacity }}; pointer-events: none; background-image: repeating-linear-gradient(135deg, #EFE9DB 0 10px, #FBF7EF 10px 20px);"></div>
+      </div>
+
+      <button onClick="{{ next }}" style="flex: none; width: 46px; height: 46px; border: none; border-radius: 9999px; background: transparent; color: #0E2A47; font-size: 24px; font-weight: 300; cursor: pointer;" style-hover="background: #FFFFFF">›</button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 6px;">
+      <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #0E2A47;">{{ activeTitle }}</div>
+      <div style="display: flex; gap: 8px;">
+        <sc-for list="{{ dots }}" as="d" hint-placeholder-count="4">
+          <button onClick="{{ d.go }}" style="width: 30px; height: 4px; border: none; border-radius: 9999px; cursor: pointer; padding: 0; background: {{ d.color }};"></button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="portafolios" data-screen-label="Portafolios" style="position: relative; background: #0E2A47; color: #FFFFFF; padding: clamp(70px, 9vw, 130px) clamp(24px, 4vw, 56px);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; margin-bottom: 46px;">
+      <div>
+        <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #29B6F6; margin-bottom: 14px;">Portafolios</div>
+        <div style="font-size: clamp(40px, 5.2vw, 84px); line-height: 0.88; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em;">Cuatro<br><span style="color: #FFC107;">narrativas</span></div>
+      </div>
+      <p style="max-width: 44ch; margin: 0; font-size: 17px; line-height: 1.5; color: #8FB4CE;">Cada tarjeta abre el portafolio completo: la investigación, el sistema visual y las decisiones detrás de la narrativa.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px);">
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="4">
+        <a href="#" onClick="{{ p.go }}" style="border-radius: 22px; background: {{ p.bg }}; color: {{ p.fg }}; padding: 22px 22px 28px; min-height: clamp(320px, 34vw, 460px); display: flex; flex-direction: column; justify-content: space-between; gap: 20px;" style-hover="transform: translateY(-6px)">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;">
+            <span>{{ p.kind }}</span>
+            <span>{{ p.n }}</span>
+          </div>
+          <div style="flex: 1; border-radius: 14px; background: {{ p.slot }}; display: grid; place-items: center;">
+            <span style="font-size: 11px; font-weight: 600; opacity: 0.7;">portada 4:5</span>
+          </div>
+          <div>
+            <div style="font-size: clamp(24px, 2.1vw, 38px); line-height: 0.92; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em;">{{ p.name }}</div>
+            <div style="margin-top: 12px; font-size: 13px; font-weight: 600;">Abrir bitácora →</div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="Cierre" style="position: relative; background: #EBF1E9; padding: clamp(70px, 9vw, 130px) clamp(24px, 4vw, 56px); display: flex; flex-direction: column; gap: 28px;">
+    <div style="font-size: clamp(40px, 6vw, 104px); line-height: 0.86; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FF4FA3;">Una biblioteca<br><span style="color: #0E2A47;">que se hojea.</span></div>
+    <p style="max-width: 56ch; margin: 0; font-size: 19px; line-height: 1.5; font-weight: 500; color: #0E2A47;">Cada proyecto se documenta como bitácora: bocetos, referencias, pruebas y resultados en el orden en que ocurrieron. El recorrido visual es parte del entregable.</p>
+    <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; color: #5A6B78;">
+      <div style="width: 30px; height: 30px; border-radius: 8px; background: #0E2A47; color: #FFFFFF; display: grid; place-items: center; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; font-size: 15px;">S</div>
+      <span>Studio — spin-off de C Minds</span>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { i: 0, flipping: false };
+
+  spreads = [
+    { word: 'RUTA', title: 'Ruta Eléctrica', date: '01 / bitácora · abr 2026', note: 'Mapeamos ocho ciudades antes de definir el tono. La narrativa nació de las notas de campo, no del brief.', tags: ['Identidad', 'Campaña', 'Territorio'], kind: 'Movilidad', bg: '#FF4FA3', fg: '#FFFFFF', slot: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.28) 0 9px, rgba(255,255,255,0.14) 9px 18px)' },
+    { word: 'NODO', title: 'Nodo Verde', date: '02 / bitácora · may 2026', note: 'Tres semanas de talleres con el equipo técnico para traducir datos de energía en imágenes.', tags: ['Marca', 'Data', 'Editorial'], kind: 'Energía', bg: '#29B6F6', fg: '#0E2A47', slot: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.4) 0 9px, rgba(255,255,255,0.18) 9px 18px)' },
+    { word: 'FERIA', title: 'Feria Abierta', date: '03 / bitácora · jun 2026', note: 'La experiencia se diseñó caminando el recinto: cada pieza responde a un punto del recorrido.', tags: ['Experiencia', 'Espacio', 'Señalética'], kind: 'Evento', bg: '#B798FF', fg: '#0E2A47', slot: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.42) 0 9px, rgba(255,255,255,0.2) 9px 18px)' },
+    { word: 'SEÑAL', title: 'Señal Abierta', date: '04 / bitácora · ago 2026', note: 'Un archivo de 200 piezas de contenido ordenado como colección para poder reusarlo.', tags: ['Contenido', 'Sistema', 'Archivo'], kind: 'Medios', bg: '#FFC107', fg: '#0E2A47', slot: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 0 9px, rgba(255,255,255,0.24) 9px 18px)' }
+  ];
+
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  turn(delta) {
+    if (this.state.flipping) return;
+    const n = this.spreads.length;
+    this.setState({ flipping: true });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState(s => ({ i: (s.i + delta + n) % n, flipping: false }));
+    }, 560);
+  }
+
+  goTo(i) { if (i !== this.state.i && !this.state.flipping) this.turn(i - this.state.i); }
+
+  renderVals() {
+    const s = this.spreads[this.state.i];
+    return {
+      activeWord: s.word,
+      activeTitle: s.title,
+      activeDate: s.date,
+      activeNote: s.note,
+      activeTags: s.tags,
+      activeIndexLabel: '0' + (this.state.i + 1),
+      flipTransform: this.state.flipping ? 'rotateY(-168deg)' : 'rotateY(0deg)',
+      flipOpacity: this.state.flipping ? 1 : 0,
+      prev: () => this.turn(-1),
+      next: () => this.turn(1),
+      dots: this.spreads.map((sp, i) => ({
+        color: i === this.state.i ? '#0E2A47' : 'rgba(14,42,71,0.25)',
+        go: () => this.goTo(i)
+      })),
+      projects: this.spreads.map((sp, i) => ({
+        n: '0' + (i + 1), name: sp.title, kind: sp.kind,
+        bg: sp.bg, fg: sp.fg, slot: sp.slot,
+        go: (e) => { e.preventDefault(); this.setState({ i, flipping: false }); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+---
+const items = [
+  ["Estrategia", "text-yellow"],
+  ["Diseño de experiencias", "text-pink"],
+  ["Tecnología creativa", "text-cyan"],
+  ["Narrativas", "text-lilac"],
+];
+---
+
+<div class="relative z-[2] overflow-hidden bg-navy py-[18px] whitespace-nowrap text-white" aria-hidden="true">
+  <div class="marquee-track inline-flex gap-12 text-[13px] font-semibold tracking-[.18em] uppercase">
+    {[...items, ...items].map(([label, color]) => (
+      <><span>{label}</span><span class={color}>✳</span></>
+    ))}
+  </div>
+</div>

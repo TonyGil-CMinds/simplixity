@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Loader from "../components/layout/Loader.astro";
+import GlobalNav from "../components/layout/GlobalNav.astro";
+import Hero from "../components/landing/Hero.astro";
+import Marquee from "../components/landing/Marquee.astro";
+import Manifesto from "../components/landing/Manifesto.astro";
+import Work from "../components/landing/Work.astro";
+import Services from "../components/landing/Services.astro";
+import Method from "../components/landing/Method.astro";
+import Contact from "../components/landing/Contact.astro";
+---
+
+<BaseLayout>
+  <Loader />
+  <GlobalNav />
+  <main id="contenido" class="relative bg-page text-navy">
+    <Hero />
+    <Marquee />
+    <Manifesto />
+    <Work />
+    <Services />
+    <Method />
+    <Contact />
+  </main>
+</BaseLayout>

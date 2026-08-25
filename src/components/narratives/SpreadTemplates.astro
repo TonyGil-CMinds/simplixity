@@ -1,0 +1,19 @@
+---
+import { narrativeProjects } from "../../data/narratives";
+import NarrativePage from "./NarrativePage.astro";
+---
+
+<div class="hidden" aria-hidden="true" data-spread-templates>
+  {narrativeProjects.map((project, projectIndex) => (
+    project.spreads.map((_, spreadIndex) => (
+      <>
+        <template data-spread-template data-project={projectIndex} data-spread={spreadIndex} data-side="left">
+          <NarrativePage project={project} projectIndex={projectIndex} spreadIndex={spreadIndex} side="left" />
+        </template>
+        <template data-spread-template data-project={projectIndex} data-spread={spreadIndex} data-side="right">
+          <NarrativePage project={project} projectIndex={projectIndex} spreadIndex={spreadIndex} side="right" />
+        </template>
+      </>
+    ))
+  ))}
+</div>

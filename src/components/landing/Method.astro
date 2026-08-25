@@ -1,0 +1,40 @@
+---
+import { methodSteps } from "../../data/site";
+---
+
+<section
+  id="metodo"
+  class="story-panel z-[6] grid grid-cols-[1fr_auto_.9fr] content-center items-center gap-[clamp(24px,4vw,64px)] bg-sage px-[var(--section-inline)] py-[var(--section-block)] max-lg:grid-cols-[.85fr_1.15fr] max-md:grid-cols-1"
+  data-tone="light"
+  aria-labelledby="method-title"
+>
+  <h2 id="method-title" class="font-display relative m-0 text-[clamp(44px,5.6vw,92px)] leading-[.86] text-pink" data-title-reveal>
+    Primero<br />el orden.<br /><span class="text-lilac">Siempre.</span>
+  </h2>
+
+  <div class="relative h-[clamp(340px,46vw,580px)] w-[clamp(240px,27vw,400px)] max-lg:hidden" data-reveal="1" data-parallax="5">
+    <div class="font-display absolute inset-[0_14px_70px_-14px] grid -rotate-4 place-items-start rounded-3xl bg-pink pt-[22px] text-3xl text-white">Estrategia</div>
+    <div class="absolute inset-[92px_-10px_-30px_10px] flex rotate-2 flex-col items-center justify-between rounded-3xl bg-navy p-[26px] text-center">
+      <p class="font-display m-0 text-3xl leading-[.9] text-white">Dirección<br />de experiencia</p>
+      <strong class="font-display text-[clamp(90px,11vw,160px)] leading-none text-sage">02</strong>
+      <p class="m-0 text-xs font-semibold text-muted">Revelar la idea que<br />hace única la experiencia.</p>
+    </div>
+  </div>
+
+  <div class="relative flex flex-col gap-[clamp(10px,2.8vh,22px)]" data-reveal="2">
+    <p class="m-0 max-w-[40ch] text-[clamp(15px,2.7vh,19px)] leading-[1.35] font-bold text-navy">
+      Cada proyecto sigue un proceso claro, colaborativo y estructurado.
+    </p>
+    <p class="m-0 max-w-[46ch] text-[clamp(14px,2.5vh,18px)] leading-[1.45] text-navy">
+      Porque una experiencia efectiva no se improvisa. Combinamos estrategia, creatividad y rigor para convertir una ambición en algo real.
+    </p>
+    <div class="mt-[clamp(2px,1.4vh,10px)] flex flex-col gap-[clamp(4px,1.4vh,10px)]">
+      {methodSteps.map((step) => (
+        <div class="flex items-baseline gap-3.5 border-b border-navy/15 pb-[clamp(4px,1.4vh,10px)]">
+          <span class="text-xs font-semibold text-pink">{step.n}</span>
+          <span class="text-[clamp(13px,2.4vh,17px)] font-medium text-navy">{step.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

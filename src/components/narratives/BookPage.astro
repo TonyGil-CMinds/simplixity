@@ -1,0 +1,71 @@
+---
+import type { NarrativeProject } from "../../data/narratives";
+
+interface Props {
+  project: NarrativeProject;
+  index: number;
+  side: "left" | "right";
+  class?: string;
+}
+
+const { project, index, side, class: className = "" } = Astro.props;
+---
+
+<article
+  class:list={[
+    "book-page paper-texture relative flex min-w-0 flex-col justify-between overflow-hidden p-[clamp(18px,3vw,30px)]",
+    side === "right" ? "book-page--right" : "book-page--left",
+    className,
+  ]}
+  style={`--page-accent:${project.accent};--page-paper:${project.paper}`}
+>
+  {side === "left" ? (
+    <>
+      <p class="page-date m-0 text-[11px] text-[#7A756A]">{project.date}</p>
+      <div class="process-slot media-stripes my-4 grid min-h-0 flex-1 place-items-center rounded-md">
+        <span class="slot-note px-3 text-center text-xs text-[#7A756A]">boceto / recorte de proceso</span>
+      </div>
+      <p class="m-0 max-w-[36ch] text-[clamp(12px,1.3vw,14px)] leading-[1.45] font-medium text-[#4A4638]">{project.note}</p>
+    </>
+  ) : (
+    <>
+      <div class="flex items-start justify-between gap-3">
+        <h3 class="page-title m-0 text-[clamp(20px,2.3vw,30px)] leading-none text-navy">{project.title}</h3>
+        <span class="page-index grid size-[34px] shrink-0 place-items-center text-[11px] text-white" style={`background:${project.accent}`}>
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+      <div class="route-slot media-stripes my-4 grid min-h-0 flex-1 place-items-center rounded-md">
+        <span class="slot-note px-3 text-center text-xs text-[#627482]">ilustración del recorrido</span>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <span class="page-tag bg-sage px-[11px] py-1.5 text-[10px] text-navy">{tag}</span>
+        ))}
+      </div>
+    </>
+  )}
+</article>
+
+<style>
+  .book-page {
+    background-color: var(--page-paper);
+    background-image:
+      radial-gradient(rgb(14 42 71 / .045) .6px, transparent .8px),
+      repeating-linear-gradient(0deg, transparent 0 32px, rgb(42 108 152 / .035) 32px 33px);
+    background-size: 8px 8px, 100% 33px;
+    color: #0e2a47;
+  }
+  .book-page--left { border-right: 1px solid rgb(14 42 71 / 0.12); }
+  .book-page--right { box-shadow: inset 18px 0 30px -22px rgb(14 42 71 / 0.35); }
+  .page-date, .slot-note, .page-title, .page-index, .page-tag { font-family: var(--font-hand); }
+  .page-date { letter-spacing: .04em; rotate: -1deg; }
+  .page-title { font-weight: 400; rotate: -.8deg; }
+  .page-index { border: 2px solid #0e2a47; border-radius: 48% 52% 43% 57% / 54% 46% 56% 44%; box-shadow: 3px 3px 0 rgb(14 42 71 / .12); rotate: 5deg; }
+  .process-slot, .route-slot { border: 2px dashed rgb(14 42 71 / .36); border-radius: 5px 9px 7px 4px; rotate: -.25deg; }
+  .process-slot { background-color: color-mix(in srgb, var(--page-accent) 10%, #fbf7ef); }
+  .route-slot { background-color: color-mix(in srgb, var(--page-accent) 8%, #f4f8fa); rotate: .25deg; }
+  .slot-note { font-size: 14px; rotate: -1deg; }
+  .page-tag { border: 1px solid rgb(14 42 71 / .32); border-radius: 48% 52% 45% 55%; letter-spacing: .02em; rotate: -1deg; }
+  .page-tag:nth-child(even) { rotate: 2deg; }
+</style>

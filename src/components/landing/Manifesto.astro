@@ -1,0 +1,29 @@
+<section
+  class="story-panel z-[3] grid grid-cols-[1fr_auto_1fr] content-center items-center gap-[clamp(20px,4vw,70px)] bg-pink px-[var(--section-inline)] py-[var(--section-block)] max-md:grid-cols-1 max-md:justify-items-center max-md:gap-5"
+  data-tone="solid"
+  aria-labelledby="manifesto-title"
+>
+  <div class="halftone-light opacity-50"></div>
+  <h2 id="manifesto-title" class="font-display relative m-0 text-[clamp(38px,5.4vw,86px)] leading-[.88] text-white max-md:justify-self-start" data-title-reveal>
+    Nosotros<br />somos el<br />impulso,
+  </h2>
+  <div class="relative flex h-[clamp(300px,44vw,560px)] w-[clamp(210px,26vw,380px)] flex-col justify-between rounded-3xl bg-blush p-[18px]" data-reveal="1" data-parallax="4">
+    <div class="flex items-center justify-between">
+      <span class="font-display grid size-7 place-items-center rounded-lg bg-white text-sm text-pink">S</span>
+      <span class="text-[11px] font-semibold text-navy">-0:22</span>
+    </div>
+    <div class="media-stripes my-3.5 grid flex-1 place-items-center rounded-2xl text-[11px] font-semibold text-[#8A4C68]">retrato con halftone</div>
+    <p class="font-display m-0 text-[clamp(34px,4vw,58px)] leading-[.84] text-white">AGENCIA<br />Simplixity</p>
+  </div>
+  <p class="font-display relative m-0 text-right text-[clamp(38px,5.4vw,86px)] leading-[.88] text-blush max-md:justify-self-end" data-title-reveal>
+    Tú eres<br />la historia.
+  </p>
+</section>
+
+<style>
+  @media (max-width: 767px) {
+    section { padding-top: 6rem; padding-bottom: 3.5rem; }
+    h2, p { font-size: clamp(2.4rem, 12vw, 4.4rem); }
+    section > div:nth-of-type(2) { height: min(42vh, 360px); }
+  }
+</style>

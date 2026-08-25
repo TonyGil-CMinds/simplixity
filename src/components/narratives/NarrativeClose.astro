@@ -1,0 +1,16 @@
+---
+import { site } from "../../data/site";
+---
+
+<section class="story-panel z-[9] flex flex-col justify-center gap-7 bg-sage px-[var(--section-inline)] py-[var(--section-block)]" data-tone="light" aria-labelledby="library-title">
+  <h2 id="library-title" class="font-display m-0 text-[clamp(40px,6vw,104px)] leading-[.86] text-pink" data-title-reveal>
+    Una biblioteca<br /><span class="text-navy">que se hojea.</span>
+  </h2>
+  <p class="m-0 max-w-[56ch] text-[clamp(16px,2vw,19px)] leading-normal font-medium text-navy">
+    Cada proyecto se documenta como bitácora: bocetos, referencias, pruebas y resultados en el orden en que ocurrieron. El recorrido visual también es parte de la experiencia.
+  </p>
+  <div class="flex items-center gap-3 text-[13px] font-semibold text-[#5A6B78]">
+    <span class="font-display grid size-[30px] place-items-center rounded-lg bg-navy text-[15px] text-white">S</span>
+    <span>{site.name}, complejidad en movimiento</span>
+  </div>
+</section>

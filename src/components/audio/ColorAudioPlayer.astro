@@ -1,0 +1,137 @@
+---
+import type { SoundtrackTrack } from "../../data/narratives";
+
+interface Props {
+  track: SoundtrackTrack;
+  accent?: string;
+  class?: string;
+}
+
+const { track, accent = "#FFB000", class: className = "" } = Astro.props;
+const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
+const isLongTitle = track.title.length > 28;
+---
+
+<section
+  class:list={["color-player", { "color-player--long": isLongTitle }, className]}
+  style={`--player-accent:${accent}`}
+  data-audio-player
+  data-audio-src={track.src}
+  data-audio-title={track.title}
+  data-audio-artist="Tech4Nature, Banda Sonora Original"
+>
+  <p class="color-player__label">Banda sonora · escucha 01</p>
+  <div class="color-player__copy">
+    <h3>{track.title}</h3>
+    <p>Tech4Nature · Banda Sonora Original</p>
+  </div>
+  <button type="button" class="color-player__toggle" data-audio-toggle aria-label={`Reproducir ${track.title}`} aria-pressed="false">
+    <svg class="audio-icon audio-icon--play" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 12.8v22.4c0 1.7 1.9 2.7 3.3 1.8l17-11.2a2.1 2.1 0 0 0 0-3.6l-17-11.2c-1.4-.9-3.3.1-3.3 1.8Z" /></svg>
+    <svg class="audio-icon audio-icon--pause" viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="10" width="8" height="28" rx="4"/><rect x="27" y="10" width="8" height="28" rx="4"/></svg>
+  </button>
+  <div class="color-player__footer">
+    <div class="color-player__time">
+      <span data-audio-current>0:00</span>
+      <span data-audio-duration>{formatTime(track.duration)}</span>
+    </div>
+    <input
+      class="audio-progress"
+      type="range"
+      min="0"
+      max="1000"
+      value="0"
+      aria-label={`Posición de ${track.title}`}
+      data-audio-progress
+    />
+  </div>
+</section>
+
+<style>
+  .color-player {
+    --audio-progress: 0%;
+    position: relative;
+    display: flex;
+    min-height: 0;
+    aspect-ratio: 1 / .95;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: visible;
+    border: 2px solid rgb(14 42 71 / .72);
+    border-radius: 46% 54% 49% 51% / 7% 8% 6% 9%;
+    background-color: var(--player-accent);
+    background-image: radial-gradient(rgb(255 255 255 / .16) .7px, transparent .8px), linear-gradient(102deg, rgb(255 255 255 / .1), transparent 35%, rgb(98 55 0 / .06));
+    background-size: 7px 7px, 100% 100%;
+    color: #fffaf0;
+    padding: clamp(12px, 3.5cqw, 24px);
+    box-shadow: 5px 8px 0 rgb(14 42 71 / .08), 0 12px 24px rgb(132 82 0 / .12);
+    transform: rotate(-1.4deg);
+  }
+
+  .color-player::before {
+    content: "";
+    position: absolute;
+    inset: 5px -4px -4px 4px;
+    z-index: 0;
+    border: 1px solid rgb(14 42 71 / .42);
+    border-radius: 52% 48% 54% 46% / 8% 6% 9% 7%;
+    rotate: .8deg;
+    pointer-events: none;
+  }
+
+  .color-player::after {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    width: 27%;
+    height: 17px;
+    translate: -50% 0;
+    rotate: 2deg;
+    background: rgb(255 242 192 / .72);
+    box-shadow: inset 0 0 0 1px rgb(120 86 22 / .06);
+  }
+
+  .color-player__label { position: relative; z-index: 1; margin: 0 0 clamp(2px, .8cqw, 5px); font-family: var(--font-hand); font-size: clamp(7px, 2.2cqw, 11px); letter-spacing: .04em; }
+  .color-player__copy { position: relative; z-index: 1; }
+  h3 { max-width: 13ch; margin: 0; font-family: var(--font-hand); font-size: clamp(17px, 6cqw, 31px); font-weight: 400; line-height: .98; }
+  .color-player--long h3 { max-width: 15ch; font-size: clamp(14px, 5.1cqw, 25px); line-height: .94; }
+  .color-player--long .color-player__copy p { margin-top: clamp(2px, .8cqw, 5px); font-size: clamp(6px, 1.65cqw, 8px); }
+  .color-player--long .color-player__toggle { width: clamp(34px, 9cqw, 52px); height: clamp(34px, 9cqw, 52px); }
+  .color-player__copy p { max-width: 24ch; margin: clamp(4px, 1.3cqw, 8px) 0 0; font-size: clamp(6px, 1.8cqw, 9px); font-weight: 700; line-height: 1.25; }
+
+  .color-player__toggle {
+    align-self: center;
+    width: clamp(38px, 11cqw, 62px);
+    height: clamp(38px, 11cqw, 62px);
+    position: relative;
+    border: 2px solid currentColor;
+    border-radius: 48% 52% 45% 55% / 54% 46% 55% 45%;
+    background: rgb(255 250 240 / .16);
+    color: #fffaf0;
+    cursor: pointer;
+    transition: transform 260ms cubic-bezier(.16,1,.3,1), color 180ms ease;
+  }
+  .color-player__toggle::after { content: ""; position: absolute; inset: 3px -4px -3px 3px; border: 1px solid currentColor; border-radius: 53% 47% 57% 43%; opacity: .55; rotate: -7deg; }
+  .color-player__toggle:hover { color: #0e2a47; transform: scale(1.06) rotate(2deg); }
+  [data-playing="true"] .color-player__toggle { color: #0e2a47; background: rgb(255 250 240 / .42); }
+
+  .audio-icon { width: 72%; height: 72%; margin: auto; fill: currentColor; }
+  .audio-icon--play { display: block; }
+  .audio-icon--pause { display: none; }
+  [data-playing="true"] .audio-icon--play { display: none; }
+  [data-playing="true"] .audio-icon--pause { display: block; }
+
+  .color-player__footer { position: relative; z-index: 1; margin-inline: clamp(4px, 2cqw, 12px); }
+  .color-player__time { display: flex; justify-content: space-between; font-family: var(--font-hand); font-size: clamp(8px, 2.3cqw, 11px); }
+  .audio-progress {
+    display: block; width: 100%; height: 10px; margin: 5px 0 0; appearance: none; border: 1px solid rgb(255 250 240 / .88); border-radius: 46% 54% 49% 51%;
+    background: linear-gradient(90deg, #fffaf0 var(--audio-progress), rgb(255 250 240 / .28) var(--audio-progress));
+    rotate: -.4deg;
+    cursor: pointer;
+  }
+  .audio-progress::-webkit-slider-runnable-track { height: 8px; border-radius: 48% 52%; background: transparent; }
+  .audio-progress::-webkit-slider-thumb { width: 12px; height: 15px; margin-top: -3px; appearance: none; border: 2px solid #fffaf0; border-radius: 48% 52% 43% 57%; background: #0e2a47; }
+  .audio-progress::-moz-range-track { height: 8px; border-radius: 48% 52%; background: transparent; }
+  .audio-progress::-moz-range-thumb { width: 10px; height: 13px; border: 2px solid #fffaf0; border-radius: 48% 52%; background: #0e2a47; }
+  .audio-progress:focus-visible { outline-color: #0e2a47; }
+</style>

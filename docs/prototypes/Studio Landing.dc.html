@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,400&amp;display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Neulis Cursive'; src: url('../../public/brand/fonts/neulis-cursive-regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #F4F4F6; }
+  body { font-family: 'Hanken Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #29B6F6; text-decoration: none; }
+  a:hover { color: #FF4FA3; }
+  @keyframes studioRise { from { transform: translateY(18px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+  @keyframes studioMarquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  @keyframes logoTone { 0%, 17% { opacity: 0 } 18%, 71% { opacity: 1 } 72%, 87% { opacity: 0 } 88%, 100% { opacity: 1 } }
+  @keyframes revealUp { from { opacity: 0; transform: translateY(40px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes menuVeil { from { transform: translateY(-100%) } to { transform: translateY(0) } }
+  @keyframes menuItem { from { opacity: 0; transform: translateY(38px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes menuMark { from { opacity: 0; transform: scale(0.86) rotate(-6deg) } to { opacity: 1; transform: scale(1) rotate(0deg) } }
+  @property --om-hole { syntax: '<length>'; inherits: false; initial-value: 0px; }
+  @keyframes liquidFill { from { clip-path: inset(100% 0 0 0) } to { clip-path: inset(0 0 0 0) } }
+  @keyframes halftoneOut { 0% { --om-hole: 0px; opacity: 1 } 70% { --om-hole: 11px } 100% { --om-hole: 15px; opacity: 0 } }
+  @keyframes phraseIn { from { opacity: 0; transform: translateY(26px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes splitUp { from { transform: translateY(0) } to { transform: translateY(-62vh) } }
+  @keyframes splitDown { from { transform: translateY(0) } to { transform: translateY(62vh) } }
+  @keyframes boltStrike { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.04) rotate(-6deg) } 14% { opacity: 1; transform: translate(-50%, -50%) scale(0.3) rotate(0deg) } 38% { transform: translate(-50%, -50%) scale(0.62) } 100% { transform: translate(-50%, -50%) scale(30) } }
+  @keyframes heroIn { from { opacity: 0; transform: translateY(38px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes heroCard { from { opacity: 0; transform: translateY(56px) scale(0.94) } to { opacity: 1; transform: translateY(0) scale(1) } }
+  @keyframes studioBar { from { width: 4% } to { width: 100% } }
+</style>
+</helmet>
+
+<div style="position: relative; background: #F4F4F6; color: #0E2A47;">
+
+  <div style="position: fixed; inset: 0; z-index: 90; overflow: hidden; transition: opacity 520ms ease, visibility 520ms; opacity: {{ loaderOpacity }}; visibility: {{ loaderVisibility }};">
+    <div style="position: absolute; inset: 0; background: #FF4FA3; mask-image: radial-gradient(circle at center, transparent var(--om-hole), #000 calc(var(--om-hole) + 0.6px)); -webkit-mask-image: radial-gradient(circle at center, transparent var(--om-hole), #000 calc(var(--om-hole) + 0.6px)); mask-size: 22px 22px; -webkit-mask-size: 22px 22px; animation: halftoneOut 1200ms 1750ms cubic-bezier(.5,0,.5,1) forwards;"></div>
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; animation: halftoneOut 1000ms 1750ms linear forwards;">
+      <div style="position: relative; width: clamp(88px, 8vw, 128px); aspect-ratio: 171.56 / 274.84;">
+        <img src="../../public/brand/logos/monogram-white.svg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.28;">
+        <img src="../../public/brand/logos/monogram-white.svg" alt="Studio" style="position: absolute; inset: 0; width: 100%; height: 100%; animation: liquidFill 1500ms 200ms cubic-bezier(.45,.1,.25,1) both;">
+      </div>
+      <div style="font-family: 'Neulis Cursive', cursive; font-weight: 900; font-size: clamp(20px, 2vw, 30px); line-height: 1.1; color: #FFFFFF; text-align: center; animation: phraseIn 900ms 700ms cubic-bezier(.2,.8,.2,1) both;">Halfway there.<br>Always here.</div>
+    </div>
+  </div>
+
+  <a href="#contacto" style="position: fixed; top: 26px; left: 28px; z-index: 60; display: block; width: 37px; height: 43px;" style-hover="opacity: 0.75">
+    <img src="../../public/brand/logos/isotipo-pink.svg" alt="Studio" style="position: absolute; inset: 0; height: 43px; width: 37px; display: block;">
+    <img data-logo-white="1" src="../../public/brand/logos/isotipo-white.svg" alt="" style="position: absolute; inset: 0; height: 43px; width: 37px; display: block; opacity: 0; transition: opacity 260ms ease;">
+  </a>
+
+  <button data-burger="1" onClick="{{ toggleMenu }}" style="position: fixed; top: 28px; right: 28px; z-index: 60; width: 54px; height: 54px; border: none; border-radius: 9999px; background: #FFFFFF; color: #0E2A47; cursor: pointer; box-shadow: 0 4px 18px rgba(14,42,71,0.18); transition: background 300ms ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;" style-hover="background: #0E2A47; color: #FFFFFF">
+    <span style="display: block; width: 18px; height: 2px; background: currentColor;"></span>
+    <span style="display: block; width: 18px; height: 2px; background: currentColor;"></span>
+    <span style="display: block; width: 18px; height: 2px; background: currentColor;"></span>
+  </button>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 55; background: #0E2A47; overflow: hidden; animation: menuVeil 620ms cubic-bezier(.7,0,.2,1) both;">
+      <div style="position: absolute; inset: 0; background-image: radial-gradient(#B798FF 1.6px, transparent 1.7px); background-size: 12px 12px; opacity: 0.18;"></div>
+      <img src="../../public/brand/logos/isotipo-pink.svg" alt="" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 78vh; opacity: 0.9; animation: menuMark 900ms 200ms cubic-bezier(.2,.7,.2,1) both;">
+      <button onClick="{{ toggleMenu }}" style="position: absolute; top: 28px; right: 28px; width: 54px; height: 54px; border: none; border-radius: 9999px; background: #FF4FA3; color: #FFFFFF; font-size: 22px; font-weight: 300; cursor: pointer; animation: menuItem 500ms 120ms both;" style-hover="background: #FFFFFF; color: #0E2A47">×</button>
+
+      <div style="position: relative; height: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; padding: 0 clamp(28px, 5vw, 80px);">
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <a href="#trabajo" onClick="{{ toggleMenu }}" style="font-size: clamp(38px, 5vw, 78px); font-weight: 900; font-family: 'Neulis Cursive', cursive; line-height: 1; color: #FFFFFF; animation: menuItem 620ms 180ms both;" style-hover="color: #FF4FA3">Trabajo</a>
+          <a href="#servicios" onClick="{{ toggleMenu }}" style="font-size: clamp(38px, 5vw, 78px); font-weight: 900; font-family: 'Neulis Cursive', cursive; line-height: 1; color: #FFFFFF; animation: menuItem 620ms 260ms both;" style-hover="color: #FFC107">Servicios</a>
+          <a href="#metodo" onClick="{{ toggleMenu }}" style="font-size: clamp(38px, 5vw, 78px); font-weight: 900; font-family: 'Neulis Cursive', cursive; line-height: 1; color: #FFFFFF; animation: menuItem 620ms 340ms both;" style-hover="color: #B798FF">Método</a>
+          <a href="Studio Narrativas.dc.html" style="font-size: clamp(38px, 5vw, 78px); font-weight: 900; font-family: 'Neulis Cursive', cursive; line-height: 1; color: #FFFFFF; animation: menuItem 620ms 420ms both;" style-hover="color: #FFC107">Narrativas</a>
+          <a href="#contacto" onClick="{{ toggleMenu }}" style="font-size: clamp(38px, 5vw, 78px); font-weight: 900; font-family: 'Neulis Cursive', cursive; line-height: 1; color: #FFFFFF; animation: menuItem 620ms 500ms both;" style-hover="color: #29B6F6">Contacto</a>
+        </div>
+        <div></div>
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px; animation: menuItem 700ms 560ms both;">
+          <div style="font-size: clamp(30px, 3.4vw, 52px); font-weight: 900; font-family: 'Neulis Cursive', cursive; line-height: 1; color: #FFFFFF;">¿Nos escribimos?</div>
+          <p style="margin: 0; max-width: 34ch; font-size: 16px; line-height: 1.5; color: #8FB4CE;">Cuéntanos en qué estás trabajando. Respondemos rápido y sin rodeos.</p>
+          <a href="mailto:hola@studio.mx" style="font-size: 15px; font-weight: 700; color: #0E2A47; background: #FFC107; padding: 13px 22px; border-radius: 10px;">hola@studio.mx</a>
+        </div>
+      </div>
+
+      <div style="position: absolute; bottom: 34px; left: clamp(28px, 5vw, 80px); display: flex; gap: 22px; font-size: 13px; font-weight: 600; color: #8FB4CE; animation: menuItem 700ms 640ms both;">
+        <a href="#trabajo" style="color: #8FB4CE;">Instagram</a>
+        <a href="#trabajo" style="color: #8FB4CE;">YouTube</a>
+        <a href="#trabajo" style="color: #8FB4CE;">LinkedIn</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <section data-screen-label="Hero" data-tone="light" style="position: sticky; top: 0; z-index: 1; height: 100svh; overflow: hidden; padding: 96px clamp(24px, 4vw, 56px) clamp(24px, 4vh, 48px); display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;">
+    <div style="position: absolute; top: 8vh; left: 0; right: 0; width: auto; text-align: center; font-size: min(11.5vw, 15vh); animation: heroIn 1000ms 2500ms cubic-bezier(.2,.8,.2,1) both; line-height: 0.8; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #0E2A47; pointer-events: none; user-select: none;">Simplixity</div>
+
+    <div style="position: absolute; inset: 23vh 0 30vh; display: flex; align-items: center; justify-content: center; gap: clamp(12px, 2vw, 34px); pointer-events: none;">
+      <div style="width: clamp(170px, 17vw, 280px); height: min(clamp(260px, 30vw, 400px), 100%); border-radius: 20px; animation: heroCard 900ms 2750ms cubic-bezier(.2,.8,.2,1) both; background: #B798FF; background-image: radial-gradient(#0E2A47 1.5px, transparent 1.6px); background-size: 9px 9px; transform: rotate(-4deg); display: grid; place-items: end; padding: 18px;">
+        <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #0E2A47; background: #FFFFFF; padding: 5px 9px; border-radius: 9999px;">equipo / detrás de cámara</span>
+      </div>
+      <div style="width: clamp(230px, 24vw, 400px); height: min(clamp(300px, 38vw, 520px), 100%); border-radius: 22px; animation: heroCard 900ms 2650ms cubic-bezier(.2,.8,.2,1) both; background: #EBF1E9; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; box-shadow: 0 30px 60px rgba(14,42,71,0.14); z-index: 2;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="width: 30px; height: 30px; border-radius: 8px; background: #0E2A47; color: #fff; display: grid; place-items: center; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; font-size: 15px;">S</div>
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #0E2A47;">-0:22</span>
+        </div>
+        <div style="flex: 1; margin: 14px 0; border-radius: 14px; background: repeating-linear-gradient(135deg, #DDE6DB 0 8px, #EBF1E9 8px 16px); display: grid; place-items: center;">
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #5A6B78;">reel principal 9:16</span>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; background: #FFFFFF; color: #0E2A47; padding: 6px 10px; border-radius: 9999px;">Identidad</span>
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; background: #FFFFFF; color: #0E2A47; padding: 6px 10px; border-radius: 9999px;">Contenido</span>
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; background: #FFFFFF; color: #0E2A47; padding: 6px 10px; border-radius: 9999px;">Growth</span>
+        </div>
+      </div>
+      <div style="width: clamp(170px, 17vw, 280px); height: min(clamp(260px, 30vw, 400px), 100%); border-radius: 20px; animation: heroCard 900ms 2850ms cubic-bezier(.2,.8,.2,1) both; background: #29B6F6; background-image: radial-gradient(rgba(255,255,255,0.85) 1.5px, transparent 1.6px); background-size: 9px 9px; transform: rotate(4deg); display: grid; place-items: end; padding: 18px;">
+        <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #0E2A47; background: #FFFFFF; padding: 5px 9px; border-radius: 9999px;">merch / apparel</span>
+      </div>
+    </div>
+
+    <div style="position: relative; z-index: 3; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
+      <div style="animation: heroIn 900ms 2950ms cubic-bezier(.2,.8,.2,1) both;">
+        <div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #29B6F6; margin-bottom: 14px;">Agencia creativa · spin-off de C Minds</div>
+        <h1 style="margin: 0; font-size: clamp(46px, 6.6vw, 108px); line-height: 0.86; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FF4FA3;">Human<br><span style="color: #B798FF;">Tech Club</span></h1>
+      </div>
+      <div data-reveal="1" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; width: min(360px, 100%); background: #0E2A47; border-radius: 22px; padding: 18px; display: flex; gap: 16px;">
+        <div style="width: 96px; height: 116px; flex: none; border-radius: 12px; background: repeating-linear-gradient(135deg, #1B3A5C 0 8px, #16324F 8px 16px); display: grid; place-items: center; text-align: center;">
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 9px; color: #8FB4CE;">caso<br>16:9</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #29B6F6;">Caso del mes</span>
+          <div style="font-size: 30px; line-height: 0.92; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFFFFF;">Ruta<br>Eléctrica</div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
+            <span style="font-size: 11px; background: #FF4FA3; color: #FFFFFF; padding: 5px 10px; border-radius: 9999px;">Identidad</span>
+            <span style="font-size: 11px; background: #FFC107; color: #0E2A47; padding: 5px 10px; border-radius: 9999px;">Campaña</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="position: relative; z-index: 2; background: #0E2A47; color: #FFFFFF; padding: 18px 0; overflow: hidden; white-space: nowrap;">
+    <div style="display: inline-flex; gap: 48px; animation: studioMarquee 26s linear infinite; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;">
+      <span>Estrategia de marca</span><span style="color:#FFC107">✳</span><span>Contenido de tecnología</span><span style="color:#FF4FA3">✳</span><span>Experiencias</span><span style="color:#29B6F6">✳</span><span>Growth</span><span style="color:#B798FF">✳</span>
+      <span>Estrategia de marca</span><span style="color:#FFC107">✳</span><span>Contenido de tecnología</span><span style="color:#FF4FA3">✳</span><span>Experiencias</span><span style="color:#29B6F6">✳</span><span>Growth</span><span style="color:#B798FF">✳</span>
+    </div>
+  </div>
+
+  <section data-screen-label="Manifiesto" data-tone="solid" style="position: sticky; top: 0; z-index: 3; height: 100svh; overflow: hidden; background: #FF4FA3; display: grid; grid-template-columns: 1fr auto 1fr; align-content: center; align-items: center; gap: clamp(20px, 4vw, 70px); padding: clamp(72px, 11vh, 120px) clamp(24px, 4vw, 56px); overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.5) 1.6px, transparent 1.7px); background-size: 14px 14px; opacity: 0.5;"></div>
+    <div data-reveal="0" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; position: relative; font-size: clamp(38px, 5.4vw, 86px); line-height: 0.88; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFFFFF;">Nosotros<br>somos el<br>impulso,</div>
+    <div data-reveal="1" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; position: relative; width: clamp(220px, 26vw, 380px); height: clamp(320px, 44vw, 560px); border-radius: 24px; background: #FFD3E7; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="width: 28px; height: 28px; border-radius: 8px; background: #FFFFFF; color: #FF4FA3; display: grid; place-items: center; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; font-size: 14px;">S</div>
+        <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #0E2A47;">-0:22</span>
+      </div>
+      <div style="flex: 1; margin: 14px 0; border-radius: 16px; background: repeating-linear-gradient(135deg, #F7BFD8 0 8px, #FFD3E7 8px 16px); display: grid; place-items: center;">
+        <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #8A4C68;">retrato con halftone</span>
+      </div>
+      <div style="font-size: clamp(34px, 4vw, 58px); line-height: 0.84; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFFFFF;">AGENCIA<br>Studio</div>
+    </div>
+    <div data-reveal="0" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; position: relative; font-size: clamp(38px, 5.4vw, 86px); line-height: 0.88; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFD3E7; text-align: right;">Tú eres<br>la historia.</div>
+  </section>
+
+  <section id="trabajo" data-screen-label="Trabajo" data-tone="solid" style="position: sticky; top: 0; z-index: 4; height: 100svh; overflow: hidden; background: #29B6F6; align-content: center; padding: clamp(72px, 11vh, 120px) clamp(24px, 4vw, 56px) clamp(24px, 6vh, 60px); display: grid; grid-template-columns: minmax(280px, 0.8fr) 1.2fr; align-items: center; gap: clamp(30px, 5vw, 80px);">
+    <div style="position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(14,42,71,0.55) 1.5px, transparent 1.6px); background-size: 11px 11px; opacity: 0.35;"></div>
+    <div style="position: relative;">
+      <div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #0E2A47; margin-bottom: 16px;">Proyectos</div>
+      <div style="font-size: clamp(34px, 4.4vw, 88px); line-height: 0.9; font-weight: 900; font-family: 'Neulis Cursive', cursive; letter-spacing: 0em; color: #FFFFFF; overflow-wrap: break-word;">Lo hacemos<br>entendible,<br>y&nbsp;memorable</div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-top: 34px;">
+        <sc-for list="{{ avatars }}" as="a" hint-placeholder-count="4">
+          <div style="width: 54px; height: 54px; border-radius: 9999px; border: 2px solid #FFFFFF; background: repeating-linear-gradient(135deg, #B7E4FB 0 6px, #9CD8F8 6px 12px);"></div>
+        </sc-for>
+        <div style="width: 54px; height: 54px; border-radius: 9999px; background: #FF4FA3; color: #FFFFFF; display: grid; place-items: center; font-weight: 800; font-size: 14px;">+6</div>
+      </div>
+    </div>
+    <div data-reveal="2" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; display: flex; gap: clamp(12px, 1.6vw, 24px); align-items: stretch; overflow: hidden;">
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+        <div style="flex: 1 1 0; min-width: 0; height: clamp(360px, 46vw, 580px); border-radius: 22px; background: #0E2A47; background-image: linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(0,0,0,0.12)); padding: 20px 20px 28px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+          <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.35) 1.4px, transparent 1.5px); background-size: 11px 11px; opacity: 0.35;"></div>
+          <div style="position: relative; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #29B6F6;">{{ p.kind }}</div>
+          <div style="position: relative;">
+            <div style="font-size: clamp(22px, 2vw, 40px); line-height: 0.94; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFFFFF;">{{ p.name }}</div>
+            <div style="margin-top: 14px; display: inline-block; font-size: 12px; background: #FFC107; color: #0E2A47; padding: 7px 13px; border-radius: 9999px;">{{ p.tag }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="servicios" data-screen-label="Servicios" data-tone="solid" style="position: sticky; top: 0; z-index: 5; height: 100svh; overflow: hidden; background: #B798FF; padding: clamp(72px, 11vh, 120px) clamp(24px, 4vw, 56px); display: grid; align-content: center; grid-template-columns: 1fr auto 1fr; align-items: center; gap: clamp(24px, 4vw, 64px); overflow: hidden;">
+    <div style="position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(14,42,71,0.6) 1.6px, transparent 1.7px); background-size: 10px 10px; opacity: 0.3;"></div>
+    <div style="position: relative;">
+      <div style="font-size: clamp(44px, 5.6vw, 92px); line-height: 0.86; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #0E2A47;">Pensar claro<br><span style="color: #FFFFFF;">para contar<br>mejor.</span></div>
+      <p style="max-width: 46ch; margin: clamp(14px, 3vh, 30px) 0 0; font-size: clamp(14px, 2.6vh, 19px); line-height: 1.4; font-weight: 500; color: #0E2A47;">Studio es la agencia creativa de C Minds. Trabajamos en tres frentes que sostienen la identidad y el crecimiento de una marca.</p>
+    </div>
+    <div data-reveal="1" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; width: clamp(230px, 26vw, 400px); height: clamp(330px, 44vw, 560px); border-radius: 22px; background: repeating-linear-gradient(135deg, #A585F5 0 9px, #B798FF 9px 18px); display: grid; place-items: center;">
+      <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #FFFFFF;">setup de trabajo 4:5</span>
+    </div>
+    <div data-reveal="2" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; display: flex; flex-direction: column; gap: clamp(12px, 3.4vh, 26px);">
+      <sc-for list="{{ services }}" as="s" hint-placeholder-count="3">
+        <div style="border-top: 1px solid rgba(14,42,71,0.25); padding-top: clamp(8px, 2vh, 16px);">
+          <div style="font-size: clamp(20px, min(2.4vw, 4.6vh), 40px); line-height: 0.94; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFFFFF;">{{ s.name }}</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: clamp(6px, 1.6vh, 14px);">
+            <sc-for list="{{ s.items }}" as="it" hint-placeholder-count="3">
+              <span style="font-size: clamp(11px, 1.9vh, 13px); font-weight: 500; background: #0E2A47; color: #FFFFFF; padding: clamp(4px, 1.1vh, 7px) 13px; border-radius: 9999px;">{{ it }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="metodo" data-screen-label="Método" data-tone="light" style="position: sticky; top: 0; z-index: 6; height: 100svh; overflow: hidden; background: #EBF1E9; padding: clamp(72px, 11vh, 120px) clamp(24px, 4vw, 56px); display: grid; align-content: center; grid-template-columns: 1fr auto 0.9fr; align-items: center; gap: clamp(24px, 4vw, 64px); overflow: hidden;">
+    <div style="position: relative; font-size: clamp(44px, 5.6vw, 92px); line-height: 0.86; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FF4FA3;">Primero<br>el orden.<br><span style="color: #B798FF;">Siempre.</span></div>
+    <div data-reveal="1" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; position: relative; width: clamp(240px, 27vw, 400px); height: clamp(340px, 46vw, 580px);">
+      <div style="position: absolute; inset: 0 14px 70px -14px; transform: rotate(-4deg); border-radius: 24px; background: #FF4FA3; display: grid; place-items: start center; padding-top: 22px; font-size: 30px; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFFFFF;">Estrategia</div>
+      <div style="position: absolute; inset: 92px -10px -30px 10px; transform: rotate(2deg); border-radius: 24px; background: #0E2A47; padding: 26px; display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+        <div style="font-size: 30px; line-height: 0.9; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #FFFFFF; text-align: center;">Dirección<br>de arte</div>
+        <div style="font-size: clamp(90px, 11vw, 160px); line-height: 1; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em; color: #EBF1E9;">02</div>
+        <div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 12px; text-align: center; color: #8FB4CE;">Revelar el ADN visual<br>de tu marca.</div>
+      </div>
+    </div>
+    <div data-reveal="2" style="animation-name: revealUp; animation-duration: auto; animation-timing-function: ease-out; animation-fill-mode: both; animation-timeline: view(); animation-range: entry 2% cover 32%; display: flex; flex-direction: column; gap: clamp(10px, 2.8vh, 22px);">
+      <p style="margin: 0; font-size: clamp(15px, 2.7vh, 19px); line-height: 1.35; font-weight: 700; color: #0E2A47; max-width: 40ch;">En Studio cada proyecto sigue un proceso claro y estructurado.</p>
+      <p style="margin: 0; font-size: clamp(14px, 2.5vh, 18px); line-height: 1.45; font-weight: 400; color: #0E2A47; max-width: 46ch;">Porque una comunicación efectiva no se improvisa. Creamos un método que combina estrategia, creatividad y rigor para garantizar resultados concretos.</p>
+      <div style="display: flex; flex-direction: column; gap: clamp(4px, 1.4vh, 10px); margin-top: clamp(2px, 1.4vh, 10px);">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+          <div style="display: flex; gap: 14px; align-items: baseline; border-bottom: 1px solid rgba(14,42,71,0.14); padding-bottom: clamp(4px, 1.4vh, 10px);">
+            <span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 12px; color: #FF4FA3;">{{ st.n }}</span>
+            <span style="font-size: clamp(13px, 2.4vh, 17px); font-weight: 500; color: #0E2A47;">{{ st.name }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" data-screen-label="Contacto" data-tone="solid" style="position: sticky; top: 0; z-index: 7; height: 100svh; overflow: hidden; background: #0E2A47; color: #FFFFFF; padding: clamp(72px, 11vh, 120px) clamp(24px, 4vw, 56px) clamp(24px, 5vh, 48px); display: flex; flex-direction: column; justify-content: space-between; gap: 60px; overflow: hidden;">
+    <div style="position: absolute; inset: auto 0 -6% 0; height: 40%; background-image: radial-gradient(#B798FF 2px, transparent 2.1px); background-size: 14px 14px; opacity: 0.35;"></div>
+    <div style="position: relative;">
+      <div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #29B6F6; margin-bottom: 20px;">Contacto</div>
+      <div style="font-size: clamp(50px, 9vw, 150px); line-height: 0.84; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; letter-spacing: 0em;">Cuéntanos<br><span style="color: #FF4FA3;">tu idea.</span></div>
+      <a href="mailto:hola@studio.mx" style="display: inline-block; margin-top: 36px; font-size: 20px; font-weight: 700; color: #0E2A47; background: #FFC107; padding: 16px 26px; border-radius: 10px;">hola@studio.mx</a>
+    </div>
+    <div style="position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 12px; color: #8FB4CE;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 34px; height: 34px; border-radius: 9px; background: #FFFFFF; color: #0E2A47; display: grid; place-items: center; font-weight: 900; font-family: 'Neulis Cursive', cursive; font-weight: 900; font-size: 17px; font-family: 'Hanken Grotesk', sans-serif;">S</div>
+        <span>Studio — spin-off de C Minds</span>
+      </div>
+      <div style="display: flex; gap: 22px;">
+        <a href="#trabajo" style="color: #8FB4CE;">Instagram</a>
+        <a href="#trabajo" style="color: #8FB4CE;">YouTube</a>
+        <a href="#trabajo" style="color: #8FB4CE;">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showLoader&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Comportamiento&quot;}}">
+class Component extends DCLogic {
+  state = { loading: true, menuOpen: false };
+
+  componentDidMount() {
+    if (this.props.showLoader === false) this.setState({ loading: false });
+    else this._t = setTimeout(() => this.setState({ loading: false }), 2900);
+    if (window.__studioTone) window.__studioTone.stop();
+    window.__studioTone = this.watchTone();
+  }
+
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  watchTone() {
+    let armed = false;
+    const revealPass = () => {
+      const h = window.innerHeight;
+      const nodes = document.querySelectorAll('[data-reveal]');
+      if (!armed) {
+        armed = true;
+        nodes.forEach(n => {
+          if (n.getBoundingClientRect().top <= h * 0.9) return;
+          n.dataset.pending = '1';
+          n.style.animation = 'none';
+          n.style.opacity = '0';
+          n.style.transform = 'translateY(40px)';
+          n.style.transition = 'opacity 780ms cubic-bezier(.2,.7,.2,1), transform 780ms cubic-bezier(.2,.7,.2,1)';
+          n.style.transitionDelay = (Number(n.dataset.reveal || 0) * 120) + 'ms';
+        });
+        return;
+      }
+      nodes.forEach(n => {
+        if (!n.dataset.pending) return;
+        const r = n.getBoundingClientRect();
+        if (r.top < h * 0.86 && r.bottom > 0) {
+          delete n.dataset.pending;
+          n.style.opacity = '1';
+          n.style.transform = 'none';
+        }
+      });
+    };
+    const apply = () => {
+      try {
+        revealPass();
+        let tone = 'light';
+        const stack = document.elementsFromPoint(Math.round(window.innerWidth / 2), 46);
+        for (const el of stack) {
+          const sec = el.closest && el.closest('section[data-tone]');
+          if (sec) { tone = sec.dataset.tone; break; }
+        }
+        const white = document.querySelector('[data-logo-white]');
+        if (white) white.style.opacity = tone === 'solid' ? '1' : '0';
+        const burger = document.querySelector('button[data-burger]');
+        if (burger) {
+          burger.style.background = tone === 'solid' ? '#FFFFFF' : '#29B6F6';
+          burger.style.color = '#0E2A47';
+        }
+      } catch (err) { console.warn('tone', err); }
+    };
+    window.addEventListener('scroll', apply, { passive: true });
+    window.addEventListener('resize', apply);
+    const io = new IntersectionObserver(apply, { threshold: [0, 0.1, 0.4, 0.8, 1] });
+    document.querySelectorAll('section[data-tone]').forEach(sec => io.observe(sec));
+    const timer = window.setInterval(apply, 300);
+    apply();
+    return { stop() {
+      window.removeEventListener('scroll', apply);
+      window.removeEventListener('resize', apply);
+      io.disconnect();
+      window.clearInterval(timer);
+    } };
+  }
+
+  renderVals() {
+    const loading = this.state.loading && this.props.showLoader !== false;
+    return {
+      loaderOpacity: loading ? 1 : 0,
+      loaderVisibility: loading ? 'visible' : 'hidden',
+      menuOpen: this.state.menuOpen,
+      logoSrc: this.state.tone === 'solid' ? '../../public/brand/logos/isotipo-white.svg' : '../../public/brand/logos/isotipo-pink.svg',
+      burgerBg: this.state.tone === 'solid' ? '#FFFFFF' : '#29B6F6',
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      avatars: [1, 2, 3, 4],
+      projects: [
+        { kind: 'Identidad + contenido', name: 'Ruta Eléctrica', tag: 'Campaña' },
+        { kind: 'Marca', name: 'Nodo Verde', tag: 'Identidad' },
+        { kind: 'Experiencia', name: 'Feria Abierta', tag: 'Evento' }
+      ].map(p => ({ ...p, name: p.name.replace('\n', ' ') })),
+      services: [
+        { name: 'Estrategia de marca', items: ['Posicionamiento', 'Naming', 'Tono de voz'] },
+        { name: 'Contenido y dirección de arte', items: ['Video', 'Fotografía', 'Social'] },
+        { name: 'Crecimiento', items: ['Campañas', 'Data & reporting', 'Comunidad'] }
+      ],
+      steps: [
+        { n: '01', name: 'Diagnóstico y estrategia' },
+        { n: '02', name: 'Dirección de arte' },
+        { n: '03', name: 'Producción de contenido' },
+        { n: '04', name: 'Medición y ajuste' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

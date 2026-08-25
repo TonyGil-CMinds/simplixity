@@ -1,0 +1,51 @@
+---
+import { projects } from "../../data/site";
+---
+
+<section
+  id="trabajo"
+  class="story-panel z-[4] grid grid-cols-[minmax(280px,.8fr)_1.2fr] content-center items-center gap-[clamp(30px,5vw,80px)] bg-cyan px-[var(--section-inline)] py-[var(--section-block)] max-lg:grid-cols-1"
+  data-tone="solid"
+  aria-labelledby="work-title"
+>
+  <div class="halftone-dark opacity-35"></div>
+  <div class="relative">
+    <p class="eyebrow mb-4 text-navy">Proyectos</p>
+    <h2 id="work-title" class="font-display m-0 overflow-wrap-anywhere text-[clamp(34px,4.4vw,88px)] leading-[.9] text-white" data-title-reveal>
+      Lo hacemos<br />entendible,<br />y memorable
+    </h2>
+    <div class="mt-[34px] flex items-center gap-2.5" aria-label="Equipo multidisciplinario">
+      {[1, 2, 3, 4].map(() => (
+        <span class="media-stripes block size-[54px] rounded-full border-2 border-white" aria-hidden="true"></span>
+      ))}
+      <span class="grid size-[54px] place-items-center rounded-full bg-pink text-sm font-extrabold text-white">+6</span>
+    </div>
+  </div>
+
+  <div class="relative flex items-stretch gap-[clamp(12px,1.6vw,24px)] overflow-hidden max-md:grid max-md:grid-cols-1" data-reveal="1">
+    {projects.slice(0, 3).map((project) => (
+      <a
+          href={`/narrativas#${project.slug}`}
+        class="project-card interactive-lift relative flex h-[clamp(360px,46vw,580px)] min-w-0 flex-1 flex-col justify-between overflow-hidden rounded-[22px] bg-navy px-5 pt-5 pb-7 text-white max-md:h-auto max-md:min-h-[220px]"
+      >
+        <div class="halftone-light opacity-35"></div>
+        <span class="relative text-[11px] font-semibold tracking-[.14em] text-cyan uppercase">{project.kind}</span>
+        <div class="relative">
+          <h3 class="font-display m-0 text-[clamp(22px,2vw,40px)] leading-[.94]">{project.title}</h3>
+          <span class="mt-3.5 inline-block rounded-full bg-yellow px-[13px] py-[7px] text-xs text-navy">{project.tags[0]}</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  @media (max-width: 1023px) {
+    section { align-content: start; padding-top: 6.5rem; }
+    section > div:last-child { align-self: stretch; }
+  }
+  @media (max-width: 767px) {
+    section > div:last-child { overflow: visible; }
+    .project-card:nth-child(n + 2) { display: none; }
+  }
+</style>

@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import GlobalNav from "../components/layout/GlobalNav.astro";
+import Flipbook from "../components/narratives/Flipbook.astro";
+import PortfolioGrid from "../components/narratives/PortfolioGrid.astro";
+import NarrativeClose from "../components/narratives/NarrativeClose.astro";
+---
+
+<BaseLayout title="Narrativas" description="Bitácoras interactivas de los proyectos de Simplixity.">
+  <GlobalNav />
+  <main id="contenido" class="relative overflow-x-clip bg-page text-navy">
+    <Flipbook />
+    <PortfolioGrid />
+    <NarrativeClose />
+  </main>
+  <script>
+    import "../scripts/audio-controller";
+  </script>
+</BaseLayout>

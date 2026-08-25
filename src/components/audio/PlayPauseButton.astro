@@ -1,0 +1,53 @@
+---
+import type { SoundtrackTrack } from "../../data/narratives";
+
+interface Props {
+  track: SoundtrackTrack;
+  class?: string;
+}
+
+const { track, class: className = "" } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={["simple-audio-toggle", className]}
+  data-audio-player
+  data-audio-toggle
+  data-audio-src={track.src}
+  data-audio-title={track.title}
+  data-audio-artist="Tech4Nature, Banda Sonora Original"
+  aria-label={`Reproducir ${track.title}`}
+  aria-pressed="false"
+>
+  <svg class="simple-icon simple-icon--play" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 12.8v22.4c0 1.7 1.9 2.7 3.3 1.8l17-11.2a2.1 2.1 0 0 0 0-3.6l-17-11.2c-1.4-.9-3.3.1-3.3 1.8Z" /></svg>
+  <svg class="simple-icon simple-icon--pause" viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="10" width="8" height="28" rx="4"/><rect x="27" y="10" width="8" height="28" rx="4"/></svg>
+</button>
+
+<style>
+  .simple-audio-toggle {
+    position: relative;
+    display: grid;
+    width: clamp(30px, 8cqw, 48px);
+    height: clamp(30px, 8cqw, 48px);
+    flex: none;
+    place-items: center;
+    border: 2px solid #0e2a47;
+    border-radius: 49% 51% 44% 56% / 54% 45% 55% 46%;
+    background: #fffaf0;
+    color: #0e2a47;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease, transform 240ms cubic-bezier(.16,1,.3,1), border-radius 300ms cubic-bezier(.16,1,.3,1);
+  }
+
+  .simple-audio-toggle::after { content: ""; position: absolute; inset: 3px -3px -3px 3px; border: 1px solid currentColor; border-radius: 53% 47% 57% 43%; opacity: .38; rotate: -7deg; }
+
+  .simple-audio-toggle:hover { background: #ffe29a; transform: scale(1.08) rotate(3deg); }
+  .simple-audio-toggle[data-playing="true"] { border-radius: 46% 54% 51% 49%; background: #0e2a47; color: #ffc107; }
+  .simple-icon { width: 72%; height: 72%; fill: currentColor; }
+  .simple-icon--play { display: block; }
+  .simple-icon--pause { display: none; }
+  [data-playing="true"] .simple-icon--play { display: none; }
+  [data-playing="true"] .simple-icon--pause { display: block; }
+</style>

@@ -1,0 +1,36 @@
+---
+import { site } from "../../data/site";
+---
+
+<section
+  id="contacto"
+  class="story-panel z-[7] flex flex-col justify-between gap-[60px] bg-navy px-[var(--section-inline)] pt-[var(--section-block)] pb-[clamp(24px,5vh,48px)] text-white"
+  data-tone="solid"
+  aria-labelledby="contact-title"
+>
+  <div class="halftone-light top-auto bottom-[-6%] h-[40%] opacity-35"></div>
+  <div class="relative">
+    <p class="eyebrow mb-5 text-cyan">Contacto</p>
+    <h2 id="contact-title" class="font-display m-0 text-[clamp(50px,9vw,150px)] leading-[.84]" data-title-reveal>
+      Cuéntanos<br /><span class="text-pink">tu idea.</span>
+    </h2>
+    <a
+      href={`mailto:${site.email}`}
+      class="interactive-lift mt-9 inline-block rounded-[10px] bg-yellow px-[26px] py-4 text-xl font-bold text-navy hover:bg-pink hover:text-white"
+    >
+      {site.email}
+    </a>
+  </div>
+
+  <footer class="relative flex flex-wrap items-end justify-between gap-[30px] text-xs font-semibold text-muted">
+    <div class="flex items-center gap-3">
+      <span class="font-display grid size-[34px] place-items-center rounded-[9px] bg-white text-[17px] text-navy">S</span>
+      <span>{site.name}, experiencias para hacer posible lo complejo</span>
+    </div>
+    <nav class="flex gap-[22px]" aria-label="Redes sociales">
+      <a class="hover:text-pink" href="#trabajo">Instagram</a>
+      <a class="hover:text-pink" href="#trabajo">YouTube</a>
+      <a class="hover:text-pink" href="#trabajo">LinkedIn</a>
+    </nav>
+  </footer>
+</section>
