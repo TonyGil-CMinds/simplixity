@@ -9,8 +9,6 @@ dist/
 .idea/
 .vscode/
 
-CLAUDE.md
-
 # Los medios viven en R2, no en git. Ver media-manifest.json y npm run media:pull
 public/media/
 public/multimedia/
