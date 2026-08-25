@@ -15,7 +15,7 @@ There is no test suite and no linter beyond `astro check`. `npm run build` fails
 
 ## Stack
 
-Astro 7 (static, no UI framework integrations), Tailwind CSS 4 via `@tailwindcss/vite` (no `tailwind.config`), GSAP + ScrollTrigger, Lenis smooth scroll. TypeScript is `astro/tsconfigs/strict`. All content is in Spanish; write UI copy, `aria-label`s and comments in Spanish.
+Astro 7 (static, no UI framework integrations), Tailwind CSS 4 via `@tailwindcss/vite` (no `tailwind.config`), GSAP + ScrollTrigger. TypeScript is `astro/tsconfigs/strict`. There is no smooth-scroll library — the site uses native scrolling. All content is in Spanish; write UI copy, `aria-label`s and comments in Spanish.
 
 ## Architecture
 
@@ -29,7 +29,9 @@ Layering is strict — see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md):
 - `src/scripts/` — shared runtime behavior.
 - `public/brand/` — logos and fonts; `public/media/` — production-optimized media only.
 
-[src/layouts/BaseLayout.astro](src/layouts/BaseLayout.astro) is the single document shell: it imports `global.css`, loads Google Fonts, and inlines `import "../scripts/app"` for every page. `audio-controller` is imported only by `/narrativas`.
+[src/layouts/BaseLayout.astro](src/layouts/BaseLayout.astro) is the single document shell: it imports `global.css`, loads Google Fonts, and inlines `import "../scripts/app"` and `import "../scripts/navigation"` for every page. `audio-controller` is imported only by `/narrativas`.
+
+[src/scripts/navigation.ts](src/scripts/navigation.ts) drives the tone-aware nav: it hit-tests `elementsFromPoint` against `section[data-tone]` to swap the logo and burger between light and solid. Any new full-bleed section needs a `data-tone` attribute or the nav will read the wrong tone over it.
 
 ### Flipbook (the non-obvious part)
 
@@ -37,7 +39,14 @@ Layering is strict — see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md):
 
 Page content is *not* rendered in place. [SpreadTemplates.astro](src/components/narratives/SpreadTemplates.astro) pre-renders every project × spread × side into hidden `<template data-spread-template data-project data-spread data-side>` elements; the flipbook clones the matching fragment into a half at turn time. So a page's markup is server-rendered Astro, but its DOM node is transient.
 
-[NarrativePage.astro](src/components/narratives/NarrativePage.astro) is a chain of conditionals on `spread.layout` (`t4n-legacy`, `t4n-place`, `t4n-community`, `t4n-soundtrack`, `generic`) × `side`. A new spread layout means a new branch there plus a new union member on `NarrativeSpread["layout"]` in [src/data/narratives.ts](src/data/narratives.ts).
+[NarrativePage.astro](src/components/narratives/NarrativePage.astro) is the dispatcher. It routes by `spread.layout` **prefix** before falling back to its own `layout:side` chain:
+
+- `n500-*` -> [Natura500Page.astro](src/components/narratives/Natura500Page.astro)
+- `vo-*` -> [VitalOceansPage.astro](src/components/narratives/VitalOceansPage.astro)
+- `generic` -> [BookPage.astro](src/components/narratives/BookPage.astro)
+- `t4n-*` -> handled inline, as a chain of conditionals on `layout:side`
+
+The three projects are `tech-for-nature-mexico`, `natura500` and `oceanos-vitales`, each with its own track list (`t4nTracks`, `n500Tracks`, `vitalOceansTracks`) in [src/data/narratives.ts](src/data/narratives.ts). A new spread means a new union member on `NarrativeSpread["layout"]` plus a branch in the owning page component; a whole new narrative is better served by its own `<Slug>Page.astro` and a new prefix, following Natura500 and Vital Oceans.
 
 ### Audio
 
@@ -45,7 +54,7 @@ Page content is *not* rendered in place. [SpreadTemplates.astro](src/components/
 
 ### Motion
 
-[src/scripts/app.ts](src/scripts/app.ts) sets up Lenis (stored on `window.simplixityLenis`, driven by the GSAP ticker), the loader, and every ScrollTrigger sequence. Every setup function early-returns on `prefers-reduced-motion: reduce`; preserve that guard in new animations. The loader fires a `simplixity:ready` custom event and uses `sessionStorage` (`simplixity-loader-seen`) so it plays once per session.
+[src/scripts/app.ts](src/scripts/app.ts) sets up the loader and every ScrollTrigger sequence (`setupLoader`, `setupHero`, `setupHeroSequence`, `setupScrollMotion`). Scrolling is native — Lenis was removed along with its dependency, so do not reintroduce `window.simplixityLenis`. Every setup function early-returns on `prefers-reduced-motion: reduce`; preserve that guard in new animations. The loader fires a `simplixity:ready` custom event and uses `sessionStorage` (`simplixity-loader-seen`) so it plays once per session.
 
 ## Design constraints
 

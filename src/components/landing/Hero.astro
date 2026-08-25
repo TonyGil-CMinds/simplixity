@@ -33,7 +33,8 @@ import { asset } from "../../lib/assets";
             width="972"
             height="1619"
             class="size-full object-cover"
-            loading="eager"
+            loading="lazy"
+            fetchpriority="low"
             decoding="async"
           />
         </div>
@@ -63,11 +64,12 @@ import { asset } from "../../lib/assets";
           <div class="hero-card-face hero-card-back absolute inset-0 overflow-hidden rounded-[22px] bg-navy shadow-[0_30px_60px_rgba(14,42,71,.2)]">
             <video
               class="size-full object-cover"
-              src={asset("/multimedia/reel.webm")}
+              data-src={asset("/multimedia/reel.webm")}
+              poster={asset("/multimedia/reel-poster.webp")}
               muted
               loop
               playsinline
-              preload="metadata"
+              preload="none"
               data-hero-reel
               aria-label="Showreel de proyectos creativos de Simplixity"
             ></video>
@@ -86,9 +88,10 @@ import { asset } from "../../lib/assets";
             alt="Tres integrantes de Simplixity revisan ideas alrededor de una laptop"
             width="1003"
             height="1568"
-            class="size-full object-cover"
-            loading="eager"
-            decoding="async"
+              class="size-full object-cover"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
           />
         </div>
         <span class="hero-bubble hero-bubble--right absolute right-[-30px] -bottom-4 rounded-[16px] bg-[#FFD3E7] px-4 py-3 text-xl shadow-[0_6px_22px_rgba(14,42,71,.14)]" aria-hidden="true">🎥 ⚡ 👉</span>
@@ -142,14 +145,6 @@ import { asset } from "../../lib/assets";
 
   .hero-main-card {
     perspective: 1500px;
-    will-change: transform;
-  }
-
-  .hero-side-card,
-  [data-hero-copy],
-  [data-hero-case],
-  [data-hero-word] {
-    will-change: transform, opacity;
   }
 
   .hero-bubble {

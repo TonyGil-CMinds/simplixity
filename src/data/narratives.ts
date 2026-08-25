@@ -11,7 +11,23 @@ export type SoundtrackTrack = {
 export type NarrativeSpread = {
   id: string;
   label: string;
-  layout: "t4n-legacy" | "t4n-place" | "t4n-community" | "t4n-soundtrack" | "generic";
+  layout:
+    | "t4n-legacy"
+    | "t4n-place"
+    | "t4n-community"
+    | "t4n-bioscanner"
+    | "t4n-platform"
+    | "t4n-soundtrack"
+    | "n500-origin"
+    | "n500-remember"
+    | "n500-journey"
+    | "n500-platform"
+    | "n500-soundtrack"
+    | "vo-nets"
+    | "vo-world"
+    | "vo-platform"
+    | "vo-soundtrack"
+    | "generic";
 };
 
 export type NarrativeProject = {
@@ -97,6 +113,131 @@ export const t4nTracks: readonly SoundtrackTrack[] = [
   },
 ] as const;
 
+export const n500Tracks: readonly SoundtrackTrack[] = [
+  {
+    id: "start-of-a-startup",
+    title: "The Start of a Startup",
+    src: asset("/media/narratives/n-500/audio/01-the-start-of-a-startup.mp3"),
+    duration: 67.76,
+    description: "Yo también lo recuerdo con mucha nostalgia.",
+  },
+  {
+    id: "remember-me",
+    title: "Remember Me ft. Lyra Nyx",
+    src: asset("/media/narratives/n-500/audio/02-remember-me.mp3"),
+    duration: 274.08,
+    description: "Los emprendimientos NbS buscan ser recordados.",
+  },
+  {
+    id: "the-breaking",
+    title: "The Breaking...",
+    src: asset("/media/narratives/n-500/audio/03-the-breaking.mp3"),
+    duration: 99,
+    description: "Si Dios me permitiera volver a hacerlo, lo haría todo igual.",
+  },
+  {
+    id: "now-we-build",
+    title: "Now We Build",
+    src: asset("/media/narratives/n-500/audio/04-now-we-build.mp3"),
+    duration: 102.6,
+    description: "Es un salto de fe. Eso y pizzas.",
+  },
+  {
+    id: "glorious-imperfection",
+    title: "Glorious Imperfection",
+    src: asset("/media/narratives/n-500/audio/05-glorious-imperfection.mp3"),
+    duration: 56.64,
+    description: "De alguna manera estamos llegando más lejos.",
+  },
+  {
+    id: "no-way-to-take-it-slow",
+    title: "No Way to Take It Slow ft. June",
+    src: asset("/media/narratives/n-500/audio/06-no-way-to-take-it-slow.mp3"),
+    duration: 184.2,
+    description: "Tema principal. Nada detiene este tren. Nada.",
+  },
+  {
+    id: "you-are-invited-too",
+    title: "You Are Invited, Too",
+    src: asset("/media/narratives/n-500/audio/07-you-are-invited-too.mp3"),
+    duration: 99.76,
+    description: "Si me das la oportunidad, no te fallaré.",
+  },
+  {
+    id: "one-step-one-dream",
+    title: "One Step for a Dream",
+    src: asset("/media/narratives/n-500/audio/08-one-step-one-dream.mp3"),
+    duration: 137.24,
+    description: "Es ahora o nunca. Sin importar lo que pase, cuenta conmigo.",
+  },
+  {
+    id: "the-becoming",
+    title: "...The Becoming",
+    src: asset("/media/narratives/n-500/audio/09-the-becoming.mp3"),
+    duration: 139.28,
+    description: "Cinco años después, no sé si cambió el lugar o fui yo. Pero estoy en paz.",
+  },
+] as const;
+
+export const vitalOceansTracks: readonly SoundtrackTrack[] = [
+  {
+    id: "these-nets",
+    title: "These Nets Are Also Part of Me",
+    src: asset("/media/narratives/vital-oceans/audio/01-these-nets-are-also-part-of-me.mp3"),
+    duration: 144.24,
+    description: "Si estas redes nos unen y también nos separan, lo mejor es que el océano esté de nuestro lado.",
+  },
+  {
+    id: "seamless",
+    title: "(Sea)mless ft. June",
+    src: asset("/media/narratives/vital-oceans/audio/02-seamless-ft-june.mp3"),
+    duration: 249.68,
+    description: "Tema principal. Entender que no podemos hacer esto solos es lo más importante. Tú empujas, yo empujo.",
+  },
+  {
+    id: "enormous-world",
+    title: "The World Was Always This Enormous",
+    src: asset("/media/narratives/vital-oceans/audio/03-the-world-was-always-this-enormous.mp3"),
+    duration: 300,
+    description: "La inmensidad de un océano de posibilidades, personas, historias y memorias.",
+  },
+  {
+    id: "unmarked",
+    title: "(Un)marked",
+    src: asset("/media/narratives/vital-oceans/audio/04-unmarked.mp3"),
+    duration: 193.88,
+    description: "Piano y violín: lo que se escucha cuando una sola persona intenta sostenerlo todo.",
+  },
+  {
+    id: "strings-and-tides",
+    title: "Strings and Tides",
+    src: asset("/media/narratives/vital-oceans/audio/05-strings-and-tides.mp3"),
+    duration: 172.48,
+    description: "La marea también cambia. Ahí encontramos la forma de escapar de estas redes.",
+  },
+  {
+    id: "vital-oceans",
+    title: "Vital Oceans",
+    src: asset("/media/narratives/vital-oceans/audio/06-vital-oceans.mp3"),
+    duration: 69.76,
+    description: "Infinidad, aceptación y una promesa: proteger la vida de este océano.",
+  },
+  {
+    id: "my-home-is-the-sea",
+    title: "My Home is The Sea ft. Crimson Rush",
+    src: asset("/media/narratives/vital-oceans/audio/07-my-home-is-the-sea.mp3"),
+    duration: 283.88,
+    description: "Un canto hacia el mar como hogar: de las comunidades, de quienes pescan y de la vida que vuelve.",
+  },
+  {
+    id: "watermarked",
+    title: "(Water)marked",
+    src: asset("/media/narratives/vital-oceans/audio/08-watermarked.mp3"),
+    duration: 124.88,
+    description: "Las mismas notas, ahora con más instrumentos. Varias voces trabajando en una misión compartida.",
+  },
+] as const;
+
 export const narrativeProjects: readonly NarrativeProject[] = [
   {
     slug: "tech-for-nature-mexico",
@@ -116,36 +257,53 @@ export const narrativeProjects: readonly NarrativeProject[] = [
       { id: "legado", label: "El legado", layout: "t4n-legacy" },
       { id: "dzilam", label: "Dzilam de Bravo", layout: "t4n-place" },
       { id: "comunidad", label: "Antes y después", layout: "t4n-community" },
+      { id: "bioscanner", label: "Bioscanner", layout: "t4n-bioscanner" },
+      { id: "plataforma", label: "Cómo funciona Bioscanner", layout: "t4n-platform" },
       { id: "banda-sonora", label: "Banda sonora", layout: "t4n-soundtrack" },
     ],
   },
   {
     slug: "natura500",
-    word: "Natura500",
-    title: "Natura500",
-    date: "02 / bitácora · abr 2026",
-    note: "El archivo visual y sonoro de esta iniciativa se incorporará próximamente a la colección.",
-    tags: ["Próximamente"],
-    kind: "Bitácora en preparación",
-    bg: "#FF4FA3",
-    fg: "#FFFFFF",
-    paper: "#FFF8F1",
-    accent: "#FF4FA3",
-    spreads: [{ id: "resumen", label: "Resumen", layout: "generic" }],
+    word: "Natura 500",
+    title: "Natura 500",
+    credits: "NATURATECH LAC / BID LAB",
+    date: "02 / bitácora · América Latina y el Caribe",
+    note: "El inicio de una startup contado desde la ruptura, la construcción y aquello en lo que termina convirtiéndose quien la crea.",
+    tags: ["Emprendimiento", "Naturaleza", "Narrativa sonora"],
+    kind: "Emprendimiento verde y azul",
+    bg: "#D85B36",
+    fg: "#FFF8E8",
+    paper: "#F1E8D0",
+    accent: "#D85B36",
+    cover: asset("/media/narratives/n-500/images/rectangle-2.webp"),
+    spreads: [
+      { id: "el-inicio", label: "The Start of a Startup", layout: "n500-origin" },
+      { id: "ser-recordadas", label: "Ser recordadas", layout: "n500-remember" },
+      { id: "el-viaje", label: "De la ruptura a la transformación", layout: "n500-journey" },
+      { id: "la-plataforma", label: "Un HBO verde y azul", layout: "n500-platform" },
+      { id: "banda-sonora", label: "Banda sonora", layout: "n500-soundtrack" },
+    ],
   },
   {
     slug: "oceanos-vitales",
     word: "Océanos Vitales",
     title: "Océanos Vitales",
-    date: "03 / bitácora · may 2026",
-    note: "El archivo visual y sonoro de esta iniciativa se incorporará próximamente a la colección.",
-    tags: ["Próximamente"],
-    kind: "Bitácora en preparación",
-    bg: "#29B6F6",
-    fg: "#0E2A47",
-    paper: "#F5FBFE",
-    accent: "#29B6F6",
-    spreads: [{ id: "resumen", label: "Resumen", layout: "generic" }],
+    credits: "SIMPLIXITY / C MINDS / SEAMINES",
+    date: "03 / bitácora · Baja California",
+    note: "Una red de comunidades, ciencia e instituciones para convertir historias del mar en Áreas Marinas Protegidas.",
+    tags: ["Océano", "Comunidades", "Inteligencia artificial"],
+    kind: "Conservación marina inclusiva",
+    bg: "#087F8C",
+    fg: "#F4F1DF",
+    paper: "#EEF3E8",
+    accent: "#18A9B8",
+    cover: asset("/media/narratives/vital-oceans/images/portada-1.webp"),
+    spreads: [
+      { id: "estas-redes", label: "Estas redes que nos unen / separan", layout: "vo-nets" },
+      { id: "la-inmensidad", label: "La inmensidad de este mundo", layout: "vo-world" },
+      { id: "la-plataforma", label: "La plataforma", layout: "vo-platform" },
+      { id: "banda-sonora", label: "Banda sonora", layout: "vo-soundtrack" },
+    ],
   },
   {
     slug: "ceiba",

@@ -1,0 +1,381 @@
+---
+import { asset } from "../../lib/assets";
+import type { NarrativeProject } from "../../data/narratives";
+import { n500Tracks } from "../../data/narratives";
+import CapsuleAudioPlayer from "../audio/CapsuleAudioPlayer.astro";
+import ColorAudioPlayer from "../audio/ColorAudioPlayer.astro";
+import PlayPauseButton from "../audio/PlayPauseButton.astro";
+import DoodleArrow from "./DoodleArrow.astro";
+import InkMark from "./InkMark.astro";
+
+interface Props {
+  project: NarrativeProject;
+  spreadIndex: number;
+  side: "left" | "right";
+}
+
+const { project, spreadIndex, side } = Astro.props;
+const spread = project.spreads[spreadIndex];
+const page = `${spread.layout}:${side}`;
+const folio = spreadIndex * 2 + (side === "left" ? 1 : 2);
+const n500Artist = "Natura 500 · Banda Sonora Original";
+const soundtrackColumns = side === "left" ? n500Tracks.slice(0, 4) : n500Tracks.slice(4);
+const soundtrackStart = side === "left" ? 1 : 5;
+
+const journey = [
+  { name: "La ruptura", className: "journey__step--breaking" },
+  { name: "La construcción", className: "journey__step--building" },
+  { name: "La oportunidad", className: "journey__step--chance" },
+  { name: "La escala", className: "journey__step--scale" },
+  { name: "Un paso a la vez", className: "journey__step--step" },
+  { name: "En lo que me convertí", className: "journey__step--becoming" },
+];
+---
+
+{page === "n500-origin:left" ? (
+  <article class="book-page nb-photo n500-cover">
+    <img
+      class="nb-photo__img"
+      src={asset("/media/narratives/n-500/images/rectangle-2.webp")}
+      alt="Acuarela de dos socios trabajando de noche entre computadoras, circuitos, libretas y tazas de café"
+    />
+    <span class="nb-tape nb-tape--tr n500-tape" aria-hidden="true"></span>
+    <CapsuleAudioPlayer
+      track={n500Tracks[0]}
+      artist={n500Artist}
+      cover={asset("/media/narratives/n-500/images/ost-cover.webp")}
+      coverAlt="Portada de la banda sonora original de Natura 500"
+      note="escucha 01 · el inicio del inicio"
+      class="n500-cover__player"
+    />
+  </article>
+) : page === "n500-origin:right" ? (
+  <article class="book-page nb-page n500-page n500-origin">
+    <span class="n500-scribble n500-scribble--corner" aria-hidden="true">///</span>
+    <div class="nb-sheet n500-origin__sheet">
+      <p class="nb-kicker">cuaderno 01 · el inicio del inicio</p>
+      <h2 class="nb-title n500-origin__title">
+        The Start of<br />a Startup
+        <InkMark variant="underline-double" class="n500-origin__underline" width={2.5} />
+      </h2>
+      <p class="n500-origin__memory">Yo también lo recuerdo con mucha nostalgia.</p>
+      <div class="nb-copy n500-origin__copy">
+        <p>Pienso en dos socios sentados frente a una mesa: olor a humedad y metal, el aire pesado, las risas cuando algo por fin funcionaba.</p>
+        <p>También recuerdo la disciplina, la presión y esa promesa silenciosa de no fallar. <strong class="n500-hl">Natura 500 nace desde ese recuerdo</strong>, no desde la fantasía de que todo saldrá bien.</p>
+      </div>
+      <p class="n500-origin__aside">un salto de fe<br />+ pizzas</p>
+    </div>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "n500-remember:left" ? (
+  <article class="book-page nb-page n500-page n500-remember">
+    <div class="nb-sheet n500-remember__sheet">
+      <p class="nb-kicker">cuaderno 02 · por qué mostrar</p>
+      <h2 class="nb-title n500-remember__title">¿Por qué deben<br />ser recordadas?</h2>
+      <div class="nb-copy n500-remember__copy">
+        <p>Cuando una empresa trabaja a favor de la naturaleza, <strong class="n500-hl">mostrar importa todavía más.</strong></p>
+        <p>Las soluciones basadas en la naturaleza atraviesan el agro, la conservación, los fármacos y el monitoreo con inteligencia artificial. Su escala no siempre se parece a la de una app, por eso su valor necesita una historia que pueda sentirse.</p>
+      </div>
+      <figure class="nb-print n500-remember__award">
+        <span class="nb-tape nb-tape--top" aria-hidden="true"></span>
+        <img
+          src={asset("/media/narratives/n-500/images/Natural-sweetener-start-up-wins-Chivas-Venture-fund-It-s-a-bulletproof-business-model-that-benefits-all-says-CEO.webp")}
+          alt="Emprendedores de impacto celebran juntos en un escenario"
+        />
+        <figcaption>hay valor antes de que exista un unicornio</figcaption>
+      </figure>
+    </div>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "n500-remember:right" ? (
+  <article class="book-page nb-page n500-page n500-human">
+    <span class="nb-stain n500-human__stain" aria-hidden="true"></span>
+    <div class="nb-sheet n500-human__sheet">
+      <p class="nb-kicker">cuaderno 02 · lo humano</p>
+      <h2 class="n500-human__statement">No son sólo empresas.<br /><span>Son conexiones humanas.</span></h2>
+      <div class="nb-copy n500-human__copy">
+        <p>Algunas están en semilla. Otras crecen, escalan o ya se consolidaron. En cada etapa hay alguien intentando que la idea sobreviva.</p>
+        <p>Por eso Natura 500 no las ordena solamente: las presenta desde las personas, las tensiones y las decisiones que les dieron forma.</p>
+      </div>
+      <div class="n500-human__objects">
+        <figure class="nb-print n500-human__portrait">
+          <span class="nb-tape nb-tape--top" aria-hidden="true"></span>
+          <img src={asset("/media/narratives/n-500/images/rectangle-1.webp")} alt="Acuarela de un equipo de campo con las manos cubiertas de tierra" />
+          <figcaption>quienes hacen que funcionen</figcaption>
+        </figure>
+        <ColorAudioPlayer
+          track={n500Tracks[1]}
+          artist={n500Artist}
+          label="escucha 02 · ser recordadas"
+          accent="#B84E35"
+          class="n500-human__player"
+        />
+      </div>
+    </div>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "n500-journey:left" ? (
+  <article class="book-page nb-page n500-page n500-journey">
+    <div class="nb-sheet n500-journey__sheet">
+      <p class="nb-kicker">cuaderno 03 · el viaje narrativo</p>
+      <h2 class="nb-subtitle n500-journey__title">No es una línea recta.</h2>
+      <div class="journey" role="img" aria-label="El viaje del emprendedor, desde la ruptura hasta en lo que me convertí">
+        <svg class="journey__orbit" viewBox="0 0 300 300" aria-hidden="true">
+          <path d="M151 28c68 0 123 54 123 121s-55 122-123 122S28 216 28 149 83 28 151 28Z" />
+          <path class="journey__echo" d="M152 34c65-2 116 48 119 113 2 67-53 117-118 119-66 2-119-50-120-116C31 87 87 36 152 34Z" />
+          <path class="journey__arrow" d="m257 87 17 2-5-16" />
+        </svg>
+        <p class="journey__center">El viaje del<br />emprendedor</p>
+        {journey.map((step, index) => (
+          <p class:list={["journey__step", step.className]}><span>{String(index + 1).padStart(2, "0")}</span>{step.name}</p>
+        ))}
+      </div>
+      <p class="n500-journey__note">Lo que vuelve al inicio ya no es la misma persona.</p>
+    </div>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "n500-journey:right" ? (
+  <article class="book-page nb-page n500-page n500-motion">
+    <div class="nb-sheet n500-motion__sheet">
+      <p class="nb-kicker">cuaderno 03 · tema principal</p>
+      <div class="n500-motion__arc" aria-label="De la ruptura a la transformación">
+        <p><span>...The</span> Breaking</p>
+        <DoodleArrow variant="down" class="n500-motion__arrow" />
+        <p><span>...The</span> Becoming</p>
+      </div>
+      <div class="nb-copy n500-motion__copy">
+        <p>Muchas empresas terminarán. Lo irremplazable será aquello en lo que el emprendedor se convirtió: alguien más completo para dirigir, negociar, vender y diseñar.</p>
+        <p>El viaje no termina cuando la empresa termina. Queda una forma distinta de mirar los problemas, tomar decisiones y volver a empezar con más herramientas que antes.</p>
+      </div>
+      <ColorAudioPlayer
+        track={n500Tracks[5]}
+        artist={n500Artist}
+        label="✳ tema principal"
+        accent="#275E58"
+        class="n500-motion__player"
+      />
+      <p class="n500-motion__motto">Nada detiene este tren. Nada.</p>
+    </div>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "n500-platform:left" ? (
+  <article class="book-page nb-page n500-page n500-platform">
+    <div class="nb-sheet n500-platform__sheet">
+      <p class="nb-kicker">cuaderno 04 · la plataforma</p>
+      <h2 class="nb-title n500-platform__title">No es un<br />diccionario.</h2>
+      <p class="n500-platform__lede">Es el HBO de las empresas verdes y azules.</p>
+      <div class="nb-copy n500-platform__copy">
+        <p>Natura 500, el primer spin-off de NaturaTech LAC, busca descubrir a las empresas de América Latina y el Caribe y leerlas también desde su potencial de inversión.</p>
+        <p>Entrar debe sentirse como abrir Netflix, Apple TV o HBO: cada empresa tiene un mundo, una tensión y personas que sostienen su historia.</p>
+      </div>
+      <div class="n500-platform__stages" aria-label="Etapas de las empresas en Natura 500">
+        <span>semilla</span><span>creciendo</span><span>escalando</span><span>consolidadas</span>
+      </div>
+    </div>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "n500-platform:right" ? (
+  <article class="book-page nb-page n500-page n500-window">
+    <div class="nb-sheet n500-window__sheet">
+      <p class="nb-kicker">cuaderno 04 · ver el ecosistema</p>
+      <div class="n500-window__collage">
+        <div class="n500-window__device">
+          <div class="n500-laptop__screen">
+            <img src={asset("/media/narratives/n-500/images/hero-explorer.webp")} alt="Vista de la plataforma Natura 500 mostrando el perfil de la empresa Pronaca" />
+          </div>
+          <span class="n500-laptop__base" aria-hidden="true"></span>
+        </div>
+        <a class="n500-window__cta" href="https://500.naturatech.org" target="_blank" rel="noreferrer">
+          <span class="n500-window__cta-tape" aria-hidden="true"></span>
+          Entrar ahora <span class="n500-window__cta-arrow" aria-hidden="true">↗</span>
+        </a>
+        <figure class="nb-print n500-window__team">
+          <img src={asset("/media/narratives/n-500/images/lemu-kimal-lo-aguirre.webp")} alt="Equipo de emprendimiento verde reunido al aire libre" />
+          <figcaption>y una red que abre oportunidades</figcaption>
+        </figure>
+      </div>
+      <div class="n500-window__callout">
+        <p class="n500-window__statement">Que puedan verse.<br />Que puedan sentirse.</p>
+      </div>
+      <CapsuleAudioPlayer
+        track={n500Tracks[6]}
+        artist={n500Artist}
+        cover={asset("/media/narratives/n-500/images/ost-cover.webp")}
+        coverAlt="Portada de la banda sonora original de Natura 500"
+        note="escucha 07 · la invitación"
+        class="n500-window__player"
+      />
+    </div>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : (
+  <article class="book-page nb-page n500-page n500-setlist" aria-label={`${side === "left" ? "Primera" : "Segunda"} parte de la banda sonora de Natura 500`}>
+    <div class="nb-sheet n500-setlist__sheet">
+      <div class="n500-setlist__heading">
+        <p class="nb-kicker">cuaderno 05 · banda sonora</p>
+        <h2>{side === "left" ? "The Breaking..." : "...The Becoming"}</h2>
+      </div>
+      <ol class="n500-setlist__list">
+        {soundtrackColumns.map((track, index) => (
+          <li class:list={["n500-track", { "n500-track--main": track.id === "no-way-to-take-it-slow" }]}>
+            <span class="n500-track__num" aria-hidden="true">{String(index + soundtrackStart).padStart(2, "0")}</span>
+            <PlayPauseButton track={track} artist={n500Artist} class="n500-track__button" />
+            <div class="n500-track__copy">
+              <h3>{track.title}</h3>
+              <p>{track.description}</p>
+            </div>
+            {track.id === "no-way-to-take-it-slow" && <span class="n500-track__badge">tema principal</span>}
+          </li>
+        ))}
+      </ol>
+      {side === "right" && <p class="n500-setlist__closing">No sé si cambió el lugar o fui yo.<br /><strong>Pero estoy en paz.</strong></p>}
+    </div>
+    <span class={`nb-folio nb-folio--${side}`} aria-hidden="true">{folio}</span>
+  </article>
+)}
+
+<style>
+  .n500-page {
+    --nb-paper: oklch(0.91 0.026 85);
+    --nb-ink: oklch(0.30 0.055 187);
+    --nb-ink-soft: oklch(0.43 0.038 187 / 0.72);
+    --nb-dot-ink: oklch(0.48 0.045 65 / 0.16);
+  }
+
+  .n500-page::before { opacity: .55; }
+  .n500-page::after {
+    background-image:
+      radial-gradient(140% 118% at 48% 50%, transparent 58%, oklch(0.42 0.055 58 / .12) 100%),
+      linear-gradient(90deg, oklch(0.38 0.04 60 / .08), transparent 6%, transparent 94%, oklch(0.38 0.04 60 / .08));
+  }
+  .n500-hl {
+    font-weight: 700;
+    background: linear-gradient(96deg, transparent 2%, oklch(0.72 0.13 42 / .48) 6% 94%, transparent 98%) 0 .77em / 100% .56em no-repeat;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding-inline: .08em;
+  }
+  .n500-tape { background-color: oklch(0.80 0.07 54 / .72); }
+  .n500-scribble { position: absolute; z-index: 4; color: oklch(0.55 0.12 42 / .5); font-family: var(--font-marker); }
+  .n500-scribble--corner { top: 4cqw; right: 5cqw; font-size: 6cqw; rotate: 13deg; }
+
+  /* 01 · origen */
+  .n500-cover :global(.n500-cover__player) { position: absolute; z-index: 5; right: 7%; bottom: 6%; left: 8%; }
+  .n500-origin__sheet { grid-template-rows: auto auto auto 1fr; }
+  .n500-origin__title { position: relative; width: max-content; margin-top: calc(var(--rule) * .65); color: oklch(0.35 0.08 42); font-size: 8cqw; rotate: -.7deg; }
+  :global(.n500-origin__underline) { position: absolute; right: -2cqw; bottom: -1.2cqw; left: 1cqw; height: 3.4cqw; color: oklch(0.51 0.11 42); }
+  .n500-origin__memory { margin: calc(var(--rule) * .8) 0 0; font-family: var(--font-marker); font-size: 4.5cqw; line-height: var(--rule); rotate: .6deg; }
+  .n500-origin__copy { align-self: start; margin-top: calc(var(--rule) * 1.2); }
+  .n500-origin__aside { position: absolute; right: 2.8cqw; bottom: 12cqw; margin: 0; color: oklch(0.49 0.10 42 / .72); font-family: var(--font-pen); font-size: 3.2cqw; font-weight: 700; line-height: 1.05; rotate: -7deg; }
+
+  /* 02 · por qué recordar */
+  .n500-remember__sheet { grid-template-rows: auto auto auto minmax(0, 1fr); }
+  .n500-remember__title { margin-top: calc(var(--rule) * .65); font-size: 7.2cqw; color: oklch(0.34 0.075 42); rotate: -.8deg; }
+  .n500-remember__copy { margin-top: calc(var(--rule) * .8); font-size: 3.55cqw; }
+  .n500-remember__award { align-self: end; justify-self: end; width: 78%; height: calc(var(--rule) * 6.6); padding: 2.5cqw 2.5cqw 7cqw; rotate: 1.8deg; }
+  .n500-remember__award img { height: 100%; }
+  .n500-remember__award figcaption { bottom: 1.7cqw; font-size: 2.9cqw; }
+
+  .n500-human__sheet { grid-template-rows: auto auto auto 1fr; }
+  .n500-human__statement { margin: calc(var(--rule) * .65) 0 0; font-family: var(--font-marker); font-size: 6.1cqw; font-weight: 400; line-height: calc(var(--rule) * 1.35); rotate: -.8deg; }
+  .n500-human__statement span { color: oklch(0.49 0.11 42); }
+  .n500-human__copy { margin-top: calc(var(--rule) * .65); font-size: 3.35cqw; }
+  .n500-human__copy p { margin-bottom: calc(var(--rule) * .55); line-height: calc(var(--rule) * .92); }
+  .n500-human__objects { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); align-items: end; gap: 4cqw; min-height: 0; padding-bottom: calc(var(--rule) * .5); }
+  .n500-human__portrait { height: calc(var(--rule) * 8.5); padding: 2.8cqw 2.8cqw 7cqw; rotate: -1.4deg; }
+  .n500-human__portrait img { height: 100%; }
+  .n500-human__portrait figcaption { bottom: 1.7cqw; font-size: 2.8cqw; }
+  :global(.n500-human__player) { width: calc(var(--rule) * 6.7); height: calc(var(--rule) * 6.8); min-height: 0; margin-bottom: calc(var(--rule) * .5); }
+  .n500-human__stain { right: 4%; bottom: 5%; width: 28%; }
+
+  /* 03 · círculo narrativo */
+  .n500-journey__sheet { grid-template-rows: auto auto 1fr auto; padding-right: 8.2cqw; }
+  .n500-journey__title { margin-top: calc(var(--rule) * .55); color: oklch(0.35 0.075 42); rotate: -.5deg; }
+  .journey { position: relative; align-self: center; width: 100%; aspect-ratio: 1; margin-top: calc(var(--rule) * .3); }
+  .journey__orbit { position: absolute; inset: 6%; width: 88%; height: 88%; overflow: visible; fill: none; stroke: oklch(0.39 0.055 187 / .72); stroke-width: 2.3; stroke-linecap: round; }
+  .journey__echo { opacity: .33; stroke-width: 1.3; }
+  .journey__arrow { stroke: oklch(0.50 0.11 42); stroke-width: 3; }
+  .journey__center { position: absolute; top: 50%; left: 50%; width: 30cqw; margin: 0; translate: -50% -50%; color: oklch(0.50 0.11 42); font-family: var(--font-marker); font-size: 5.2cqw; line-height: .9; text-align: center; rotate: -3deg; }
+  .journey__step { position: absolute; width: 18cqw; margin: 0; font-family: var(--font-pen); font-size: 3.05cqw; font-weight: 700; line-height: 1.05; text-align: center; }
+  .journey__step span { display: block; margin-bottom: .5cqw; color: oklch(0.50 0.11 42); font-size: 2.5cqw; }
+  .journey__step--breaking { top: 1%; left: 41%; rotate: -2deg; }
+  .journey__step--building { top: 22%; right: -2%; rotate: 2deg; }
+  .journey__step--chance { right: -1%; bottom: 19%; rotate: -1deg; }
+  .journey__step--scale { bottom: -1%; left: 42%; rotate: 2deg; }
+  .journey__step--step { bottom: 18%; left: -2%; rotate: -3deg; }
+  .journey__step--becoming { top: 21%; left: -4%; rotate: 1deg; }
+  .n500-journey__note { margin: 0 auto calc(var(--rule) * .35); font-family: var(--font-marker); font-size: 3.8cqw; line-height: 1; text-align: center; rotate: -.5deg; }
+
+  .n500-motion__sheet { grid-template-rows: auto auto auto 1fr auto; }
+  .n500-motion__arc { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin-top: calc(var(--rule) * .65); }
+  .n500-motion__arc p { margin: 0; font-family: var(--font-marker); font-size: 5.2cqw; line-height: .9; }
+  .n500-motion__arc p:last-child { text-align: right; }
+  .n500-motion__arc span { display: block; color: oklch(0.50 0.11 42); font-size: 3cqw; }
+  :global(.n500-motion__arrow) { width: 6cqw; height: 8cqw; color: oklch(0.39 0.055 187); rotate: -91deg; }
+  .n500-motion__copy { margin-top: var(--rule); font-size: 3.55cqw; }
+  :global(.n500-motion__player) { align-self: end; justify-self: center; width: calc(var(--rule) * 8.3); height: calc(var(--rule) * 7.4); min-height: 0; }
+  .n500-motion__motto { margin: calc(var(--rule) * .6) 0 0; font-family: var(--font-marker); font-size: 4.2cqw; line-height: var(--rule); text-align: center; rotate: -.8deg; }
+
+  /* 04 · plataforma */
+  .n500-platform__sheet { grid-template-rows: auto auto auto auto 1fr; }
+  .n500-platform__title { margin-top: calc(var(--rule) * .65); color: oklch(0.35 0.075 42); rotate: -.9deg; }
+  .n500-platform__lede { margin: calc(var(--rule) * .5) 0 0; color: oklch(0.50 0.11 42); font-family: var(--font-marker); font-size: 5cqw; line-height: var(--rule); rotate: .4deg; }
+  .n500-platform__copy { margin-top: calc(var(--rule) * .8); font-size: 3.55cqw; }
+  .n500-platform__stages { display: flex; align-self: end; flex-wrap: wrap; gap: 1.3cqw 1.8cqw; padding-bottom: calc(var(--rule) * .5); }
+  .n500-platform__stages span { border: 1.3px solid oklch(0.39 0.055 187 / .6); border-radius: 50%; padding: 1.1cqw 2.3cqw; font-family: var(--font-pen); font-size: 3cqw; font-weight: 700; rotate: -1deg; }
+  .n500-platform__stages span:nth-child(even) { rotate: 2deg; }
+
+  .n500-window__sheet { grid-template-rows: auto 1fr auto auto; }
+  .n500-window__collage { position: relative; min-height: 0; margin-top: calc(var(--rule) * .4); }
+  .n500-window__device { position: absolute; top: 3%; left: 1%; z-index: 1; width: 80%; rotate: -1.5deg; filter: drop-shadow(0 2.2cqw 1.8cqw oklch(0.29 0.035 187 / .2)); }
+  .n500-laptop__screen { position: relative; overflow: hidden; border: 2px solid oklch(0.20 0.025 187); border-bottom-width: 3px; border-radius: 2.3cqw 2.3cqw .7cqw .7cqw; background: oklch(0.19 0.022 187); padding: 3.2cqw 2.1cqw 2cqw; }
+  .n500-laptop__screen::before { content: ""; position: absolute; top: 1.15cqw; left: 50%; z-index: 2; width: 1.05cqw; aspect-ratio: 1; translate: -50% 0; border: 1px solid oklch(0.55 0.02 187); border-radius: 50%; background: oklch(0.11 0.02 187); box-shadow: 0 0 0 .45cqw oklch(0.26 0.02 187); }
+  .n500-laptop__screen::after { content: ""; position: absolute; inset: 3.2cqw 2.1cqw 2cqw; border-radius: .7cqw; background: linear-gradient(118deg, oklch(0.98 0.01 90 / .17), transparent 29%); pointer-events: none; }
+  .n500-laptop__screen img { display: block; width: 100%; aspect-ratio: 1280 / 832; border: 1px solid oklch(0.58 0.02 187 / .45); border-radius: .7cqw; object-fit: cover; }
+  .n500-laptop__base { position: relative; display: block; width: 116%; height: 5.4cqw; margin-left: -8%; border: 1.4px solid oklch(0.32 0.025 187 / .78); border-top: 0; border-radius: 0 0 1.6cqw 1.6cqw; background: linear-gradient(180deg, oklch(0.88 0.014 187), oklch(0.62 0.025 187)); clip-path: polygon(7% 0, 93% 0, 100% 78%, 96% 100%, 4% 100%, 0 78%); }
+  .n500-laptop__base::before { content: ""; position: absolute; top: .7cqw; left: 50%; width: 19%; height: 1.4cqw; translate: -50% 0; border: 1px solid oklch(0.44 0.02 187 / .5); border-radius: 0 0 .8cqw .8cqw; background: oklch(0.75 0.018 187); }
+  .n500-window__team figcaption { bottom: 1.5cqw; font-size: 2.7cqw; }
+  .n500-window__team { position: absolute; right: 0; bottom: 2%; z-index: 2; width: 46%; height: 39%; padding: 2.2cqw 2.2cqw 6.4cqw; rotate: 3deg; }
+  .n500-window__team img { height: 100%; }
+  .n500-window__callout { position: relative; z-index: 3; display: flex; justify-content: flex-end; margin: calc(var(--rule) * .15) 0 calc(var(--rule) * .45); }
+  .n500-window__statement { width: max-content; margin: 0; color: oklch(0.35 0.075 42); font-family: var(--font-marker); font-size: 4.3cqw; line-height: .95; text-align: right; rotate: -1deg; }
+  .n500-window__cta { position: absolute; bottom: 4%; left: 4%; z-index: 4; display: inline-flex; min-height: 8.4cqw; align-items: center; justify-content: center; gap: 1.2cqw; border: 1.7px solid oklch(0.29 0.055 187); border-radius: 5px 9px 7px 6px; background: oklch(0.83 0.19 125); color: oklch(0.25 0.045 187); padding: 1.5cqw 3.2cqw 1.2cqw; font-family: var(--font-pen); font-size: 3.4cqw; font-weight: 700; line-height: 1; text-decoration: none; white-space: nowrap; rotate: -2deg; box-shadow: 3px 5px 0 oklch(0.29 0.055 187 / .12), 0 1.8cqw 2.6cqw oklch(0.29 0.055 187 / .15); transition: transform 260ms cubic-bezier(.16,1,.3,1), background 180ms ease; }
+  .n500-window__cta-tape { position: absolute; top: -2.2cqw; left: 50%; width: 45%; height: 3.8cqw; translate: -50% 0; rotate: 3deg; background: linear-gradient(90deg, oklch(0.92 0.07 88 / .3), oklch(0.93 0.08 88 / .82) 14% 86%, oklch(0.92 0.07 88 / .3)); box-shadow: 0 1px 2px oklch(0.35 0.04 65 / .12); pointer-events: none; }
+  .n500-window__cta:hover { background: oklch(0.88 0.2 125); transform: translateY(-1px) rotate(-1deg); }
+  .n500-window__cta:focus-visible { outline: 3px solid oklch(0.49 0.11 42); outline-offset: 3px; }
+  .n500-window__cta-arrow { font-family: var(--font-marker); font-size: 3.8cqw; }
+  :global(.n500-window__player) { position: relative; z-index: 3; margin-bottom: calc(var(--rule) * .25); }
+
+  /* 05 · soundtrack */
+  .n500-setlist__sheet { display: grid; grid-template-rows: auto 1fr auto; padding-top: calc(var(--rule) * 1.1); }
+  .n500-setlist__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 3cqw; }
+  .n500-setlist__heading h2 { margin: 0; color: oklch(0.50 0.11 42); font-family: var(--font-marker); font-size: 4.4cqw; font-weight: 400; line-height: 1; rotate: -1deg; }
+  .n500-setlist__list { display: flex; flex-direction: column; justify-content: space-evenly; gap: 1.5cqw; min-height: 0; margin: calc(var(--rule) * .4) 0 0; padding: 0; list-style: none; }
+  .n500-track { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 3cqw; padding: 1.5cqw 0 1.5cqw 7.8cqw; }
+  .n500-track::after { content: ""; position: absolute; right: 0; bottom: 0; left: 7cqw; border-bottom: 1px solid oklch(0.39 0.055 187 / .22); rotate: -.25deg; }
+  .n500-track:last-child::after { display: none; }
+  .n500-track__num { position: absolute; top: 2.7cqw; left: 0; color: oklch(0.50 0.11 42 / .65); font-family: var(--font-marker); font-size: 4.6cqw; rotate: -5deg; }
+  :global(.n500-track__button) { width: 7cqw; height: 7cqw; }
+  .n500-track__copy h3 { margin: 0; font-family: var(--font-marker); font-size: 4.2cqw; font-weight: 400; line-height: .96; }
+  .n500-track__copy p { margin: .8cqw 0 0; font-family: var(--font-pen); font-size: 3.15cqw; font-weight: 600; line-height: 1.08; }
+  .n500-track--main { margin-inline: -2cqw; border: 1.5px solid oklch(0.50 0.11 42 / .55); border-radius: 8px 12px 7px 11px; padding-right: 2cqw; background: oklch(0.76 0.065 166 / .16); rotate: -.4deg; }
+  .n500-track--main::after { display: none; }
+  .n500-track__badge { position: absolute; top: -2.2cqw; right: 2cqw; padding: .7cqw 1.5cqw; background: oklch(0.91 0.026 85); color: oklch(0.50 0.11 42); font-family: var(--font-pen); font-size: 2.4cqw; font-weight: 700; rotate: 2deg; }
+  .n500-setlist__closing { margin: .6cqw 0 calc(var(--rule) * .35); font-family: var(--font-marker); font-size: 3.8cqw; line-height: 1.05; text-align: right; rotate: -.7deg; }
+  .n500-setlist__closing strong { color: oklch(0.50 0.11 42); font-weight: 400; }
+
+  @media (max-width: 639px) {
+    .n500-origin__copy, .n500-remember__copy, .n500-motion__copy, .n500-platform__copy { font-size: 3.45cqw; }
+    .n500-human__objects { grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr); gap: 2.4cqw; }
+    .n500-human__copy { font-size: 3.2cqw; }
+    .n500-human__portrait { height: calc(var(--rule) * 8.2); }
+    :global(.n500-human__player) { width: calc(var(--rule) * 6.4); }
+    .journey__step { font-size: 2.9cqw; }
+    .n500-window__device { top: 7%; width: 83%; }
+    .n500-window__team { height: 37%; }
+    .n500-window__statement { font-size: 4.1cqw; }
+    .n500-window__cta { bottom: 4%; min-height: 8.4cqw; padding-inline: 2.6cqw; font-size: 3.1cqw; }
+    .n500-track { gap: 2.4cqw; padding-left: 7.2cqw; }
+    .n500-track__copy p { font-size: 3cqw; }
+  }
+</style>

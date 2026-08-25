@@ -13,6 +13,18 @@ colors:
   tinta-suave: "#8FB4CE"
   papel-blanco: "#FFFFFF"
 typography:
+  pen:
+    fontFamily: "Caveat, Gochi Hand, cursive"
+    fontSize: "clamp(0.9rem, 3.85cqw, 1.4rem)"
+    fontWeight: 500
+    lineHeight: "var(--rule)"
+    letterSpacing: "0.004em"
+  marker:
+    fontFamily: "Gochi Hand, Caveat, cursive"
+    fontSize: "clamp(1.3rem, 8.6cqw, 2.6rem)"
+    fontWeight: 400
+    lineHeight: "calc(var(--rule) * 2)"
+    letterSpacing: "normal"
   display:
     fontFamily: "Neulis Cursive, Hanken Grotesk, sans-serif"
     fontSize: "clamp(2.75rem, 7vw, 9.375rem)"
@@ -130,6 +142,8 @@ La paleta es un conjunto de tintas de taller creativo. El azul sostiene la credi
 
 **Display Font:** Neulis Cursive con Hanken Grotesk como respaldo.
 **Body Font:** Hanken Grotesk con system-ui como respaldo.
+**Pluma (bitácora):** Caveat. Es la letra con la que está escrita la narrativa dentro de las hojas.
+**Plumón (bitácora):** Gochi Hand. Títulos, nombres y frases de cierre trazadas con marcador.
 
 **Character:** La voz combina titulares manuales, densos y expresivos con una sans legible y contemporánea. El contraste recuerda anotaciones sobre una maqueta bien ordenada.
 
@@ -143,7 +157,9 @@ La paleta es un conjunto de tintas de taller creativo. El azul sostiene la credi
 
 **The One Idea Per Fold Rule.** Un solo titular domina cada viewport. El resto de la tipografía lo apoya y nunca compite por escala.
 
-**The Human Annotation Rule.** Las marcas manuales se usan para títulos, notas y énfasis breves. Nunca sustituyen párrafos de lectura.
+**The Human Annotation Rule.** Fuera de la bitácora, las marcas manuales se usan para títulos, notas y énfasis breves: nunca sustituyen párrafos de lectura.
+
+**The Handwritten Log Rule.** Dentro de Narrativas la regla se invierte a propósito. Las hojas son un cuaderno escrito por una persona, así que la narración corre en pluma (Caveat) y los títulos en plumón (Gochi Hand). La sans queda para etiquetas técnicas y para todo lo que vive fuera del libro. El piso de legibilidad no se negocia: la pluma nunca baja de 3.5cqw de la hoja, el interlineado siempre es un múltiplo de la pauta y el contraste de la tinta sobre el papel se mantiene en AA.
 
 ## Elevation
 
@@ -190,6 +206,19 @@ La profundidad es híbrida. La mayoría de las superficies son planas y se separ
 
 El isotipo permanece fijo y adapta su contraste por sección. El menú circular abre una superficie completa Azul Institucional con navegación display. En móvil, los enlaces ocupan una sola columna y conservan un objetivo táctil mínimo de 44px.
 
+### Bitácora: papel y tinta
+
+Cada hoja de Narrativas comparte una sola materia, definida en `global.css` sobre `.nb-page`:
+
+- **Pauta.** `--rule` fija el ritmo vertical de la hoja. Todo margen, interlineado y alto de objeto es un múltiplo de `--rule`, de modo que el texto cae siempre sobre la misma retícula invisible. La unidad es `cqw`, así que la hoja se comporta igual en pliego de escritorio y en hoja única de móvil.
+- **Papel de puntos.** El fondo es papel cálido con una retícula de puntos de opacidad muy baja, alineada al margen del texto. No hay rayas ni cuadrícula: el punto orienta sin competir con la escritura.
+- **Fibra y canto.** Una capa de ruido en `multiply` da grano de papel; un viñeteado cálido envejece los bordes y marca el lomo.
+- **Marcas de tinta.** `InkMark.astro` provee subrayados, cajas, corchetes, asteriscos y palomas trazadas a mano. Cuando una caja tiene que estirarse mucho, se dibuja con doble contorno en CSS en lugar de deformar el SVG.
+- **Objetos pegados.** Fotografías reveladas (`.nb-print`), cinta adhesiva (`.nb-tape`), cercos de café (`.nb-stain`) y folios escritos a mano (`.nb-folio`) sostienen la idea de un cuaderno usado.
+- **Marcatextos.** El énfasis se resuelve con dos pasadas de plumón amarillo sobre el texto, con `box-decoration-break: clone` para que sobreviva al salto de línea.
+
+**The Rule Multiple Rule.** Si un elemento de la hoja necesita alto propio, se declara en múltiplos de `--rule`, no en porcentajes. Un porcentaje contra una fila flexible desborda la hoja en cuanto cambia el contenido.
+
 ### Flipbook
 
 El libro es una superficie editorial de dos páginas en escritorio y una página enfocada en móvil. Cada giro conserva continuidad entre página saliente y entrante mediante perspectiva, `transform-origin` en el lomo, sombreado progresivo y una duración constante. El contenido no cambia hasta que el pliegue lo oculta. Los botones, teclado, gesto horizontal y progreso deben compartir la misma máquina de estado para impedir saltos o giros superpuestos.
@@ -202,6 +231,7 @@ En `prefers-reduced-motion`, el giro 3D se sustituye por una disolución corta s
 
 - **Do** conservar la estructura, paleta y proporciones definidas en los prototipos HTML.
 - **Do** usar semitono, papel, collage, recortes y doodles como materiales narrativos.
+- **Do** escribir a mano la narración de la bitácora y anclar cada hoja a la pauta `--rule`.
 - **Do** mantener cada sección en `100svh` solo cuando su contenido cabe sin recorte; en móvil corto, permitir flujo natural.
 - **Do** animar exclusivamente `transform`, `opacity`, filtros moderados y variables visuales compatibles con composición.
 - **Do** hacer que el flipbook responda igual a botones, teclado, arrastre y gesto táctil.
@@ -212,6 +242,7 @@ En `prefers-reduced-motion`, el giro 3D se sustituye por una disolución corta s
 - **Don't** convertir Simplixity en una consultora corporativa tradicional, una ONG institucional genérica o una plantilla de startup SaaS.
 - **Don't** usar la paleta de manera infantil, arbitraria o puramente decorativa.
 - **Don't** usar degradado dentro del texto, glassmorphism decorativo o tarjetas idénticas repetidas sin jerarquía.
+- **Don't** rayar o cuadricular las hojas de la bitácora: el papel es de puntos y de baja opacidad.
 - **Don't** usar `border-left` o `border-right` de más de 1px como franja decorativa.
 - **Don't** simular el flipbook con un simple carrusel lateral o cambiar el contenido antes de que la página termine de girar.
-- **Don't** bloquear el scroll, la navegación o el contenido si GSAP, Lenis o JavaScript no cargan.
+- **Don't** bloquear el scroll, la navegación o el contenido si GSAP o JavaScript no cargan.

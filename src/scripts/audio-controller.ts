@@ -1,34 +1,64 @@
 import { asset } from "../lib/assets";
 
+type PlaylistEntry = {
+  src: string;
+  title: string;
+  artist: string;
+};
+
+type AudioRuntime = {
+  audio: HTMLAudioElement;
+  activeSrc: string;
+  activeTitle: string;
+  activeArtist: string;
+  playlist: PlaylistEntry[];
+  playlistIndex: number;
+  abortController?: AbortController;
+  observer?: MutationObserver;
+};
+
 declare global {
   interface Window {
     simplixityAudio?: HTMLAudioElement;
+    simplixityAudioRuntime?: AudioRuntime;
   }
 }
 
 export {};
 
-const audio = window.simplixityAudio || new Audio();
+const previousRuntime = window.simplixityAudioRuntime;
+previousRuntime?.abortController?.abort();
+previousRuntime?.observer?.disconnect();
+
+const audio = previousRuntime?.audio || window.simplixityAudio || new Audio();
+const runtime: AudioRuntime = previousRuntime || {
+  audio,
+  activeSrc: audio.currentSrc || "",
+  activeTitle: "",
+  activeArtist: "",
+  playlist: [],
+  playlistIndex: -1,
+};
+
+runtime.abortController = new AbortController();
 window.simplixityAudio = audio;
+window.simplixityAudioRuntime = runtime;
 audio.preload = "metadata";
 
-let activeSrc = audio.currentSrc || "";
-let activeTitle = "";
-
+const signal = runtime.abortController.signal;
 const formatTime = (seconds: number) => {
   if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
   return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 };
 
 const absoluteUrl = (src: string) => new URL(src, window.location.href).href;
-
 const roots = () => Array.from(document.querySelectorAll<HTMLElement>("[data-audio-player]"));
 const boundToggles = new WeakSet<HTMLElement>();
 
 function syncControls() {
-  const currentUrl = activeSrc ? absoluteUrl(activeSrc) : "";
+  const currentUrl = runtime.activeSrc ? absoluteUrl(runtime.activeSrc) : "";
   const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
-    const progress = duration > 0 ? (audio.currentTime / duration) * 1000 : 0;
+  const progress = duration > 0 ? (audio.currentTime / duration) * 1000 : 0;
 
   roots().forEach((root) => {
     const src = root.dataset.audioSrc || "";
@@ -56,24 +86,58 @@ function syncControls() {
   });
 }
 
-function bindControls() {
-  roots().forEach((root) => {
-    const control = root.matches("[data-audio-toggle]")
-      ? root
-      : root.querySelector<HTMLElement>("[data-audio-toggle]");
-    if (!control || boundToggles.has(control)) return;
-    boundToggles.add(control);
-    control.addEventListener("click", () => { void toggle(root); });
+function readPlaylist(root: HTMLElement) {
+  const serialized = root.dataset.audioPlaylist;
+  const index = Number(root.dataset.audioPlaylistIndex);
+  if (!serialized || !Number.isInteger(index)) return null;
+
+  try {
+    const playlist = JSON.parse(serialized) as PlaylistEntry[];
+    if (!Array.isArray(playlist) || !playlist[index]) return null;
+    return { playlist, index };
+  } catch {
+    return null;
+  }
+}
+
+function updateMediaSession(entry: PlaylistEntry) {
+  if (!("mediaSession" in navigator) || !("MediaMetadata" in window)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: entry.title,
+    artist: entry.artist,
+    album: "Tech for Nature México, Banda Sonora Original",
+    artwork: [{ src: asset("/media/narratives/tech-for-nature/images/soundtrack-cover.webp"), sizes: "1200x1200", type: "image/webp" }],
   });
-  syncControls();
+}
+
+async function startEntry(entry: PlaylistEntry) {
+  audio.pause();
+  runtime.activeSrc = entry.src;
+  runtime.activeTitle = entry.title;
+  runtime.activeArtist = entry.artist;
+  audio.src = entry.src;
+  audio.currentTime = 0;
+  updateMediaSession(entry);
+
+  try {
+    await audio.play();
+  } catch {
+    syncControls();
+  }
 }
 
 async function toggle(root: HTMLElement) {
   const src = root.dataset.audioSrc;
   if (!src) return;
   const resolved = absoluteUrl(src);
+  const playlistState = readPlaylist(root);
 
-  if (activeSrc && absoluteUrl(activeSrc) === resolved) {
+  if (playlistState) {
+    runtime.playlist = playlistState.playlist;
+    runtime.playlistIndex = playlistState.index;
+  }
+
+  if (runtime.activeSrc && absoluteUrl(runtime.activeSrc) === resolved) {
     if (audio.paused) {
       try {
         await audio.play();
@@ -88,27 +152,29 @@ async function toggle(root: HTMLElement) {
     return;
   }
 
-  audio.pause();
-  activeSrc = src;
-  activeTitle = root.dataset.audioTitle || "Banda sonora";
-  audio.src = src;
-  audio.currentTime = 0;
-
-  if ("mediaSession" in navigator && "MediaMetadata" in window) {
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: activeTitle,
-      artist: root.dataset.audioArtist || "Tech4Nature",
-      album: "Tech for Nature México, Banda Sonora Original",
-      artwork: [{ src: asset("/media/narratives/tech-for-nature/images/soundtrack-cover.webp"), sizes: "1200x1200", type: "image/webp" }],
-    });
+  if (!playlistState) {
+    runtime.playlist = [];
+    runtime.playlistIndex = -1;
   }
 
-  try {
-    await audio.play();
-    root.removeAttribute("data-audio-error");
-  } catch (error) {
-    root.dataset.audioError = error instanceof Error ? `${error.name}: ${error.message}` : "No se pudo reproducir";
-  }
+  await startEntry({
+    src,
+    title: root.dataset.audioTitle || "Banda sonora",
+    artist: root.dataset.audioArtist || "Tech4Nature",
+  });
+  root.removeAttribute("data-audio-error");
+  syncControls();
+}
+
+function bindControls() {
+  roots().forEach((root) => {
+    const control = root.matches("[data-audio-toggle]")
+      ? root
+      : root.querySelector<HTMLElement>("[data-audio-toggle]");
+    if (!control || boundToggles.has(control)) return;
+    boundToggles.add(control);
+    control.addEventListener("click", () => { void toggle(root); }, { signal });
+  });
   syncControls();
 }
 
@@ -119,31 +185,43 @@ document.addEventListener("input", (event) => {
   const src = root?.dataset.audioSrc;
   if (!root || !src) return;
   const resolved = absoluteUrl(src);
-  if (!activeSrc || absoluteUrl(activeSrc) !== resolved) {
-    activeSrc = src;
-    activeTitle = root.dataset.audioTitle || "Banda sonora";
+  if (!runtime.activeSrc || absoluteUrl(runtime.activeSrc) !== resolved) {
+    runtime.activeSrc = src;
+    runtime.activeTitle = root.dataset.audioTitle || "Banda sonora";
+    runtime.activeArtist = root.dataset.audioArtist || "Tech4Nature";
+    runtime.playlist = [];
+    runtime.playlistIndex = -1;
     audio.src = src;
   }
   if (Number.isFinite(audio.duration) && audio.duration > 0) {
     audio.currentTime = (Number(range.value) / 1000) * audio.duration;
   }
   syncControls();
-});
+}, { signal });
 
-audio.addEventListener("play", syncControls);
-audio.addEventListener("pause", syncControls);
-audio.addEventListener("timeupdate", syncControls);
-audio.addEventListener("durationchange", syncControls);
-audio.addEventListener("ended", syncControls);
+audio.addEventListener("play", syncControls, { signal });
+audio.addEventListener("pause", syncControls, { signal });
+audio.addEventListener("timeupdate", syncControls, { signal });
+audio.addEventListener("durationchange", syncControls, { signal });
+audio.addEventListener("ended", () => {
+  const nextIndex = runtime.playlistIndex + 1;
+  const nextTrack = runtime.playlist[nextIndex];
+  if (!nextTrack) {
+    syncControls();
+    return;
+  }
+  runtime.playlistIndex = nextIndex;
+  void startEntry(nextTrack).then(syncControls);
+}, { signal });
 
 window.addEventListener("simplixity:projectchange", (event) => {
   const projectIndex = (event as CustomEvent<{ projectIndex: number }>).detail.projectIndex;
   if (projectIndex !== 0 && !audio.paused) audio.pause();
-});
+}, { signal });
 
-window.addEventListener("simplixity:pagesmounted", bindControls);
+window.addEventListener("simplixity:pagesmounted", bindControls, { signal });
 
-new MutationObserver((records) => {
+runtime.observer = new MutationObserver((records) => {
   const addedPlayer = records.some((record) =>
     Array.from(record.addedNodes).some((node) =>
       node instanceof HTMLElement
@@ -151,5 +229,6 @@ new MutationObserver((records) => {
     ),
   );
   if (addedPlayer) bindControls();
-}).observe(document.body, { childList: true, subtree: true });
+});
+runtime.observer.observe(document.body, { childList: true, subtree: true });
 bindControls();

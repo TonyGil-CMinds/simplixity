@@ -36,6 +36,8 @@
   --color-muted: #8fb4ce;
   --font-display: "Neulis Cursive", "Hanken Grotesk", sans-serif;
   --font-hand: "Gochi Hand", cursive;
+  --font-pen: "Caveat", "Gochi Hand", cursive;
+  --font-marker: "Gochi Hand", "Caveat", cursive;
   --font-sans: "Hanken Grotesk", system-ui, sans-serif;
   --ease-studio: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-overlay: cubic-bezier(0.7, 0, 0.2, 1);
@@ -291,4 +293,304 @@ svg {
   .marquee-track {
     animation: none;
   }
+}
+
+/* ============================================================
+   Bitácora: papel, tinta y marcas hechas a mano
+   Las páginas de Narrativas comparten esta materia para que
+   cada hoja se lea como un cuaderno escrito por una persona.
+   ============================================================ */
+
+.nb-page {
+  /* Pauta del cuaderno. Todo el ritmo vertical es múltiplo de --rule. */
+  --rule: 5.1cqw;
+  --nb-rule-shift: 0.7;
+  --nb-margin-x: 8.4cqw;
+
+  --nb-paper: #f7f1de;
+  --nb-ink: #16334e;
+  --nb-ink-soft: rgb(22 51 78 / 0.6);
+  --nb-dot-ink: rgb(58 104 156 / 0.2);
+  --nb-dot-size: 0.9px;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--nb-ink);
+  background-color: var(--nb-paper);
+  background-image:
+    radial-gradient(
+      circle at center,
+      var(--nb-dot-ink) 0 var(--nb-dot-size),
+      transparent calc(var(--nb-dot-size) + 0.35px)
+    ),
+    radial-gradient(ellipse 60% 40% at 84% 9%, rgb(206 168 88 / 0.13), transparent 100%),
+    radial-gradient(ellipse 55% 45% at 10% 92%, rgb(176 144 84 / 0.12), transparent 100%),
+    linear-gradient(96deg, rgb(255 255 255 / 0.5), transparent 40%, rgb(120 84 24 / 0.055));
+  background-size: var(--rule) var(--rule), auto, auto, auto;
+  background-position:
+    calc(var(--nb-margin-x) + 3.4cqw) calc(var(--rule) * var(--nb-rule-shift)),
+    0 0,
+    0 0,
+    0 0;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+}
+
+/* Fibra del papel. */
+.nb-page::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)' opacity='0.42'/%3E%3C/svg%3E");
+  background-size: 190px 190px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Envejecido de cantos y sombra de lomo. */
+.nb-page::after {
+  content: "";
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  background-image:
+    radial-gradient(150% 125% at 50% 48%, transparent 58%, rgb(112 78 20 / 0.09) 100%),
+    linear-gradient(90deg, rgb(70 48 10 / 0.075), transparent 5%, transparent 95%, rgb(70 48 10 / 0.075));
+  pointer-events: none;
+}
+
+/* Hoja lisa: mismo papel, sin retícula de puntos. */
+.nb-page--plain {
+  background-image:
+    radial-gradient(ellipse 60% 40% at 84% 9%, rgb(206 168 88 / 0.13), transparent 100%),
+    radial-gradient(ellipse 55% 45% at 10% 92%, rgb(176 144 84 / 0.12), transparent 100%),
+    linear-gradient(96deg, rgb(255 255 255 / 0.5), transparent 40%, rgb(120 84 24 / 0.055));
+  background-size: auto;
+  background-position: 0 0;
+}
+
+/* Cuerpo de la hoja: rejilla anclada a la pauta. */
+.nb-sheet {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  height: 100%;
+  padding:
+    calc(var(--rule) * 2)
+    7.5cqw
+    calc(var(--rule) * 1.4)
+    calc(var(--nb-margin-x) + 3.4cqw);
+}
+
+/* --- Manuscrito --- */
+
+.nb-kicker {
+  margin: 0;
+  color: var(--nb-ink-soft);
+  font-family: var(--font-pen);
+  font-size: 3cqw;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  line-height: var(--rule);
+}
+
+.nb-title {
+  margin: 0;
+  font-family: var(--font-marker);
+  font-size: 8.6cqw;
+  font-weight: 400;
+  line-height: calc(var(--rule) * 2);
+}
+
+.nb-subtitle {
+  margin: 0;
+  font-family: var(--font-marker);
+  font-size: 5.4cqw;
+  font-weight: 400;
+  line-height: var(--rule);
+}
+
+.nb-copy {
+  font-family: var(--font-pen);
+  font-size: 3.85cqw;
+  font-weight: 500;
+  letter-spacing: 0.004em;
+}
+
+.nb-copy p {
+  margin: 0 0 var(--rule);
+  line-height: var(--rule);
+}
+
+.nb-copy p:last-child {
+  margin-bottom: 0;
+}
+
+/* La mano no escribe perfectamente recto: deriva mínima por párrafo. */
+.nb-copy p:nth-of-type(odd) { rotate: -0.2deg; }
+.nb-copy p:nth-of-type(even) { rotate: 0.24deg; }
+
+.nb-copy--tight p {
+  margin-bottom: 0;
+}
+
+/* Marcatextos: dos pasadas de plumón que sobreviven al salto de línea. */
+.nb-hl {
+  font-weight: 700;
+  background-image:
+    linear-gradient(97deg, rgb(255 199 58 / 0.14), rgb(255 199 58 / 0.72) 5%, rgb(255 186 22 / 0.66) 95%, rgb(255 199 58 / 0.18)),
+    linear-gradient(93deg, rgb(255 176 0 / 0.3), rgb(255 208 82 / 0.22) 72%, rgb(255 208 82 / 0.05));
+  background-repeat: no-repeat, no-repeat;
+  background-size: 100% 0.62em, 100% 0.34em;
+  background-position: 0 0.72em, 0 0.92em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  margin-inline: -0.1em;
+  padding-inline: 0.1em;
+}
+
+.nb-copy strong {
+  font-weight: 700;
+}
+
+/* Folio escrito a mano. */
+.nb-folio {
+  position: absolute;
+  z-index: 5;
+  bottom: calc(var(--rule) * 0.55);
+  color: rgb(22 51 78 / 0.42);
+  font-family: var(--font-pen);
+  font-size: 3.1cqw;
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.nb-folio--right { right: 7.5cqw; rotate: -2.5deg; }
+.nb-folio--left { left: calc(var(--nb-margin-x) + 3.4cqw); rotate: 2deg; }
+
+/* Nota al margen, escrita girada dentro del margen rosa. */
+.nb-margin-note {
+  position: absolute;
+  z-index: 5;
+  color: rgb(22 51 78 / 0.55);
+  font-family: var(--font-pen);
+  font-size: 3cqw;
+  font-weight: 600;
+  line-height: 1.05;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  pointer-events: none;
+}
+
+/* --- Objetos pegados en la hoja --- */
+
+.nb-tape {
+  position: absolute;
+  z-index: 5;
+  width: 21%;
+  height: 4.4cqw;
+  background:
+    linear-gradient(90deg, rgb(255 236 176 / 0.2), rgb(255 238 186 / 0.78) 12%, rgb(252 231 168 / 0.7) 88%, rgb(255 236 176 / 0.2)),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.22) 0 3px, transparent 3px 7px);
+  box-shadow: 0 1px 3px rgb(88 62 12 / 0.14);
+  pointer-events: none;
+}
+
+.nb-tape--tl { top: 3.5%; left: -3%; rotate: -34deg; }
+.nb-tape--tr { top: 4%; right: -3%; rotate: 33deg; }
+.nb-tape--bl { bottom: 4%; left: -3%; rotate: 34deg; }
+.nb-tape--br { bottom: 3.5%; right: -3%; rotate: -33deg; }
+.nb-tape--top { top: -2.2cqw; left: 50%; translate: -50% 0; rotate: -2deg; }
+
+.nb-photo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #efe7d2;
+}
+
+.nb-photo__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Grano y canto sobre la ilustración pegada. */
+.nb-photo::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  background-image:
+    radial-gradient(150% 125% at 50% 48%, transparent 62%, rgb(60 40 6 / 0.16) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.3'/%3E%3C/svg%3E");
+  background-size: auto, 190px 190px;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Foto revelada y pegada con cinta. */
+.nb-print {
+  position: relative;
+  margin: 0;
+  border-radius: 3px 5px 4px 3px;
+  background: #fdfaf1;
+  padding: 4.2cqw 4.2cqw 9cqw;
+  box-shadow: 3px 5px 0 rgb(22 51 78 / 0.05), 0 10px 20px rgb(22 51 78 / 0.13);
+}
+
+.nb-print img {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgb(22 51 78 / 0.1);
+  object-fit: cover;
+}
+
+.nb-print figcaption {
+  position: absolute;
+  right: 4.2cqw;
+  bottom: 2.4cqw;
+  left: 4.2cqw;
+  color: rgb(22 51 78 / 0.66);
+  font-family: var(--font-pen);
+  font-size: 3.1cqw;
+  font-weight: 600;
+  line-height: 1.05;
+  text-align: center;
+}
+
+/* Marcas de tinta reutilizables. */
+.ink-mark {
+  display: block;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.ink-mark__echo {
+  opacity: 0.4;
+}
+
+/* Cerco de café. Una sola vez por bitácora. */
+.nb-stain {
+  position: absolute;
+  z-index: 1;
+  aspect-ratio: 1 / 0.9;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, transparent 70%, rgb(140 96 34 / 0.09) 76%, rgb(122 82 26 / 0.15) 87%, rgb(150 108 44 / 0.05) 95%, transparent 100%);
+  mix-blend-mode: multiply;
+  rotate: -12deg;
+  pointer-events: none;
+}
+
+@media (max-width: 639px) {
+  .nb-page { --rule: 5.1cqw; }
 }

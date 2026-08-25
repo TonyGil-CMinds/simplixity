@@ -4,9 +4,19 @@ import type { SoundtrackTrack } from "../../data/narratives";
 interface Props {
   track: SoundtrackTrack;
   class?: string;
+  artist?: string;
+  playlist?: readonly SoundtrackTrack[];
+  playlistIndex?: number;
 }
 
-const { track, class: className = "" } = Astro.props;
+const {
+  track,
+  class: className = "",
+  artist = "Tech4Nature, Banda Sonora Original",
+  playlist,
+  playlistIndex,
+} = Astro.props;
+const playlistData = playlist?.map(({ src, title }) => ({ src, title, artist }));
 ---
 
 <button
@@ -16,7 +26,9 @@ const { track, class: className = "" } = Astro.props;
   data-audio-toggle
   data-audio-src={track.src}
   data-audio-title={track.title}
-  data-audio-artist="Tech4Nature, Banda Sonora Original"
+  data-audio-artist={artist}
+  data-audio-playlist={playlistData ? JSON.stringify(playlistData) : undefined}
+  data-audio-playlist-index={playlistIndex}
   aria-label={`Reproducir ${track.title}`}
   aria-pressed="false"
 >

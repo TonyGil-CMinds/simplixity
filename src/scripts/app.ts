@@ -1,34 +1,9 @@
-import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-declare global {
-  interface Window {
-    simplixityLenis?: Lenis;
-  }
-}
 
 gsap.registerPlugin(ScrollTrigger);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-function setupSmoothScroll() {
-  if (reducedMotion.matches) return;
-
-  window.simplixityLenis?.destroy();
-  const lenis = new Lenis({
-    duration: 1.05,
-    smoothWheel: true,
-    wheelMultiplier: 0.9,
-    touchMultiplier: 1.05,
-    anchors: { offset: 0 },
-  });
-
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
-  window.simplixityLenis = lenis;
-}
 
 function setupLoader() {
   const loader = document.querySelector<HTMLElement>("[data-loader]");
@@ -89,11 +64,22 @@ function setupHeroSequence() {
     return;
   }
 
+  let reelIsLoaded = false;
   let reelIsActive = false;
+  const loadReel = () => {
+    if (reelIsLoaded) return;
+    const src = reel.dataset.src;
+    if (!src) return;
+    reelIsLoaded = true;
+    reel.src = src;
+    reel.load();
+  };
+
   const setReelActive = (active: boolean) => {
     if (active === reelIsActive) return;
     reelIsActive = active;
     if (active) {
+      loadReel();
       void reel.play().catch(() => undefined);
       return;
     }
@@ -110,6 +96,7 @@ function setupHeroSequence() {
       scrub: 0.85,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
+        if (self.progress >= 0.42 && self.progress < 0.995) loadReel();
         const reelVisible = self.progress >= 0.52 && self.progress < 0.995;
         setReelActive(reelVisible);
         sequence.dataset.tone = self.progress >= 0.42 ? "solid" : "light";
@@ -192,88 +179,13 @@ function setupScrollMotion() {
   });
 }
 
-function setupToneNavigation() {
-  const whiteLogo = document.querySelector<HTMLElement>("[data-logo-white]");
-  const burger = document.querySelector<HTMLElement>("[data-menu-toggle]");
-  if (!whiteLogo || !burger) return;
-
-  const apply = () => {
-    const stack = document.elementsFromPoint(Math.round(window.innerWidth / 2), 44);
-    let tone = "light";
-    for (const element of stack) {
-      const section = element.closest<HTMLElement>("section[data-tone]");
-      if (section) {
-        tone = section.dataset.tone || "light";
-        break;
-      }
-    }
-    whiteLogo.style.opacity = tone === "solid" ? "1" : "0";
-    burger.dataset.tone = tone;
-  };
-
-  window.addEventListener("scroll", apply, { passive: true });
-  window.addEventListener("resize", apply);
-  apply();
-}
-
-function setupMenu() {
-  const menu = document.querySelector<HTMLElement>("[data-menu]");
-  const openButton = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
-  const closeButton = document.querySelector<HTMLButtonElement>("[data-menu-close]");
-  if (!menu || !openButton || !closeButton) return;
-
-  const focusable = () =>
-    Array.from(menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
-
-  const close = () => {
-    menu.classList.remove("is-open");
-    menu.setAttribute("aria-hidden", "true");
-    openButton.setAttribute("aria-expanded", "false");
-    document.body.classList.remove("menu-open");
-    window.simplixityLenis?.start();
-    openButton.focus({ preventScroll: true });
-  };
-
-  const open = () => {
-    menu.classList.add("is-open");
-    menu.setAttribute("aria-hidden", "false");
-    openButton.setAttribute("aria-expanded", "true");
-    document.body.classList.add("menu-open");
-    window.simplixityLenis?.stop();
-    window.setTimeout(() => focusable()[0]?.focus({ preventScroll: true }), 80);
-  };
-
-  openButton.addEventListener("click", open);
-  closeButton.addEventListener("click", close);
-  menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", close));
-
-  document.addEventListener("keydown", (event) => {
-    if (!menu.classList.contains("is-open")) return;
-    if (event.key === "Escape") close();
-    if (event.key !== "Tab") return;
-    const nodes = focusable();
-    const first = nodes[0];
-    const last = nodes[nodes.length - 1];
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last?.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first?.focus();
-    }
-  });
-}
-
 function init() {
-  if (document.documentElement.dataset.simplixityReady) return;
-  document.documentElement.dataset.simplixityReady = "true";
-  setupSmoothScroll();
+  if (document.documentElement.dataset.simplixityMotionReady) return;
+  document.documentElement.dataset.simplixityMotionReady = "true";
   setupLoader();
   setupHero();
   setupHeroSequence();
   setupScrollMotion();
-  setupToneNavigation();
-  setupMenu();
   window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
 }
 

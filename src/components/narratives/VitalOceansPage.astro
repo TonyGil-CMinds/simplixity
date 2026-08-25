@@ -1,0 +1,355 @@
+---
+import { asset } from "../../lib/assets";
+import type { NarrativeProject } from "../../data/narratives";
+import { vitalOceansTracks } from "../../data/narratives";
+import CapsuleAudioPlayer from "../audio/CapsuleAudioPlayer.astro";
+import ColorAudioPlayer from "../audio/ColorAudioPlayer.astro";
+import PlayPauseButton from "../audio/PlayPauseButton.astro";
+import InkMark from "./InkMark.astro";
+
+interface Props {
+  project: NarrativeProject;
+  spreadIndex: number;
+  side: "left" | "right";
+}
+
+const { project, spreadIndex, side } = Astro.props;
+const spread = project.spreads[spreadIndex];
+const page = `${spread.layout}:${side}`;
+const folio = spreadIndex * 2 + (side === "left" ? 1 : 2);
+const artist = "Océanos Vitales · Banda Sonora Original";
+const soundtrackColumns = side === "left" ? vitalOceansTracks.slice(0, 4) : vitalOceansTracks.slice(4);
+const soundtrackStart = side === "left" ? 1 : 5;
+
+const platformSteps = [
+  ["01", "Seleccionar el área desde un teléfono o una computadora."],
+  ["02", "Reunir datos, memorias y evidencia sobre lo que está pasando en el océano."],
+  ["03", "Generar un reporte con respaldo científico, listo para ser revisado y enviado."],
+];
+
+const voices = ["comunidad", "ciencia", "gobierno", "sector privado"];
+---
+
+{page === "vo-nets:left" ? (
+  <article class="book-page nb-photo vo-cover" aria-label="Inicio de la bitácora Océanos Vitales">
+    <img
+      class="nb-photo__img"
+      src={asset("/media/narratives/vital-oceans/images/portada-1.webp")}
+      alt="Ilustración en acuarela de un equipo navegando en una lancha sobre un océano azul"
+    />
+    <p class="vo-cover__label">océanos vitales<br /><span>bitácora 03</span></p>
+    <CapsuleAudioPlayer
+      track={vitalOceansTracks[0]}
+      artist={artist}
+      cover={asset("/media/narratives/vital-oceans/audio/album-cover.webp")}
+      coverAlt="Portada de la banda sonora original de Océanos Vitales"
+      note="escucha 01 · estas redes"
+      class="vo-cover__player"
+    />
+  </article>
+) : page === "vo-nets:right" ? (
+  <article class="book-page nb-page vo-page vo-nets">
+    <div class="vo-net vo-net--a" aria-hidden="true"></div>
+    <div class="vo-net vo-net--b" aria-hidden="true"></div>
+    <div class="nb-sheet vo-nets__sheet">
+      <p class="nb-kicker">cuaderno 01 · el problema</p>
+      <h2 class="nb-title vo-nets__title">
+        Estas redes<br />que nos unen<br /><span>y nos separan.</span>
+      </h2>
+      <div class="nb-copy vo-nets__copy">
+        <p>Pienso en las redes que arrastran el fondo marino. Se llevan la vida y dejan a las comunidades frente a un océano cada vez más vacío.</p>
+        <p>Pero también pienso en nuestras conexiones. Hay redes que asfixian y redes que nos sostienen. <strong class="vo-hl">Las dos forman parte de mí.</strong></p>
+      </div>
+      <div class="vo-nets__objects">
+        <figure class="nb-print vo-nets__photo">
+          <span class="nb-tape nb-tape--top" aria-hidden="true"></span>
+          <img src={asset("/media/narratives/vital-oceans/images/sea-lions.webp")} alt="Lobos marinos asoman la cabeza sobre el agua junto a un buzo" />
+          <figcaption>cuando protegemos un área, la vida vuelve</figcaption>
+        </figure>
+      </div>
+    </div>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "vo-world:left" ? (
+  <article class="book-page nb-page vo-page vo-world">
+    <div class="nb-sheet vo-world__sheet">
+      <p class="nb-kicker">cuaderno 02 · todas las aventuras</p>
+      <h2 class="nb-title vo-world__title">
+        La inmensidad<br />de este mundo
+        <InkMark variant="underline-double" class="vo-world__underline" width={2.5} />
+      </h2>
+      <div class="nb-copy vo-world__copy">
+        <p>No es la aventura de unos pocos. Son viajes, caminos y recuerdos de personas que llegaron desde lugares distintos a una misma misión.</p>
+        <p>El océano es inmenso, pero <strong class="vo-hl">las personas también somos un mundo enorme.</strong> Océanos Vitales empieza cuando dejamos de disputar quién avanza y reconocemos el problema común.</p>
+      </div>
+      <div class="vo-world__objects">
+        <figure class="nb-print vo-world__photo">
+          <span class="nb-tape nb-tape--top" aria-hidden="true"></span>
+          <img src={asset("/media/narratives/vital-oceans/images/coastal-community.webp")} alt="Niñas y niños de una comunidad costera miran juntos hacia el cielo" />
+          <figcaption>cada historia también es un punto de partida</figcaption>
+        </figure>
+        <ColorAudioPlayer
+          track={vitalOceansTracks[2]}
+          artist={artist}
+          label="escucha 03 · la inmensidad"
+          accent="#1C91A4"
+          class="vo-world__player"
+        />
+      </div>
+    </div>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "vo-world:right" ? (
+  <article class="book-page nb-photo vo-home" aria-label="Una historia de pertenencia al océano">
+    <img
+      class="nb-photo__img"
+      src={asset("/media/narratives/vital-oceans/images/portada-2.webp")}
+      alt="Ilustración en acuarela de un pescador trabajando desde una embarcación pequeña"
+    />
+    <p class="vo-home__quote">“Para muchas personas,<br />el hogar es el mar.”</p>
+    <CapsuleAudioPlayer
+      track={vitalOceansTracks[6]}
+      artist={artist}
+      cover={asset("/media/narratives/vital-oceans/audio/album-cover.webp")}
+      coverAlt="Portada de la banda sonora original de Océanos Vitales"
+      note="escucha 07 · pertenencia"
+      class="vo-home__player"
+    />
+  </article>
+) : page === "vo-platform:left" ? (
+  <article class="book-page nb-page vo-page vo-platform">
+    <div class="nb-sheet vo-platform__sheet">
+      <p class="nb-kicker">cuaderno 03 · la plataforma</p>
+      <h2 class="nb-title vo-platform__title">Dos clics<br /><span>desde el hogar.</span></h2>
+      <div class="nb-copy vo-platform__copy">
+        <p>Muchas comunidades ya cuidan el mar sin que exista un sello oficial. Lo que falta suele ser documentación, datos y una revisión que las instituciones puedan reconocer.</p>
+      </div>
+      <ol class="vo-flow">
+        {platformSteps.map(([number, text]) => (
+          <li>
+            <span>{number}</span>
+            <p>{text}</p>
+          </li>
+        ))}
+      </ol>
+      <figure class="nb-print vo-platform__photo">
+        <span class="nb-tape nb-tape--top" aria-hidden="true"></span>
+        <img src={asset("/media/narratives/vital-oceans/images/fisherman-at-sea.webp")} alt="Pescador sostiene una línea desde una canoa sobre el mar" />
+        <figcaption>son sus historias, es su hogar</figcaption>
+      </figure>
+    </div>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "vo-platform:right" ? (
+  <article class="book-page nb-page vo-page vo-voices">
+    <span class="nb-stain vo-voices__stain" aria-hidden="true"></span>
+    <div class="nb-sheet vo-voices__sheet">
+      <p class="nb-kicker">cuaderno 03 · una misión compartida</p>
+      <h2 class="vo-voices__statement">Una voz puede empezar.<br /><span>Muchas voces regeneran.</span></h2>
+      <div class="vo-voices__map" aria-label="Comunidad, ciencia, gobierno y sector privado trabajando alrededor del océano">
+        <p class="vo-voices__center">el océano</p>
+        {voices.map((voice, index) => <p class={`vo-voices__voice vo-voices__voice--${index + 1}`}>{voice}</p>)}
+      </div>
+      <div class="nb-copy vo-voices__copy">
+        <p>La inteligencia artificial no sustituye las historias. Las ordena para que una comunidad pueda convertir lo que sabe de su hogar en un reporte verificable y en un caso que otros lugares puedan adaptar.</p>
+      </div>
+      <div class="vo-voices__objects">
+        <figure class="nb-print vo-voices__photo">
+          <span class="nb-tape nb-tape--top" aria-hidden="true"></span>
+          <img src={asset("/media/narratives/vital-oceans/images/wildlife-antarctica.webp")} alt="Foca descansa sobre el hielo entre un grupo de pingüinos" />
+          <figcaption>que el océano vuelva a ser hogar</figcaption>
+        </figure>
+        <CapsuleAudioPlayer
+          track={vitalOceansTracks[1]}
+          artist={artist}
+          cover={asset("/media/narratives/vital-oceans/audio/album-cover.webp")}
+          coverAlt="Portada de la banda sonora original de Océanos Vitales"
+          note="✳ tema principal"
+          class="vo-voices__player"
+        />
+      </div>
+    </div>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : (
+  <article class="book-page nb-page vo-page vo-setlist" aria-label={`${side === "left" ? "Primera" : "Segunda"} parte de la banda sonora de ${project.title}`}>
+    <div class="nb-sheet vo-setlist__sheet">
+      <div class="vo-setlist__heading">
+        <p class="nb-kicker">cuaderno 04 · banda sonora</p>
+        <h2>{side === "left" ? "Una voz" : "Todas las voces"}</h2>
+      </div>
+      <ol class="vo-setlist__list">
+        {soundtrackColumns.map((track, index) => (
+          <li class:list={["vo-track", { "vo-track--main": track.id === "seamless", "vo-track--counterpoint": track.id === "unmarked" || track.id === "watermarked" }]}>
+            <span class="vo-track__num" aria-hidden="true">{String(index + soundtrackStart).padStart(2, "0")}</span>
+            <PlayPauseButton track={track} artist={artist} class="vo-track__button" />
+            <div class="vo-track__copy">
+              <h3>{track.title}</h3>
+              <p>{track.description}</p>
+            </div>
+            {track.id === "seamless" && <span class="vo-track__badge">tema principal</span>}
+            {track.id === "unmarked" && <span class="vo-track__badge">una voz</span>}
+            {track.id === "watermarked" && <span class="vo-track__badge">muchas voces</span>}
+          </li>
+        ))}
+      </ol>
+      {side === "right" && <p class="vo-setlist__closing">Tú empujas, yo empujo.<br /><strong>El océano vuelve a respirar.</strong></p>}
+    </div>
+    <span class={`nb-folio nb-folio--${side}`} aria-hidden="true">{folio}</span>
+  </article>
+)}
+
+<style>
+  .vo-page {
+    --nb-paper: oklch(0.935 0.025 114);
+    --nb-ink: oklch(0.29 0.06 214);
+    --nb-ink-soft: oklch(0.43 0.055 210 / .72);
+    --nb-dot-ink: oklch(0.50 0.08 211 / .17);
+  }
+
+  .vo-page::before { opacity: .48; }
+  .vo-page::after {
+    background-image:
+      radial-gradient(145% 120% at 48% 50%, transparent 60%, oklch(0.38 0.06 211 / .12) 100%),
+      linear-gradient(90deg, oklch(0.28 0.045 210 / .08), transparent 6%, transparent 94%, oklch(0.28 0.045 210 / .08));
+  }
+
+  .vo-hl {
+    font-weight: 700;
+    background: linear-gradient(96deg, transparent 2%, oklch(0.74 0.13 187 / .42) 7% 94%, transparent 98%) 0 .76em / 100% .56em no-repeat;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding-inline: .08em;
+  }
+
+  .vo-cover__label {
+    position: absolute;
+    z-index: 5;
+    top: 6%;
+    left: 7%;
+    margin: 0;
+    color: oklch(0.98 0.015 110);
+    font-family: var(--font-marker);
+    font-size: 7.5cqw;
+    line-height: .78;
+    text-shadow: 0 2px 18px oklch(0.20 0.06 222 / .32);
+    rotate: -2deg;
+  }
+  .vo-cover__label span { font-family: var(--font-pen); font-size: 3.2cqw; font-weight: 700; }
+  .vo-cover :global(.vo-cover__player) { position: absolute; z-index: 5; right: 6%; bottom: 5.5%; left: 7%; }
+
+  .vo-net {
+    position: absolute;
+    z-index: 1;
+    width: 38%;
+    aspect-ratio: 1;
+    border: 1px solid oklch(0.35 0.07 212 / .18);
+    border-radius: 50%;
+    background-image:
+      repeating-linear-gradient(35deg, transparent 0 8cqw, oklch(0.35 0.07 212 / .12) 8cqw calc(8cqw + 1px)),
+      repeating-linear-gradient(145deg, transparent 0 8cqw, oklch(0.35 0.07 212 / .12) 8cqw calc(8cqw + 1px));
+    pointer-events: none;
+  }
+  .vo-net--a { top: -9%; right: -12%; rotate: 13deg; }
+  .vo-net--b { right: -18%; bottom: 12%; rotate: -8deg; opacity: .72; }
+  .vo-nets__sheet { grid-template-rows: auto auto auto minmax(0, 1fr); }
+  .vo-nets__title { margin-top: calc(var(--rule) * .45); color: oklch(0.33 0.09 211); font-size: 6.8cqw; line-height: calc(var(--rule) * 1.45); rotate: -.7deg; }
+  .vo-nets__title span { color: oklch(0.48 0.11 188); }
+  .vo-nets__copy { margin-top: calc(var(--rule) * .55); font-size: 3.35cqw; }
+  .vo-nets__copy p { margin-bottom: calc(var(--rule) * .45); line-height: calc(var(--rule) * .92); }
+  .vo-nets__objects { display: grid; min-height: 0; place-items: end center; }
+  .vo-nets__photo { width: 72%; height: calc(var(--rule) * 7.4); padding: 2.5cqw 2.5cqw 6.5cqw; rotate: -1.5deg; }
+  .vo-nets__photo img { height: 100%; }
+  .vo-nets__photo figcaption { bottom: 1.5cqw; font-size: 2.7cqw; }
+
+  .vo-world__sheet { grid-template-rows: auto auto auto 1fr; }
+  .vo-world__title { position: relative; width: max-content; margin-top: calc(var(--rule) * .55); color: oklch(0.33 0.09 211); font-size: 7.1cqw; rotate: -.8deg; }
+  :global(.vo-world__underline) { position: absolute; right: -2cqw; bottom: -1.3cqw; left: 0; height: 3.2cqw; color: oklch(0.48 0.11 188); }
+  .vo-world__copy { margin-top: calc(var(--rule) * .65); font-size: 3.25cqw; }
+  .vo-world__copy p { margin-bottom: calc(var(--rule) * .4); line-height: calc(var(--rule) * .89); }
+  .vo-world__objects { display: grid; grid-template-columns: minmax(0, 1.23fr) minmax(0, .77fr); align-items: end; gap: 3cqw; min-height: 0; }
+  .vo-world__photo { height: calc(var(--rule) * 7.7); padding: 2.5cqw 2.5cqw 6.6cqw; rotate: 1.6deg; }
+  .vo-world__photo img { height: 100%; }
+  .vo-world__photo figcaption { bottom: 1.5cqw; font-size: 2.65cqw; }
+  :global(.vo-world__player) { width: calc(var(--rule) * 6.5); height: calc(var(--rule) * 6.7); min-height: 0; }
+
+  .vo-home__quote {
+    position: absolute;
+    z-index: 5;
+    top: 7%;
+    right: 7%;
+    margin: 0;
+    color: oklch(0.28 0.055 212);
+    font-family: var(--font-marker);
+    font-size: 5.2cqw;
+    line-height: .92;
+    text-align: right;
+    rotate: 1.2deg;
+  }
+  .vo-home :global(.vo-home__player) { position: absolute; z-index: 5; right: 6%; bottom: 5.5%; left: 7%; }
+
+  .vo-platform__sheet { grid-template-rows: auto auto auto 1fr; }
+  .vo-platform__title { margin-top: calc(var(--rule) * .45); color: oklch(0.33 0.09 211); font-size: 7.5cqw; line-height: calc(var(--rule) * 1.55); rotate: -.8deg; }
+  .vo-platform__title span { color: oklch(0.48 0.11 188); }
+  .vo-platform__copy { margin-top: calc(var(--rule) * .42); font-size: 3.2cqw; }
+  .vo-platform__copy p { line-height: calc(var(--rule) * .88); }
+  .vo-flow { display: grid; align-content: start; gap: 1.4cqw; margin: calc(var(--rule) * .2) 0 0; padding: 0; list-style: none; }
+  .vo-flow li { display: grid; grid-template-columns: 6.5cqw 1fr; align-items: center; gap: 1.7cqw; min-height: calc(var(--rule) * 1.55); border: 1px solid oklch(0.37 0.07 211 / .34); border-radius: 6px 10px 7px 9px; padding: 1.1cqw 2cqw; }
+  .vo-flow li:nth-child(even) { margin-left: 2cqw; rotate: .35deg; }
+  .vo-flow span { color: oklch(0.48 0.11 188); font-family: var(--font-marker); font-size: 4.3cqw; rotate: -5deg; }
+  .vo-flow p { margin: 0; font-family: var(--font-pen); font-size: 2.9cqw; font-weight: 650; line-height: 1.08; }
+  .vo-platform__photo { position: absolute; right: 5.8cqw; bottom: calc(var(--rule) * 1.65); width: 43%; height: calc(var(--rule) * 6.2); padding: 2.2cqw 2.2cqw 5.9cqw; rotate: 3deg; }
+  .vo-platform__photo img { height: 100%; }
+  .vo-platform__photo figcaption { bottom: 1.3cqw; font-size: 2.55cqw; }
+
+  .vo-voices__sheet { grid-template-rows: auto auto 1fr auto auto; }
+  .vo-voices__statement { margin: calc(var(--rule) * .45) 0 0; font-family: var(--font-marker); font-size: 5.4cqw; font-weight: 400; line-height: calc(var(--rule) * 1.15); rotate: -.6deg; }
+  .vo-voices__statement span { color: oklch(0.48 0.11 188); }
+  .vo-voices__map { position: relative; align-self: center; width: 62%; aspect-ratio: 1; margin: calc(var(--rule) * .3) auto 0; border: 1.5px solid oklch(0.35 0.07 211 / .38); border-radius: 50%; }
+  .vo-voices__map::before { content: ""; position: absolute; inset: 10%; border: 1px dashed oklch(0.48 0.11 188 / .4); border-radius: 50%; rotate: 8deg; }
+  .vo-voices__center { position: absolute; top: 50%; left: 50%; margin: 0; translate: -50% -50%; color: oklch(0.48 0.11 188); font-family: var(--font-marker); font-size: 5cqw; rotate: -3deg; }
+  .vo-voices__voice { position: absolute; margin: 0; border-radius: 50%; background: var(--nb-paper); padding: .6cqw 1.5cqw; font-family: var(--font-pen); font-size: 2.9cqw; font-weight: 700; }
+  .vo-voices__voice--1 { top: -5%; left: 36%; rotate: -2deg; }
+  .vo-voices__voice--2 { top: 43%; right: -13%; rotate: 2deg; }
+  .vo-voices__voice--3 { bottom: -5%; left: 35%; rotate: 1deg; }
+  .vo-voices__voice--4 { top: 43%; left: -18%; rotate: -3deg; }
+  .vo-voices__copy { margin-top: calc(var(--rule) * .4); font-size: 3.15cqw; }
+  .vo-voices__copy p { line-height: calc(var(--rule) * .88); }
+  .vo-voices__objects { display: grid; grid-template-columns: .8fr 1.2fr; align-items: end; gap: 2.5cqw; min-height: 0; }
+  .vo-voices__photo { height: calc(var(--rule) * 5.8); padding: 2cqw 2cqw 5.6cqw; rotate: -2deg; }
+  .vo-voices__photo img { height: 100%; }
+  .vo-voices__photo figcaption { bottom: 1.2cqw; font-size: 2.4cqw; }
+  :global(.vo-voices__player) { align-self: center; }
+  .vo-voices__stain { right: 5%; bottom: 3%; width: 24%; }
+
+  .vo-setlist__sheet { display: grid; grid-template-rows: auto 1fr auto; padding-top: calc(var(--rule) * 1.1); }
+  .vo-setlist__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 3cqw; }
+  .vo-setlist__heading h2 { margin: 0; color: oklch(0.48 0.11 188); font-family: var(--font-marker); font-size: 4.6cqw; font-weight: 400; rotate: -1deg; }
+  .vo-setlist__list { display: flex; min-height: 0; flex-direction: column; justify-content: space-evenly; gap: 1.2cqw; margin: calc(var(--rule) * .35) 0 0; padding: 0; list-style: none; }
+  .vo-track { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 2.8cqw; padding: 1.3cqw 0 1.3cqw 7.4cqw; }
+  .vo-track::after { content: ""; position: absolute; right: 0; bottom: 0; left: 6.8cqw; border-bottom: 1px solid oklch(0.35 0.07 211 / .2); rotate: -.2deg; }
+  .vo-track:last-child::after { display: none; }
+  .vo-track__num { position: absolute; top: 2.3cqw; left: 0; color: oklch(0.48 0.11 188 / .65); font-family: var(--font-marker); font-size: 4.4cqw; rotate: -5deg; }
+  :global(.vo-track__button) { width: 6.7cqw; height: 6.7cqw; }
+  .vo-track__copy h3 { margin: 0; font-family: var(--font-marker); font-size: 3.8cqw; font-weight: 400; line-height: .96; }
+  .vo-track__copy p { margin: .6cqw 0 0; font-family: var(--font-pen); font-size: 2.75cqw; font-weight: 600; line-height: 1.08; }
+  .vo-track--main, .vo-track--counterpoint { margin-inline: -1.5cqw; border: 1.3px solid oklch(0.48 0.11 188 / .48); border-radius: 7px 11px 8px 10px; padding-right: 1.5cqw; background: oklch(0.76 0.08 188 / .13); rotate: -.25deg; }
+  .vo-track--main::after, .vo-track--counterpoint::after { display: none; }
+  .vo-track__badge { position: absolute; top: -1.8cqw; right: 1.5cqw; padding: .5cqw 1.2cqw; background: var(--nb-paper); color: oklch(0.48 0.11 188); font-family: var(--font-pen); font-size: 2.2cqw; font-weight: 700; rotate: 2deg; }
+  .vo-setlist__closing { margin: .4cqw 0 calc(var(--rule) * .3); font-family: var(--font-marker); font-size: 3.5cqw; line-height: 1.05; text-align: right; rotate: -.6deg; }
+  .vo-setlist__closing strong { color: oklch(0.48 0.11 188); font-weight: 400; }
+
+  @media (max-width: 639px) {
+    .vo-nets__copy, .vo-world__copy, .vo-platform__copy, .vo-voices__copy { font-size: 3.05cqw; }
+    .vo-world__objects { gap: 2.2cqw; }
+    .vo-nets__photo { width: 78%; }
+    .vo-nets__photo, .vo-world__photo { height: calc(var(--rule) * 7.3); }
+    .vo-flow { gap: 1cqw; }
+    .vo-flow li { min-height: calc(var(--rule) * 1.45); padding-block: .8cqw; }
+    .vo-platform__photo { width: 40%; height: calc(var(--rule) * 5.8); }
+    .vo-voices__map { width: 58%; }
+    .vo-track { gap: 2.2cqw; padding-left: 7cqw; }
+    .vo-track__copy h3 { font-size: 3.65cqw; }
+    .vo-track__copy p { font-size: 2.65cqw; }
+  }
+</style>

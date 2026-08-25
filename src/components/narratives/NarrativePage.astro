@@ -8,6 +8,9 @@ import CapsuleAudioPlayer from "../audio/CapsuleAudioPlayer.astro";
 import PlayPauseButton from "../audio/PlayPauseButton.astro";
 import DoodleArrow from "./DoodleArrow.astro";
 import DoodleFace from "./DoodleFace.astro";
+import InkMark from "./InkMark.astro";
+import Natura500Page from "./Natura500Page.astro";
+import VitalOceansPage from "./VitalOceansPage.astro";
 
 interface Props {
   project: NarrativeProject;
@@ -18,191 +21,614 @@ interface Props {
 
 const { project, projectIndex, spreadIndex, side } = Astro.props;
 const spread = project.spreads[spreadIndex];
-const isGeneric = spread.layout === "generic";
+const page = `${spread.layout}:${side}`;
+const folio = spreadIndex * 2 + (side === "left" ? 1 : 2);
 const soundtrackColumns = side === "left" ? t4nTracks.slice(0, 4) : t4nTracks.slice(4);
+const soundtrackStart = side === "left" ? 1 : 5;
+const t4nArtist = "Tech4Nature · Banda Sonora Original";
+
+const flowSteps = [
+  { n: "01", text: "El monte graba solo, de día y de noche." },
+  { n: "02", text: "Se suben los registros tal como salen de la cámara." },
+  { n: "03", text: "La inteligencia artificial aparta los falsos positivos: el viento, la rama, la sombra." },
+  { n: "04", text: "Lo que queda se clasifica por especie y aparece en un tablero que cualquiera puede leer." },
+];
+
+const partners = [
+  "Grupo de monitoreo Chac’Mool",
+  "Pronatura",
+  "Fundación Pachamama",
+  "C Minds · Simplixity",
+];
 ---
 
-{isGeneric ? (
+{spread.layout.startsWith("n500-") ? (
+  <Natura500Page project={project} spreadIndex={spreadIndex} side={side} />
+) : spread.layout.startsWith("vo-") ? (
+  <VitalOceansPage project={project} spreadIndex={spreadIndex} side={side} />
+) : spread.layout === "generic" ? (
   <BookPage project={project} index={projectIndex} side={side} />
-) : spread.layout === "t4n-legacy" && side === "left" ? (
-  <article class="book-page t4n-page t4n-photo-page">
+) : page === "t4n-legacy:left" ? (
+  <article class="book-page nb-photo">
     <img
+      class="nb-photo__img"
       src={asset("/media/narratives/tech-for-nature/images/legacy-cover.webp")}
       alt="Benja, Rex y Juan revisan tecnología de monitoreo en el bosque"
-      class="t4n-full-image"
     />
+    <span class="nb-tape nb-tape--tl" aria-hidden="true"></span>
+    <span class="nb-tape nb-tape--br" aria-hidden="true"></span>
   </article>
-) : spread.layout === "t4n-legacy" ? (
-  <article class="book-page t4n-page t4n-paper t4n-legacy-page">
-    <div class="legacy-copy legacy-copy--father">
-      <h2 class="font-gochi">
-        <span class="legacy-heading-line">Papá de <DoodleArrow variant="hook" class="legacy-hook" /></span>
-        <span>Benja</span>
+) : page === "t4n-legacy:right" ? (
+  <article class="book-page nb-page legacy">
+    <div class="nb-sheet legacy__sheet">
+      <p class="nb-kicker">bitácora 01 · el legado</p>
+
+      <div class="lineage">
+        <p class="lineage__node lineage__node--a">Papá de<br />Benja</p>
+        <DoodleArrow variant="hook" class="lineage__hook lineage__hook--a" />
+        <div class="lineage__branch">
+          <p class="lineage__node lineage__node--b">
+            Benja
+            <DoodleArrow variant="hook" class="lineage__hook lineage__hook--b" />
+          </p>
+          <p class="lineage__node lineage__node--c">Hija de<br />Benja</p>
+          <DoodleFace />
+        </div>
+      </div>
+
+      <div class="legacy__columns">
+        <div class="nb-copy legacy__col">
+          <p>La mejor forma de entender la historia de Tech4Nature México es <strong class="nb-hl">a través del legado.</strong></p>
+          <p>Son las personas que caminan el bosque, son sus propias vidas las que hacen que todo tenga sentido.</p>
+        </div>
+        <div class="nb-copy legacy__col legacy__col--aside">
+          <p>También se siente así, ya que este fue el primer proyecto que trabajamos al entrar a C Minds.</p>
+        </div>
+      </div>
+
+      <div class="legacy__objects">
+        <ColorAudioPlayer track={t4nTracks[0]} accent="#FFB000" class="legacy__player" />
+        <figure class="nb-print legacy__print">
+          <span class="nb-tape nb-tape--tl" aria-hidden="true"></span>
+          <span class="nb-tape nb-tape--br" aria-hidden="true"></span>
+          <img src={asset("/media/narratives/tech-for-nature/images/team.webp")} alt="Equipo de Tech for Nature México en el bosque" />
+          <figcaption>tres generaciones</figcaption>
+        </figure>
+      </div>
+    </div>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "t4n-place:left" ? (
+  <article class="book-page nb-page place">
+    <div class="nb-sheet place__sheet">
+      <p class="nb-kicker">bitácora 02 · el lugar</p>
+
+      <h2 class="nb-title place__title">
+        Dzilam de<br />Bravo, Yucatán
+        <InkMark variant="underline-double" class="place__underline" width={2.4} />
       </h2>
-      <p>La mejor forma de entender la historia de Tech4Nature México es <strong>a través del legado.</strong></p>
-      <p>Son las personas que caminan el bosque, son sus propias vidas las que hacen que todo tenga sentido.</p>
+
+      <div class="nb-copy place__copy">
+        <p>El lugar es otro personaje dentro de la narrativa. Dzilam es el punto de partida para las historias de los monitores. Todos fueron compañeros de primaria, todos han pescado, todos han compartido comidas.</p>
+        <p>Por eso queremos que Dzilam sea parte de todo lo que hacemos. Es costa, es manglar, es selva baja, como me diría Rex hace años.</p>
+      </div>
+
+      <figure class="nb-print place__print">
+        <span class="nb-tape nb-tape--tl" aria-hidden="true"></span>
+        <span class="nb-tape nb-tape--br" aria-hidden="true"></span>
+        <img src={asset("/media/narratives/tech-for-nature/images/dzilam-aerial.webp")} alt="Vista aérea de Dzilam de Bravo y su costa" />
+        <figcaption>el puerto, desde arriba</figcaption>
+      </figure>
     </div>
-    <div class="legacy-copy legacy-copy--daughter">
-      <h2 class="font-gochi">
-        <span class="legacy-heading-line">Benja <DoodleArrow variant="hook" class="legacy-hook" /></span>
-        <span>Hija de</span>
-        <span>Benja <DoodleFace /></span>
-      </h2>
-      <p>También se siente así, ya que este fue el primer proyecto que trabajamos al entrar a C Minds.</p>
-    </div>
-    <ColorAudioPlayer track={t4nTracks[0]} accent="#FFB000" class="legacy-player" />
-    <figure class="t4n-polaroid legacy-team">
-      <img src={asset("/media/narratives/tech-for-nature/images/team.webp")} alt="Equipo de Tech for Nature México en el bosque" />
-    </figure>
+    <p class="place__coords">
+      <span>21°26′00″N<br />88°41′00″O</span>
+      <InkMark variant="box" class="place__coords-box" width={2.1} />
+    </p>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
   </article>
-) : spread.layout === "t4n-place" && side === "left" ? (
-  <article class="book-page t4n-page t4n-paper t4n-place-copy">
-    <h2 class="font-gochi">Dzilam de<br />Bravo, Yucatán</h2>
-    <div class="place-paragraphs">
-      <p>El lugar es otro personaje dentro de la narrativa. Dzilam es el punto de partida para las historias de los monitores. Todos fueron compañeros de primaria, todos han pescado, todos han compartido comidas.</p>
-      <p>Por eso queremos que Dzilam sea parte de todo lo que hacemos. Es costa, es manglar, es selva baja, como me diría Rex hace años.</p>
-    </div>
-    <p class="font-gochi coordinates">21°26′00″N 88°41′00″O</p>
-    <figure class="t4n-polaroid place-photo">
-      <img src={asset("/media/narratives/tech-for-nature/images/dzilam-aerial.webp")} alt="Vista aérea de Dzilam de Bravo y su costa" />
-    </figure>
-  </article>
-) : spread.layout === "t4n-place" ? (
-  <article class="book-page t4n-page t4n-photo-page place-hero">
+) : page === "t4n-place:right" ? (
+  <article class="book-page nb-photo place-hero">
     <img
+      class="nb-photo__img"
       src={asset("/media/narratives/tech-for-nature/images/dzilam-cover.webp")}
       alt="Darwin y una compañera navegan frente a la costa de Dzilam de Bravo"
-      class="t4n-full-image"
     />
-    <CapsuleAudioPlayer track={t4nTracks[1]} class="place-capsule" />
+    <span class="nb-tape nb-tape--tr" aria-hidden="true"></span>
+    <CapsuleAudioPlayer track={t4nTracks[1]} class="place-hero__capsule" />
   </article>
-) : spread.layout === "t4n-community" && side === "left" ? (
-  <article class="book-page t4n-page t4n-paper community-copy">
-    <ColorAudioPlayer track={t4nTracks[3]} accent="#FFB000" class="community-player" />
-    <div class="community-text">
-      <p>Por eso tenía mucho sentido hacer esta historia, una historia basada en ‘dos locos’ que comenzaron esta aventura. Hoy somos ‘más locos’ unidos para conservar el jaguar. Por conservar la vida. Por conservar lo que nuestros hijos verán.</p>
-      <p>Para ti, para después de ti.</p>
+) : page === "t4n-community:left" ? (
+  <article class="book-page nb-page community">
+    <div class="nb-sheet community__sheet">
+      <p class="nb-kicker">bitácora 03 · los locos</p>
+
+      <ColorAudioPlayer track={t4nTracks[3]} accent="#FFB000" class="community__player" />
+
+      <div class="nb-copy community__copy">
+        <InkMark variant="star" class="community__star" width={3} />
+        <p>Por eso tenía mucho sentido hacer esta historia, una historia basada en ‘dos locos’ que comenzaron esta aventura. Hoy somos ‘más locos’ unidos para conservar el jaguar. Por conservar la vida. Por conservar lo que nuestros hijos verán.</p>
+      </div>
+
+      <p class="community__closing">
+        <span>Para ti, para después de ti.</span>
+        <InkMark variant="underline-double" class="community__underline" width={2.4} />
+      </p>
     </div>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
   </article>
-) : spread.layout === "t4n-community" ? (
-  <article class="book-page t4n-page t4n-photo-page">
+) : page === "t4n-community:right" ? (
+  <article class="book-page nb-photo">
     <img
+      class="nb-photo__img"
       src={asset("/media/narratives/tech-for-nature/images/community-cover.webp")}
       alt="Tres integrantes del proyecto muestran reconocimientos con huellas de jaguar"
-      class="t4n-full-image"
     />
+    <span class="nb-tape nb-tape--tl" aria-hidden="true"></span>
+    <span class="nb-tape nb-tape--br" aria-hidden="true"></span>
+  </article>
+) : page === "t4n-bioscanner:left" ? (
+  <article class="book-page nb-photo">
+    <img
+      class="nb-photo__img"
+      src={asset("/media/narratives/tech-for-nature/images/bioscanner-cover.webp")}
+      alt="Ángel y Xio revisan Bioscanner en una tableta, sobre una mesa de trabajo con placas, multímetros y un cuaderno abierto"
+    />
+    <span class="nb-tape nb-tape--tr" aria-hidden="true"></span>
+    <span class="nb-tape nb-tape--bl" aria-hidden="true"></span>
+  </article>
+) : page === "t4n-bioscanner:right" ? (
+  <article class="book-page nb-page bio">
+    <div class="nb-sheet bio__sheet">
+      <p class="nb-kicker">bitácora 04 · la herramienta</p>
+
+      <h2 class="nb-title bio__title">
+        Bioscanner
+        <InkMark variant="underline" class="bio__underline" width={3} />
+      </h2>
+
+      <p class="bio__lede">Es el sueño de Rex, vuelto herramienta.</p>
+
+      <div class="nb-copy bio__copy">
+        <p>Ángel y Xio se sentaron con el grupo de monitoreo Chac’Mool a ver lo que nadie ve: miles de fotos de cámara trampa esperando a que alguien las revise una por una.</p>
+        <p>De ahí salió Bioscanner, una plataforma de <strong class="nb-hl">inteligencia artificial</strong> que hace ese trabajo en minutos y devuelve cada registro ya clasificado por especie.</p>
+      </div>
+
+      <ColorAudioPlayer track={t4nTracks[7]} accent="#FFB000" class="bio__player" />
+    </div>
+    <span class="nb-margin-note bio__note">fase 02</span>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "t4n-platform:left" ? (
+  <article class="book-page nb-page platform">
+    <div class="nb-sheet platform__sheet">
+      <p class="nb-kicker">bitácora 05 · cómo funciona</p>
+
+      <h2 class="nb-subtitle platform__title">De la cámara al tablero</h2>
+
+      <ol class="flow">
+        {flowSteps.map((step, index) => (
+          <li class="flow__step">
+            <span class="flow__num" aria-hidden="true">{step.n}</span>
+            <p class="flow__text">{step.text}</p>
+            {index < flowSteps.length - 1 && <DoodleArrow variant="down" class="flow__arrow" />}
+          </li>
+        ))}
+      </ol>
+    </div>
+    <span class="nb-margin-note platform__note">casi ninguna foto trae animal</span>
+    <span class="nb-folio nb-folio--left" aria-hidden="true">{folio}</span>
+  </article>
+) : page === "t4n-platform:right" ? (
+  <article class="book-page nb-page reason">
+    <span class="nb-stain reason__stain" aria-hidden="true"></span>
+    <div class="nb-sheet reason__sheet">
+      <p class="nb-kicker">bitácora 05 · por qué importa</p>
+
+      <h2 class="nb-title reason__title">Por qué<br />importa</h2>
+
+      <div class="nb-copy reason__copy">
+        <p>Bioscanner no se hizo para un solo grupo de monitoreo. Se hizo para cualquiera que cuide un territorio y necesite saber qué vive en él.</p>
+        <p>Es nuestro <strong class="nb-hl">caso de estudio</strong>: la prueba de que la tecnología puede ponerse del lado de la naturaleza, y de que se construye mejor con quienes caminan el bosque.</p>
+      </div>
+
+      <div class="credits">
+        <p class="credits__label">hecho junto a</p>
+        <InkMark variant="bracket" class="credits__bracket" />
+        <ul class="credits__list">
+          {partners.map((partner) => <li>{partner}</li>)}
+        </ul>
+      </div>
+    </div>
+    <span class="reason__stamp" aria-hidden="true">fase 02</span>
+    <span class="nb-folio nb-folio--right" aria-hidden="true">{folio}</span>
   </article>
 ) : (
-  <article class="book-page t4n-page t4n-paper soundtrack-page" aria-label={`${side === "left" ? "Primera" : "Segunda"} parte de la banda sonora`}>
-    <ol class="soundtrack-list">
-      {soundtrackColumns.map((track, index) => (
-        <li class="soundtrack-row">
-          <span class="track-number" aria-hidden="true">{String(index + (side === "left" ? 1 : 5)).padStart(2, "0")}</span>
-          <PlayPauseButton track={track} />
-          <h3>{track.title}</h3>
-          <p>{track.id === "antes-de-nosotros" ? <><strong>✳ Tema principal.</strong> El canto de las huellas que damos y de aquellas que seguirán.</> : track.description}</p>
-          {index < soundtrackColumns.length - 1 && <DoodleArrow variant="down" class="soundtrack-arrow" />}
-        </li>
-      ))}
-    </ol>
+  <article
+    class="book-page nb-page t4n-setlist"
+    aria-label={`${side === "left" ? "Primera" : "Segunda"} parte de la banda sonora`}
+  >
+    <div class="nb-sheet t4n-setlist__sheet">
+      <div class="t4n-setlist__heading">
+        <p class="nb-kicker">bitácora 06 · banda sonora</p>
+        <h2>{side === "left" ? "Antes de nosotros" : "Después de nosotros"}</h2>
+      </div>
+      <ol class="t4n-setlist__list">
+        {soundtrackColumns.map((track, index) => (
+          <li class:list={["t4n-track", { "t4n-track--main": track.id === "antes-de-nosotros" }]}>
+            <span class="t4n-track__num" aria-hidden="true">{String(index + soundtrackStart).padStart(2, "0")}</span>
+            <PlayPauseButton
+              track={track}
+              artist={t4nArtist}
+              playlist={t4nTracks}
+              playlistIndex={index + soundtrackStart - 1}
+              class="t4n-track__button"
+            />
+            <div class="t4n-track__copy">
+              <h3>{track.title}</h3>
+              <p>{track.description}</p>
+            </div>
+            {track.id === "antes-de-nosotros" && <span class="t4n-track__badge">tema principal</span>}
+          </li>
+        ))}
+      </ol>
+      {side === "right" && <p class="t4n-setlist__closing">Antes de nosotros. Después de nosotros.<br /><strong>Las huellas continúan.</strong></p>}
+    </div>
+    <span class={`nb-folio nb-folio--${side}`} aria-hidden="true">{folio}</span>
   </article>
 )}
 
 <style>
-  .font-gochi { font-family: "Gochi Hand", cursive; font-weight: 400; }
-  .t4n-page { position: relative; container-type: inline-size; min-height: 0; background: #f8f4e9; color: #062c4e; }
-  .t4n-paper {
-    isolation: isolate;
-    background-color: #f8f4e9;
-    background-image:
-      radial-gradient(rgb(14 42 71 / .045) .6px, transparent .8px),
-      repeating-linear-gradient(0deg, transparent 0 32px, rgb(42 108 152 / .038) 32px 33px),
-      linear-gradient(94deg, rgb(255 255 255 / .58), transparent 45%, rgb(82 55 16 / .025));
-    background-size: 8px 8px, 100% 33px, 100% 100%;
-  }
-  .t4n-paper::after { content: "notas de campo"; position: absolute; right: 4cqw; bottom: 2.8cqw; color: rgb(14 42 71 / .22); font-family: var(--font-hand); font-size: clamp(7px, 2.4cqw, 11px); rotate: -2deg; pointer-events: none; }
-  .t4n-photo-page { padding: 0; }
-  .t4n-full-image { width: 100%; height: 100%; object-fit: cover; }
+  /* ---------- Hoja 02 · el legado ---------- */
+  .legacy__sheet { grid-template-rows: auto auto auto 1fr; }
 
-  .t4n-legacy-page {
+  .lineage {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: minmax(0, 1fr) minmax(0, .88fr);
-    gap: 4cqw 3cqw;
-    padding: 7cqw 5cqw 6cqw;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: start;
+    margin-top: var(--rule);
+    column-gap: 1cqw;
   }
-  .legacy-copy h2 { display: grid; justify-items: center; margin: 0; font-size: clamp(19px, 9cqw, 42px); line-height: 1.03; rotate: -.5deg; }
-  .legacy-copy--daughter h2 { rotate: .8deg; }
-  .legacy-heading-line { display: inline-flex; align-items: flex-start; justify-content: center; gap: .1em; }
-  :global(.legacy-hook) { width: 1.05em; height: 1em; margin-top: .08em; rotate: 7deg; }
-  .legacy-copy p { margin: 8cqw 0 0; font-size: clamp(8px, 3.6cqw, 16px); line-height: 1.35; }
-  .legacy-copy--father { text-align: center; }
-  .legacy-copy--daughter h2 { text-align: center; }
-  .legacy-copy h2 :global(.doodle-face) { width: 1.3em; height: 1.3em; margin-left: .08em; vertical-align: -.28em; rotate: -6deg; }
-  :global(.legacy-player) { width: 100%; max-width: 100%; height: auto; max-height: 100%; align-self: end; justify-self: center; }
-  .legacy-team { align-self: end; }
-
-  .t4n-polaroid {
-    position: relative;
+  .lineage__node {
     margin: 0;
-    border: 1px solid rgb(14 42 71 / .13);
-    border-radius: 5px 9px 6px 4px;
-    background: #fcfbf7;
-    padding: 8cqw 5cqw 6cqw;
-    box-shadow: 4px 7px 0 rgb(14 42 71 / .055), 0 9px 18px rgb(14 42 71 / .07);
-    rotate: .4deg;
+    font-family: var(--font-marker);
+    font-size: 6.6cqw;
+    line-height: calc(var(--rule) * 1.02);
   }
-  .t4n-polaroid::before,
-  .t4n-polaroid::after {
+  .lineage__node--a { align-self: start; rotate: -1.4deg; }
+  .lineage__node--b { display: flex; align-items: flex-start; gap: 0.6cqw; rotate: 1.1deg; }
+  .lineage__node--c { margin: calc(var(--rule) * 0.34) 0 0 4.4cqw; rotate: -0.9deg; }
+  .lineage__branch { position: relative; padding-right: 12cqw; }
+  :global(.lineage__hook) { flex: none; color: #1b4f79; }
+  :global(.lineage__hook--a) { width: 6cqw; height: 5.4cqw; margin-top: 2.6cqw; rotate: 14deg; }
+  :global(.lineage__hook--b) { width: 4.6cqw; height: 4.2cqw; margin-top: 1.8cqw; rotate: 118deg; }
+  .lineage__branch :global(.doodle-face) {
+    position: absolute;
+    top: 1cqw;
+    right: 0;
+    width: 11cqw;
+    height: 11cqw;
+    rotate: -7deg;
+  }
+
+  .legacy__columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
+    margin-block: calc(var(--rule) * 0.85);
+    column-gap: 3.4cqw;
+  }
+  .legacy__col { position: relative; font-size: 3.6cqw; }
+  .legacy__col--aside { padding-left: 1cqw; }
+
+  /* Fila de objetos con alto definido: los porcentajes de dentro ya tienen contra qué medirse. */
+  .legacy__objects {
+    --objects-h: calc(var(--rule) * 6.6);
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    align-items: end;
+    height: var(--objects-h);
+    min-height: 0;
+    column-gap: 4cqw;
+  }
+  /* Alto medido en pauta: la caja del reproductor no puede empujar la hoja. */
+  :global(.legacy__player) {
+    width: calc(var(--rule) * 7);
+    height: var(--objects-h);
+    min-height: 0;
+    justify-self: start;
+  }
+  .legacy__print {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    height: var(--objects-h);
+    padding: 3.4cqw 3.4cqw 7.6cqw;
+    rotate: 1.4deg;
+  }
+  .legacy__print img { height: 100%; }
+  .legacy__print figcaption { bottom: 1.9cqw; }
+
+  /* ---------- Hoja 03 · Dzilam ---------- */
+  .place__sheet { grid-template-rows: auto auto auto minmax(0, 1fr); }
+  .place__title { position: relative; width: max-content; margin-top: var(--rule); rotate: -1.2deg; }
+  :global(.place__underline) {
+    position: absolute;
+    right: -2cqw;
+    bottom: -1.1cqw;
+    left: 0.4cqw;
+    height: 3.2cqw;
+    color: #1b4f79;
+  }
+  .place__copy { margin-block: calc(var(--rule) * 1.2) var(--rule); }
+  .place__coords {
+    position: absolute;
+    z-index: 5;
+    right: 5.6cqw;
+    bottom: 12%;
+    width: max-content;
+    margin: 0;
+    font-family: var(--font-pen);
+    font-size: 3.3cqw;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.16;
+    rotate: -4.5deg;
+  }
+  :global(.place__coords-box) {
+    position: absolute;
+    inset: -2.4cqw -2.8cqw;
+    color: rgb(22 51 78 / 0.34);
+  }
+  .place__print {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    align-self: end;
+    justify-self: start;
+    width: 70%;
+    height: 100%;
+    min-height: 0;
+    padding: 3.2cqw 3.2cqw 7cqw;
+    rotate: -1.4deg;
+  }
+  .place__print img { height: 100%; }
+  .place__print figcaption { bottom: 1.8cqw; }
+
+  /* ---------- Hoja 04 · Dzilam, ilustración ---------- */
+  .place-hero :global(.place-hero__capsule) {
+    position: absolute;
+    z-index: 5;
+    right: 6%;
+    bottom: 6%;
+    left: 11%;
+  }
+
+  /* ---------- Hoja 05 · los locos ---------- */
+  .community__sheet { grid-template-rows: auto auto 1fr auto; justify-items: center; }
+  :global(.community__player) {
+    width: calc(var(--rule) * 9.4);
+    height: calc(var(--rule) * 8.5);
+    min-height: 0;
+    margin-top: calc(var(--rule) * 1.2);
+  }
+  .community__copy { position: relative; margin-top: calc(var(--rule) * 2); }
+  :global(.community__star) {
+    position: absolute;
+    top: calc(var(--rule) * -1.5);
+    left: -1cqw;
+    width: 8.5cqw;
+    height: 8.5cqw;
+    color: #ffb000;
+    rotate: -9deg;
+  }
+  .community__closing {
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+    margin: 0 auto calc(var(--rule) * 0.5);
+    font-family: var(--font-marker);
+    font-size: 5.6cqw;
+    line-height: calc(var(--rule) * 1.4);
+    text-align: center;
+    rotate: -1deg;
+  }
+  :global(.community__underline) {
+    position: absolute;
+    right: -2cqw;
+    bottom: -1.4cqw;
+    left: -1cqw;
+    height: 3.4cqw;
+    color: #1b4f79;
+  }
+
+  /* ---------- Hoja 08 · Bioscanner ---------- */
+  .bio__sheet { grid-template-rows: auto auto auto auto 1fr; }
+  .bio__title { position: relative; width: max-content; margin-top: var(--rule); rotate: -1deg; }
+  :global(.bio__underline) {
+    position: absolute;
+    right: -2.4cqw;
+    bottom: -0.6cqw;
+    left: 0;
+    height: 2.6cqw;
+    color: #ffb000;
+  }
+  .bio__lede {
+    margin: 0;
+    color: rgb(22 51 78 / 0.72);
+    font-family: var(--font-pen);
+    font-size: 4cqw;
+    font-weight: 600;
+    line-height: var(--rule);
+    rotate: -0.4deg;
+  }
+  .bio__copy { margin-block: var(--rule); }
+  :global(.bio__player) {
+    width: calc(var(--rule) * 8.5);
+    height: calc(var(--rule) * 7.3);
+    min-height: 0;
+    align-self: end;
+    justify-self: center;
+  }
+  .bio__note { top: 26%; right: 2.4cqw; }
+
+  /* ---------- Hoja 09 · cómo funciona ---------- */
+  .platform__sheet { grid-template-rows: auto auto 1fr; }
+  .platform__title { margin-top: calc(var(--rule) * 0.5); rotate: -1deg; }
+
+  .flow {
+    display: grid;
+    align-content: space-between;
+    margin: var(--rule) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .flow__step {
+    position: relative;
+    border: 1.6px solid rgb(22 51 78 / 0.4);
+    border-radius: 7px 11px 8px 10px;
+    padding: 2.6cqw 3.4cqw 2.6cqw 9.5cqw;
+  }
+  .flow__step::before {
     content: "";
     position: absolute;
-    width: 18%;
-    height: 9%;
-    background: rgb(255 226 132 / .56);
-    rotate: -38deg;
+    inset: 3px -3px -3px 3px;
+    border: 1px solid rgb(22 51 78 / 0.22);
+    border-radius: 10px 7px 11px 8px;
+    rotate: -0.4deg;
+    pointer-events: none;
   }
-  .t4n-polaroid::before { top: 4%; left: -2%; }
-  .t4n-polaroid::after { right: -2%; bottom: 3%; }
-  .t4n-polaroid img { position: relative; z-index: 1; width: 100%; height: 100%; border: 1px solid rgb(14 42 71 / .12); border-radius: 2px; object-fit: cover; }
-  .legacy-team { height: 100%; max-height: 18rem; }
+  .flow__step:nth-child(odd) { rotate: -0.5deg; }
+  .flow__step:nth-child(even) { margin-left: 3cqw; rotate: 0.6deg; }
+  .flow__step:nth-child(even)::before { rotate: 0.5deg; }
+  .flow__num {
+    position: absolute;
+    top: 2.4cqw;
+    left: 3cqw;
+    color: #ffb000;
+    font-family: var(--font-marker);
+    font-size: 5.2cqw;
+    line-height: 1;
+    rotate: -6deg;
+  }
+  .flow__text {
+    margin: 0;
+    font-family: var(--font-pen);
+    font-size: 3.7cqw;
+    font-weight: 500;
+    line-height: 1.24;
+  }
+  :global(.flow__arrow) {
+    position: absolute;
+    bottom: -4.6cqw;
+    left: 14%;
+    width: 5cqw;
+    height: 5.6cqw;
+    color: #1b4f79;
+  }
+  .flow__step:nth-child(even) :global(.flow__arrow) { left: 22%; rotate: 6deg; }
+  .platform__note { top: 34%; right: 2.4cqw; max-height: 46%; }
 
-  .t4n-place-copy { padding: 14cqw 13cqw 7cqw; }
-  .t4n-place-copy h2 { margin: 0; font-size: clamp(24px, 10cqw, 46px); line-height: 1.12; rotate: -1deg; }
-  .place-paragraphs { margin-top: 10cqw; }
-  .place-paragraphs p { margin: 0 0 7cqw; font-size: clamp(9px, 4cqw, 17px); line-height: 1.35; }
-  .coordinates { margin: 0 0 5cqw; text-align: center; color: #111417; font-size: clamp(9px, 3.4cqw, 14px); rotate: -1.5deg; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-  .place-photo { height: 34%; padding: 7cqw; }
-  .place-hero { position: relative; }
-  .place-hero :global(.place-capsule) { position: absolute; right: 6%; bottom: 6%; left: 12%; }
+  /* ---------- Hoja 10 · por qué importa ---------- */
+  .reason__sheet { grid-template-rows: auto auto auto 1fr; }
+  .reason__title { margin-top: var(--rule); rotate: -1deg; }
+  .reason__copy { margin-top: var(--rule); }
+  .reason__stain { right: 6%; bottom: 26%; width: 26%; }
 
-  .community-copy { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9cqw; padding: 11cqw 13cqw 13cqw; }
-  :global(.community-player) { width: 60%; min-height: 0; align-self: center; }
-  .community-text { position: relative; text-align: center; font-size: clamp(9px, 4cqw, 17px); line-height: 1.4; }
-  .community-text::before { content: "✳"; position: absolute; top: -5cqw; left: -2cqw; color: #ffb000; font-family: var(--font-hand); font-size: clamp(18px, 8cqw, 38px); rotate: -12deg; }
-  .community-text p { margin: 0 0 8cqw; }
+  .credits { position: relative; align-self: end; padding-left: 4.4cqw; }
+  .credits__label {
+    margin: 0 0 calc(var(--rule) * 0.4);
+    color: rgb(22 51 78 / 0.58);
+    font-family: var(--font-pen);
+    font-size: 3.2cqw;
+    font-weight: 600;
+    line-height: var(--rule);
+  }
+  :global(.credits__bracket) {
+    position: absolute;
+    top: calc(var(--rule) * 0.9);
+    left: 0;
+    width: 3cqw;
+    height: calc(100% - var(--rule) * 1.1);
+    color: rgb(255 79 163 / 0.52);
+  }
+  .credits__list { margin: 0; padding: 0; list-style: none; }
+  .credits__list li {
+    font-family: var(--font-pen);
+    font-size: 3.7cqw;
+    font-weight: 600;
+    line-height: var(--rule);
+  }
+  .credits__list li:nth-child(even) { padding-left: 0.9cqw; }
 
-  .soundtrack-page { padding: 10cqw 9cqw; }
-  .soundtrack-list { display: flex; height: 100%; flex-direction: column; justify-content: space-between; gap: 2cqw; margin: 0; padding: 0; list-style: none; }
-  .soundtrack-row {
-    position: relative;
+  .reason__stamp {
+    position: absolute;
+    z-index: 5;
+    top: 6%;
+    right: 6.5%;
     display: grid;
-    grid-template-columns: auto .85fr 1.15fr;
-    align-items: start;
-    gap: 5cqw;
-    min-height: 0;
+    place-items: center;
+    border: 1.8px solid rgb(255 79 163 / 0.5);
+    border-radius: 6px 10px 7px 9px;
+    padding: 1.2cqw 3.4cqw;
+    color: rgb(255 79 163 / 0.72);
+    font-family: var(--font-marker);
+    font-size: 3.4cqw;
+    letter-spacing: 0.08em;
+    line-height: 1.15;
+    text-transform: uppercase;
+    rotate: -7deg;
   }
-  .track-number { position: absolute; top: -1.8cqw; left: 8.5cqw; color: rgb(14 42 71 / .46); font-family: var(--font-hand); font-size: clamp(7px, 2.4cqw, 11px); rotate: -8deg; }
-  .soundtrack-row:nth-child(even) .track-number { rotate: 6deg; }
-  .soundtrack-row h3 { margin: 0; color: #090b0d; font-family: var(--font-hand); font-size: clamp(14px, 5.6cqw, 27px); font-weight: 400; line-height: 1.02; rotate: -.4deg; }
-  .soundtrack-row p { margin: 0; font-size: clamp(8px, 3.6cqw, 16px); line-height: 1.35; }
-  .soundtrack-row strong { text-decoration: underline; text-decoration-color: #ffb000; text-decoration-thickness: 3px; text-underline-offset: 3px; }
-  :global(.soundtrack-arrow) { position: absolute; bottom: -5cqw; left: 25%; width: clamp(18px, 7cqw, 32px); height: clamp(22px, 8cqw, 38px); color: #090b0d; rotate: -4deg; }
-  .soundtrack-row:nth-child(even) :global(.soundtrack-arrow) { rotate: 5deg; }
+  .reason__stamp::before {
+    content: "";
+    position: absolute;
+    inset: 3px -3px -3px 3px;
+    border: 1px solid rgb(255 79 163 / 0.3);
+    border-radius: 9px 6px 10px 7px;
+    rotate: 0.8deg;
+  }
 
+  /* ---------- Hojas 11 y 12 · banda sonora ---------- */
+  .t4n-setlist__sheet { display: grid; grid-template-rows: auto 1fr auto; padding-top: calc(var(--rule) * 1.1); }
+  .t4n-setlist__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 3cqw; }
+  .t4n-setlist__heading h2 { margin: 0; color: oklch(0.67 0.16 78); font-family: var(--font-marker); font-size: 4.4cqw; font-weight: 400; line-height: 1; rotate: -1deg; }
+  .t4n-setlist__list { display: flex; min-height: 0; flex-direction: column; justify-content: space-evenly; gap: 1.4cqw; margin: calc(var(--rule) * .35) 0 0; padding: 0; list-style: none; }
+  .t4n-track { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 2.8cqw; padding: 1.35cqw 0 1.35cqw 7.5cqw; }
+  .t4n-track::after { content: ""; position: absolute; right: 0; bottom: 0; left: 6.8cqw; border-bottom: 1px solid oklch(0.33 0.055 244 / .2); rotate: -.2deg; }
+  .t4n-track:last-child::after { display: none; }
+  .t4n-track__num { position: absolute; top: 2.35cqw; left: 0; color: oklch(0.67 0.16 78 / .68); font-family: var(--font-marker); font-size: 4.4cqw; rotate: -5deg; }
+  :global(.t4n-track__button) { width: 6.8cqw; height: 6.8cqw; }
+  .t4n-track__copy h3 { margin: 0; font-family: var(--font-marker); font-size: 4cqw; font-weight: 400; line-height: .96; }
+  .t4n-track__copy p { margin: .65cqw 0 0; font-family: var(--font-pen); font-size: 2.85cqw; font-weight: 600; line-height: 1.08; }
+  .t4n-track--main { margin-inline: -1.5cqw; border: 1.3px solid oklch(0.67 0.16 78 / .5); border-radius: 7px 11px 8px 10px; padding-right: 1.5cqw; background: oklch(0.84 0.13 83 / .22); rotate: -.25deg; }
+  .t4n-track--main::after { display: none; }
+  .t4n-track__badge { position: absolute; top: -1.8cqw; right: 1.5cqw; padding: .5cqw 1.2cqw; background: var(--nb-paper); color: oklch(0.56 0.15 72); font-family: var(--font-pen); font-size: 2.2cqw; font-weight: 700; rotate: 2deg; }
+  .t4n-setlist__closing { margin: .5cqw 0 calc(var(--rule) * .3); font-family: var(--font-marker); font-size: 3.5cqw; line-height: 1.05; text-align: right; rotate: -.6deg; }
+  .t4n-setlist__closing strong { color: oklch(0.56 0.15 72); font-weight: 400; }
+
+  /* En una sola hoja el contenido se apila: la pauta se comprime para que quepa. */
   @media (max-width: 639px) {
-    .t4n-legacy-page { min-height: 100%; }
-    .legacy-copy p { font-size: clamp(11px, 3.6cqw, 16px); }
-    .place-paragraphs p, .community-text, .soundtrack-row p { font-size: clamp(11px, 3.6cqw, 16px); }
-    .soundtrack-row h3 { font-size: clamp(15px, 5cqw, 23px); }
+    :global(.nb-sheet) {
+      padding-top: var(--rule);
+      padding-bottom: calc(var(--rule) * 0.9);
+    }
+    .lineage { margin-top: calc(var(--rule) * 0.6); }
+    .lineage__node { font-size: 5.8cqw; }
+    .legacy__columns {
+      grid-template-columns: 1fr;
+      row-gap: calc(var(--rule) * 0.7);
+      margin-block: calc(var(--rule) * 0.7);
+    }
+    .legacy__col--aside { padding-left: 2.4cqw; }
+    .legacy__objects { --objects-h: calc(var(--rule) * 6.6); grid-template-columns: minmax(0, 1.32fr) minmax(0, 0.68fr); }
+    .legacy__print { padding: 2.6cqw 2.6cqw 8.6cqw; }
+    .legacy__print figcaption,
+    .place__print figcaption { bottom: 2.2cqw; font-size: 2.9cqw; }
+    .place__print { width: 82%; }
+    .place__coords { bottom: 9%; font-size: 3cqw; }
+    :global(.community__player) { width: calc(var(--rule) * 9.8); height: calc(var(--rule) * 8.6); margin-top: var(--rule); }
+    .community__copy { margin-top: calc(var(--rule) * 1.2); }
+    :global(.bio__player) { width: calc(var(--rule) * 9); height: calc(var(--rule) * 7.4); }
+    .flow { row-gap: calc(var(--rule) * 0.5); }
+    .flow__step { padding: 2.2cqw 2.8cqw 2.2cqw 8.4cqw; }
+    .t4n-setlist__list { gap: 1.1cqw; }
+    .t4n-track { gap: 2.2cqw; padding-left: 7cqw; }
+    .t4n-track__copy h3 { font-size: 3.8cqw; }
+    .t4n-track__copy p { font-size: 2.7cqw; }
   }
 </style>

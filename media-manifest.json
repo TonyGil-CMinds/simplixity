@@ -12,6 +12,74 @@
       "size": 117172,
       "sha256": "2d83ac51f33bb026bdb6593c9bc30a4ca8027bda390581ec659115efe9b891c9"
     },
+    "/media/narratives/n-500/audio/01-the-start-of-a-startup.mp3": {
+      "size": 1627821,
+      "sha256": "93131673097e3e15f9e86d81353b8f10b8e4d78242489d039b53055ffe866fcb"
+    },
+    "/media/narratives/n-500/audio/02-remember-me.mp3": {
+      "size": 6579117,
+      "sha256": "d64dc52de20cce0ad20d8554b08b3d276afca6e7f1947be4ffcd399a4191055f"
+    },
+    "/media/narratives/n-500/audio/03-the-breaking.mp3": {
+      "size": 2377197,
+      "sha256": "c2baa79733235b68790c44d27c5e6d6031ac409fcb33f12e856152c39d58363b"
+    },
+    "/media/narratives/n-500/audio/04-now-we-build.mp3": {
+      "size": 2463597,
+      "sha256": "53faf270a493b0e7f93fd7a45b02ae8319269d41470a901212827eae044dbad9"
+    },
+    "/media/narratives/n-500/audio/05-glorious-imperfection.mp3": {
+      "size": 1360557,
+      "sha256": "fe99cf3298c7d6561ea3acb8244b9eb3be0efb334aedfce1564d4366cdb93a65"
+    },
+    "/media/narratives/n-500/audio/06-no-way-to-take-it-slow.mp3": {
+      "size": 4421997,
+      "sha256": "cf1d9f5258d324e431f6b8e8e1f5a87b4fd920e81270d31e2615b81ed44f0f37"
+    },
+    "/media/narratives/n-500/audio/07-you-are-invited-too.mp3": {
+      "size": 2395629,
+      "sha256": "881c3f899c9596ec48135f7ea76f93ee100f1deedba2e7991facbf639c8f938c"
+    },
+    "/media/narratives/n-500/audio/08-one-step-one-dream.mp3": {
+      "size": 3295341,
+      "sha256": "39ed0f88ff9ab73d8219c1a5384d151bbb465aa7ab1d4e0e2280591b6de104ae"
+    },
+    "/media/narratives/n-500/audio/09-the-becoming.mp3": {
+      "size": 3344301,
+      "sha256": "ae82166bec0d6d3b3f41fdbdf29fcea441534d7b2769daa1176f6e4fa2381d4f"
+    },
+    "/media/narratives/n-500/images/Natural-sweetener-start-up-wins-Chivas-Venture-fund-It-s-a-bulletproof-business-model-that-benefits-all-says-CEO.webp": {
+      "size": 67240,
+      "sha256": "c59284c312d6abdb1e4638ecdb3a04953b2ad68ee031dde138ef4922907b287f"
+    },
+    "/media/narratives/n-500/images/forest-team.webp": {
+      "size": 82938,
+      "sha256": "8e93a5faff952b663f9c560df1805e0a6e0a5efa14da2f2fd64d15e9245f17e0"
+    },
+    "/media/narratives/n-500/images/hero-explorer.webp": {
+      "size": 48388,
+      "sha256": "e7e0e4121656b8137ef400c66c914fced20b46aee2da9d6902dc7ba270ad478c"
+    },
+    "/media/narratives/n-500/images/lemu-kimal-lo-aguirre.webp": {
+      "size": 228716,
+      "sha256": "6215902ecd2758dc585fe3ced5c3568aa19ac98167bfcf13f80cf44f4ad7ce93"
+    },
+    "/media/narratives/n-500/images/ost-cover.webp": {
+      "size": 52368,
+      "sha256": "0ead99930a77a9bceea657dd274dc910dff508ca317c997014f7f501657d6e27"
+    },
+    "/media/narratives/n-500/images/rectangle-1.webp": {
+      "size": 339878,
+      "sha256": "34cea95be1ff53aea048eba93f8d86263af40a55f4ea3cae757e5988cb37b7f3"
+    },
+    "/media/narratives/n-500/images/rectangle-2.webp": {
+      "size": 205266,
+      "sha256": "61767c58eccd1d19907b83df0413f1cd500ddfa31d56a41f4b2fad7c65ceaf83"
+    },
+    "/media/narratives/n-500/images/rectangle-3.webp": {
+      "size": 314584,
+      "sha256": "9bf99b5d04c5a9a33c85083cb19be0f1969c54a928ee8e7a6b3be2effe238417"
+    },
     "/media/narratives/tech-for-nature/audio/01-para-ti-antes-de-ti.mp3": {
       "size": 1875405,
       "sha256": "70ce15c00f22f454e2014c0910a6484560e33627cc96bade300954121081d114"
@@ -48,6 +116,10 @@
       "size": 2999541,
       "sha256": "fefcfe54d04519f1ef655f491d463915375c15e6ef9be9255304d71da6beb1ab"
     },
+    "/media/narratives/tech-for-nature/images/bioscanner-cover.webp": {
+      "size": 291390,
+      "sha256": "00a341c6fdbbfdf848fd625fef2cfb19f93608507da0bf08b54bef32167ad0a4"
+    },
     "/media/narratives/tech-for-nature/images/community-cover.webp": {
       "size": 270126,
       "sha256": "754bb1194f125206e26307ad8ef8bc7e0c379987f7aefdd6c75b2e313da453e3"
@@ -72,9 +144,77 @@
       "size": 42716,
       "sha256": "129d1c7b4fec0033c3e3d9030388ea019fafa239be6b52198722afd2c7acb885"
     },
+    "/media/narratives/vital-oceans/audio/01-these-nets-are-also-part-of-me.mp3": {
+      "size": 3463062,
+      "sha256": "75ff8727955ba7984a6a2b2ed2499ea4cacd3c8ca7807ebd52873778012240ad"
+    },
+    "/media/narratives/vital-oceans/audio/02-seamless-es.mp3": {
+      "size": 5635734,
+      "sha256": "58750ccdc2e677fc3a6cf5f8d852c971029cf46e8d97fcfbd3565ae3df6dd1d3"
+    },
+    "/media/narratives/vital-oceans/audio/02-seamless-ft-june.mp3": {
+      "size": 5994006,
+      "sha256": "385429714da7933e743ce7fbf787e0dd3833352b8612ab065815796e1544db8d"
+    },
+    "/media/narratives/vital-oceans/audio/03-the-world-was-always-this-enormous.mp3": {
+      "size": 7201197,
+      "sha256": "b5c2d56161f6392d5a20534967123c207b1218ea618df0b00f75e881644cdecc"
+    },
+    "/media/narratives/vital-oceans/audio/04-unmarked.mp3": {
+      "size": 4654806,
+      "sha256": "38b6b4d61c3870d0eb0daf8e65a6f88b346798b2396abbf12a3cfaf1fa0ac6d5"
+    },
+    "/media/narratives/vital-oceans/audio/05-strings-and-tides.mp3": {
+      "size": 4141014,
+      "sha256": "793279a99917ad252b916aca0b032f265d6d31950eaa250bc9170fb477e6b912"
+    },
+    "/media/narratives/vital-oceans/audio/06-vital-oceans.mp3": {
+      "size": 1675734,
+      "sha256": "5a9d6b1e70321ff9ba897a021ad4d25270297875dc9ca8fcbc37146b8e2263a9"
+    },
+    "/media/narratives/vital-oceans/audio/07-my-home-is-the-sea.mp3": {
+      "size": 6814806,
+      "sha256": "5a0fef883475b875f0e0dd42de4cc26525093d554a8f1d7adbd3764a1c90b1b5"
+    },
+    "/media/narratives/vital-oceans/audio/08-watermarked.mp3": {
+      "size": 2998806,
+      "sha256": "c4fddf42adda9eacd3152785956b7a2a05993007230b3d33772422cddcde49c5"
+    },
+    "/media/narratives/vital-oceans/audio/album-cover.webp": {
+      "size": 233820,
+      "sha256": "c30f7b8bcf5311aeb732a9933b138fea90ae4790d3e2d9f69ffcfacbf27b0f9f"
+    },
+    "/media/narratives/vital-oceans/images/coastal-community.webp": {
+      "size": 770414,
+      "sha256": "1c5501ff8a7f0fc914ceaf65e898943a196a7c064a504bc81b2c70bf7769272e"
+    },
+    "/media/narratives/vital-oceans/images/fisherman-at-sea.webp": {
+      "size": 306762,
+      "sha256": "08a6a9689295dd0e43cac5a83da058939cc384da5d877e093ad4da27c5322a39"
+    },
+    "/media/narratives/vital-oceans/images/portada-1.webp": {
+      "size": 302160,
+      "sha256": "83c4b033d4f67444c88abca0748ee32d163143077b7b7c8a8297cba5572bc487"
+    },
+    "/media/narratives/vital-oceans/images/portada-2.webp": {
+      "size": 270586,
+      "sha256": "d9c14f343316eb717b636e236db98594f0a7bb3c7ae5c6cd5eecff9d3b41dc09"
+    },
+    "/media/narratives/vital-oceans/images/sea-lions.webp": {
+      "size": 182198,
+      "sha256": "ab945c39db1e94edc9c24a0863dbcf1eef5d6c9b75772bf3c43305fe3e269bfb"
+    },
+    "/media/narratives/vital-oceans/images/wildlife-antarctica.webp": {
+      "size": 95416,
+      "sha256": "4e3ffa61389742de4cdf91d5a386538746c8c2dedf9de4f220f33623f1dc234b"
+    },
+    "/multimedia/reel-poster.webp": {
+      "size": 21746,
+      "sha256": "e7bdb625c23bb806e4b82c47df9f2de796ea6d0f1380c7cc96dbf3789b8d0057"
+    },
     "/multimedia/reel.webm": {
-      "size": 22639447,
-      "sha256": "56f93e42d645780b81a70c3f7937f51d6a0d07121ba4a91e68fa87ae2601d479"
+      "size": 10097430,
+      "sha256": "a70f9a4411e42e4209dd9b23c257fccddc67ddda0b90da05cff458431c847f99"
     }
   }
 }

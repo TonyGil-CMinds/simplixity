@@ -12,3 +12,7 @@ dist/
 # Los medios viven en R2, no en git. Ver media-manifest.json y npm run media:pull
 public/media/
 public/multimedia/
+
+source-media/
+.claude/
+.impeccable/

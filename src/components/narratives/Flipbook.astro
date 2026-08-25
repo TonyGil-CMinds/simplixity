@@ -11,6 +11,10 @@ const clientData = narrativeProjects.map((project) => ({
   word: project.word,
   title: project.title,
   context: project.credits ?? project.kind,
+  bg: project.bg,
+  fg: project.fg,
+  accent: project.accent,
+  paper: project.paper,
   spreads: project.spreads.map(({ id, label }) => ({ id, label })),
 }));
 ---
@@ -63,13 +67,15 @@ const clientData = narrativeProjects.map((project) => ({
 </section>
 
 <script>
-  import gsap from "gsap";
-
   type ProjectMeta = {
     slug: string;
     word: string;
     title: string;
     context: string;
+    bg: string;
+    fg: string;
+    accent: string;
+    paper: string;
     spreads: { id: string; label: string }[];
   };
 
@@ -162,6 +168,10 @@ const clientData = narrativeProjects.map((project) => ({
       projectWord.textContent = project.word;
       projectTitle.textContent = project.title;
       projectContext.textContent = project.context;
+      root.style.setProperty("--book-accent", project.accent);
+      root.style.setProperty("--book-project-bg", project.bg);
+      root.style.setProperty("--book-project-fg", project.fg);
+      root.style.setProperty("--book-paper", project.paper);
       spreadLabel.textContent = isSinglePage()
         ? `${spread.label} · ${currentSide === 0 ? "izquierda" : "derecha"}`
         : spread.label;
@@ -189,7 +199,6 @@ const clientData = narrativeProjects.map((project) => ({
       turningPage.hidden = false;
       turningPage.classList.toggle("turning-page--previous", direction === -1);
       turningPage.classList.toggle("turning-page--single", isSinglePage());
-      turningPage.style.setProperty("--fold-shadow", "0");
 
       if (isSinglePage()) {
         const targetFlat = pageIndex() + direction;
@@ -251,26 +260,36 @@ const clientData = narrativeProjects.map((project) => ({
       prepareTurn(direction);
 
       if (reducedMotionQuery.matches) {
-        gsap.fromTo(stage, { opacity: 0.55 }, {
-          opacity: 1,
-          duration: 0.18,
-          ease: "power1.out",
-          onComplete: () => completeTurn(direction),
-        });
+        const fade = stage.animate(
+          [{ opacity: 0.55 }, { opacity: 1 }],
+          { duration: 180, easing: "cubic-bezier(.16, 1, .3, 1)" },
+        );
+        fade.addEventListener("finish", () => completeTurn(direction), { once: true });
         return;
       }
 
-      gsap.set(turningPage, {
-        rotationY: 0,
-        transformOrigin: direction === 1 ? "left center" : "right center",
-      });
-      gsap.to(turningPage, {
-        rotationY: direction === 1 ? -180 : 180,
-        "--fold-shadow": 1,
-        duration: 0.82,
-        ease: "power2.inOut",
-        onComplete: () => completeTurn(direction),
-      });
+      turningPage.style.transformOrigin = direction === 1 ? "left center" : "right center";
+      const rotation = direction === 1 ? -180 : 180;
+      const pageTurn = turningPage.animate(
+        [
+          { transform: "rotateY(0deg)" },
+          { transform: `rotateY(${rotation}deg)` },
+        ],
+        {
+          duration: 820,
+          easing: "cubic-bezier(.65, 0, .35, 1)",
+          fill: "forwards",
+        },
+      );
+      turnFront.animate(
+        [
+          { boxShadow: "0 0 0 rgb(14 42 71 / 0)" },
+          { boxShadow: `${direction === 1 ? "-18px" : "18px"} 0 30px rgb(14 42 71 / .23)`, offset: 0.5 },
+          { boxShadow: "0 0 0 rgb(14 42 71 / 0)" },
+        ],
+        { duration: 820, easing: "cubic-bezier(.65, 0, .35, 1)" },
+      );
+      pageTurn.addEventListener("finish", () => completeTurn(direction), { once: true });
     };
 
     const selectProject = (projectIndex: number, updateHash = true) => {
@@ -352,19 +371,23 @@ const clientData = narrativeProjects.map((project) => ({
 
     const hashProject = projects.findIndex(({ slug }) => slug === window.location.hash.slice(1));
     if (hashProject >= 0) currentProject = hashProject;
-    renderRestingState();
+    if (currentProject !== 0) renderRestingState();
     updateUI();
   }
 </script>
 
 <style>
   .flipbook-section {
+    --book-accent: #ffb000;
+    --book-project-bg: #ffc107;
+    --book-project-fg: #0e2a47;
+    --book-paper: #f8f7f3;
     position: relative;
     min-height: 100svh;
     overflow: hidden;
     padding: clamp(96px, 11vh, 132px) var(--section-inline) clamp(70px, 9vh, 110px);
     background:
-      radial-gradient(circle at 16% 8%, rgb(255 193 7 / .24), transparent 25%),
+      radial-gradient(circle at 16% 8%, color-mix(in srgb, var(--book-accent) 24%, transparent), transparent 25%),
       radial-gradient(rgb(14 42 71 / .035) .65px, transparent .8px),
       linear-gradient(180deg, #f7f3e9 0%, #eeedf0 100%);
     background-size: auto, 8px 8px, auto;
@@ -378,7 +401,7 @@ const clientData = narrativeProjects.map((project) => ({
     margin: 0;
     translate: -50% -42%;
     filter: blur(clamp(4px, .46vw, 8px));
-    color: rgb(35 94 210 / .33);
+    color: color-mix(in srgb, var(--book-accent) 36%, transparent);
     font-size: clamp(72px, 12vw, 172px);
     font-weight: 900;
     letter-spacing: -.045em;
@@ -396,7 +419,7 @@ const clientData = narrativeProjects.map((project) => ({
     touch-action: pan-y;
     user-select: none;
   }
-  .book-base { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid rgb(14 42 71 / .12); border-radius: 7px 10px 8px 6px; background: #f8f4e9; box-shadow: 0 26px 36px rgb(14 42 71 / .18), 0 4px 0 rgb(255 255 255 / .72); }
+  .book-base { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid rgb(14 42 71 / .12); border-radius: 7px 10px 8px 6px; background: var(--book-paper); box-shadow: 0 26px 36px rgb(14 42 71 / .18), 0 4px 0 rgb(255 255 255 / .72); }
   .book-half { min-width: 0; min-height: 0; overflow: hidden; container-type: inline-size; }
   .book-half > :global(.book-page),
   .page-face > :global(.book-page) { width: 100%; height: 100%; }
@@ -415,7 +438,6 @@ const clientData = narrativeProjects.map((project) => ({
     mix-blend-mode: multiply;
   }
   .turning-page {
-    --fold-shadow: 0;
     position: absolute;
     z-index: 6;
     top: 0;
@@ -436,8 +458,7 @@ const clientData = narrativeProjects.map((project) => ({
     container-type: inline-size;
     transform: rotateY(0deg) translateZ(.1px);
   }
-  .page-face--front { box-shadow: calc(-18px * var(--fold-shadow)) 0 30px rgb(14 42 71 / calc(.23 * var(--fold-shadow))); }
-  .page-face--back { transform: rotateY(180deg) translateZ(.1px); box-shadow: calc(18px * var(--fold-shadow)) 0 30px rgb(14 42 71 / calc(.2 * var(--fold-shadow))); }
+  .page-face--back { transform: rotateY(180deg) translateZ(.1px); }
   .turn-button {
     position: relative;
     display: grid;
@@ -453,12 +474,12 @@ const clientData = narrativeProjects.map((project) => ({
     transition: transform 180ms ease, background 180ms ease, opacity 180ms ease;
   }
   .turn-button::after { content: ""; position: absolute; inset: 4px -3px -3px 3px; border: 1px solid rgb(14 42 71 / .28); border-radius: 52% 48% 57% 43% / 45% 56% 44% 55%; rotate: -5deg; pointer-events: none; }
-  .turn-button:hover:not(:disabled) { transform: scale(1.06) rotate(-2deg); background: #ffe29a; }
+  .turn-button:hover:not(:disabled) { transform: scale(1.06) rotate(-2deg); background: color-mix(in srgb, var(--book-accent) 34%, #fff9e8); }
   .turn-button:disabled { opacity: .24; cursor: not-allowed; }
   :global(.turn-arrow) { width: 32px; height: 22px; }
   .book-caption { display: grid; justify-items: center; margin-top: 22px; }
-  .spread-label { margin: 0; font-family: var(--font-hand); font-size: clamp(18px, 1.65vw, 24px); line-height: 1; }
-  .spread-count { margin: 7px 0 12px; color: #617381; font-family: var(--font-hand); font-size: 13px; letter-spacing: .035em; }
+  .spread-label { margin: 0; font-family: var(--font-pen); font-size: clamp(21px, 1.9vw, 28px); font-weight: 600; line-height: 1; }
+  .spread-count { margin: 5px 0 12px; color: #617381; font-family: var(--font-pen); font-size: 16px; font-weight: 600; letter-spacing: .01em; }
   .spread-dots { display: flex; gap: 8px; }
   :global(.spread-dot) { width: 17px; height: 7px; padding: 0; border: 1px solid rgb(14 42 71 / .38); border-radius: 48% 52% 44% 56%; background: transparent; rotate: -2deg; cursor: pointer; transition: width 180ms ease, background 180ms ease, rotate 180ms ease; }
   :global(.spread-dot:nth-child(even)) { rotate: 3deg; }
@@ -472,9 +493,9 @@ const clientData = narrativeProjects.map((project) => ({
     .book-controls { position: relative; display: block; }
     .book-shell { width: max-content; margin-inline: auto; }
     .turn-button { position: absolute; z-index: 10; top: 50%; width: 34px; translate: 0 -50%; font-size: 18px; }
-    .turn-button:first-child { left: 0; }
-    .turn-button:last-child { right: 0; }
-    .book { width: min(74vw, calc((100svh - 210px) * .7735)); aspect-ratio: 864 / 1117; }
+    .turn-button:first-child { left: -6px; }
+    .turn-button:last-child { right: -6px; }
+    .book { width: min(90vw, calc((100svh - 196px) * .7735)); aspect-ratio: 864 / 1117; }
     .book-base { grid-template-columns: 1fr; }
     .book-half--right { display: none; }
     .book-spine { display: none; }

@@ -53,7 +53,15 @@ import DoodleArrow from "./DoodleArrow.astro";
       <span class="notebook-tape" aria-hidden="true"></span>
       <div class="notebook-cover">
         {project.cover ? (
-          <img src={project.cover} alt={`Portada de ${project.title}`} />
+          <img
+            src={project.cover}
+            alt={`Portada de ${project.title}`}
+            width="884"
+            height="1117"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
         ) : (
           <div class="empty-cover" aria-hidden="true">
             <span class="empty-cover__index">{String(index + 1).padStart(2, "0")}</span>
