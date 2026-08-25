@@ -1,0 +1,7 @@
+#!/bin/sh
+# Publica en R2 los medios pendientes antes de un push.
+#
+# Sale en silencio si no hay credenciales de R2 en el entorno, de modo que quien
+# solo edita código —o publica dejando archivos en media-inbox/— nunca se topa
+# con esto. Se activa con `npm install` (ver el script `prepare`).
+exec node scripts/media-sync.mjs --if-needed

@@ -1,0 +1,67 @@
+name: Medios
+
+# Los binarios no viven en el repositorio: se almacenan en Cloudflare R2.
+#
+# 1. Publicar: cualquiera puede dejar un archivo en media-inbox/ y hacer push.
+#    Este job lo sube a R2 con las credenciales del repositorio, actualiza el
+#    manifest y vacía el buzón. Quien contribuye no configura nada.
+# 2. Verificar: confirma que todo lo declarado en media-manifest.json está
+#    realmente publicado, para que un deploy nunca apunte a un archivo ausente.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Dos pushes seguidos escribirían el manifest a la vez.
+  group: medios-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  medios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Publicar el buzón en R2
+        # En pull requests desde un fork los secretos no están disponibles; ahí
+        # solo se verifica y la publicación ocurre al fusionar en main.
+        if: github.event_name == 'push'
+        run: node scripts/media-ingest.mjs --clear
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+
+      - name: Commitear manifest y vaciar buzón
+        if: github.event_name == 'push'
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Sin cambios que commitear."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore(medios): publica el buzón en R2 [skip ci]"
+          git push
+
+      - name: Verificar que el manifest coincide con el bucket
+        # No usa dependencias ni credenciales: solo la URL pública.
+        run: node scripts/media-verify.mjs
+        env:
+          PUBLIC_MEDIA_BASE_URL: ${{ vars.PUBLIC_MEDIA_BASE_URL }}

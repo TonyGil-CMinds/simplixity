@@ -30,6 +30,7 @@ El sitio separa contenido, presentación, interacción y recursos para que cada 
 - Archivos de referencia que no forman parte del sitio: `docs/references/`.
 - Maestros WAV/PNG: almacenamiento de producción externo, no Git.
 - Los binarios de `public/media/` y `public/multimedia/` se almacenan en Cloudflare R2 y quedan fuera de git; `media-manifest.json` registra ruta, tamaño y sha256 de cada uno.
-- Toda ruta a esos directorios se resuelve con `asset()` (`src/lib/assets.ts`), que antepone `PUBLIC_MEDIA_BASE_URL` en producción y sirve desde `public/` en local.
+- Toda ruta a esos directorios se resuelve con `asset()` (`src/lib/assets.ts`), que antepone el origen del bucket. Trae la URL por defecto para que un clon nuevo funcione sin configuración; `PUBLIC_MEDIA_BASE_URL` la sobrescribe y vacía sirve desde `public/`.
+- Publicar tiene dos vías: `npm run media:sync` para quien tiene credenciales de R2, y `media-inbox/` para quien no. El buzón se replica con la ruta final del archivo y la GitHub Action lo sube, fusiona el manifest y lo vacía. Así contribuir con contenido no exige configurar un entorno.
 
 Para agregar una narrativa, crear una carpeta con slug estable en `public/media/narratives/`, registrar su contenido en `src/data/narratives.ts` y reutilizar los componentes de página y audio existentes.

@@ -8,7 +8,9 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "prepare": "git config core.hooksPath .githooks || exit 0",
     "media:sync": "node scripts/media-sync.mjs",
+    "media:preview": "node scripts/media-ingest.mjs --preview",
     "media:verify": "node scripts/media-verify.mjs",
     "media:pull": "node scripts/media-pull.mjs"
   },
