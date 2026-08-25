@@ -1,4 +1,5 @@
 ---
+import { asset } from "../../lib/assets";
 import type { NarrativeProject } from "../../data/narratives";
 import { t4nTracks } from "../../data/narratives";
 import BookPage from "./BookPage.astro";
@@ -26,7 +27,7 @@ const soundtrackColumns = side === "left" ? t4nTracks.slice(0, 4) : t4nTracks.sl
 ) : spread.layout === "t4n-legacy" && side === "left" ? (
   <article class="book-page t4n-page t4n-photo-page">
     <img
-      src="/media/narratives/tech-for-nature/images/legacy-cover.webp"
+      src={asset("/media/narratives/tech-for-nature/images/legacy-cover.webp")}
       alt="Benja, Rex y Juan revisan tecnología de monitoreo en el bosque"
       class="t4n-full-image"
     />
@@ -51,7 +52,7 @@ const soundtrackColumns = side === "left" ? t4nTracks.slice(0, 4) : t4nTracks.sl
     </div>
     <ColorAudioPlayer track={t4nTracks[0]} accent="#FFB000" class="legacy-player" />
     <figure class="t4n-polaroid legacy-team">
-      <img src="/media/narratives/tech-for-nature/images/team.webp" alt="Equipo de Tech for Nature México en el bosque" />
+      <img src={asset("/media/narratives/tech-for-nature/images/team.webp")} alt="Equipo de Tech for Nature México en el bosque" />
     </figure>
   </article>
 ) : spread.layout === "t4n-place" && side === "left" ? (
@@ -63,13 +64,13 @@ const soundtrackColumns = side === "left" ? t4nTracks.slice(0, 4) : t4nTracks.sl
     </div>
     <p class="font-gochi coordinates">21°26′00″N 88°41′00″O</p>
     <figure class="t4n-polaroid place-photo">
-      <img src="/media/narratives/tech-for-nature/images/dzilam-aerial.webp" alt="Vista aérea de Dzilam de Bravo y su costa" />
+      <img src={asset("/media/narratives/tech-for-nature/images/dzilam-aerial.webp")} alt="Vista aérea de Dzilam de Bravo y su costa" />
     </figure>
   </article>
 ) : spread.layout === "t4n-place" ? (
   <article class="book-page t4n-page t4n-photo-page place-hero">
     <img
-      src="/media/narratives/tech-for-nature/images/dzilam-cover.webp"
+      src={asset("/media/narratives/tech-for-nature/images/dzilam-cover.webp")}
       alt="Darwin y una compañera navegan frente a la costa de Dzilam de Bravo"
       class="t4n-full-image"
     />
@@ -86,7 +87,7 @@ const soundtrackColumns = side === "left" ? t4nTracks.slice(0, 4) : t4nTracks.sl
 ) : spread.layout === "t4n-community" ? (
   <article class="book-page t4n-page t4n-photo-page">
     <img
-      src="/media/narratives/tech-for-nature/images/community-cover.webp"
+      src={asset("/media/narratives/tech-for-nature/images/community-cover.webp")}
       alt="Tres integrantes del proyecto muestran reconocimientos con huellas de jaguar"
       class="t4n-full-image"
     />

@@ -1,0 +1,23 @@
+name: Verificar medios
+
+# Los binarios no viven en el repositorio: se suben a R2 con `npm run media:sync`.
+# Este job confirma que todo lo declarado en media-manifest.json está realmente
+# publicado, para que un deploy nunca apunte a un archivo inexistente.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # media-verify.mjs no usa dependencias ni credenciales: solo la URL pública.
+      - run: node scripts/media-verify.mjs
+        env:
+          PUBLIC_MEDIA_BASE_URL: ${{ vars.PUBLIC_MEDIA_BASE_URL }}

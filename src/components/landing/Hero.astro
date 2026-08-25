@@ -1,3 +1,7 @@
+---
+import { asset } from "../../lib/assets";
+---
+
 <section
   class="hero-sequence relative z-[1] h-[230svh] bg-page"
   data-tone="light"
@@ -24,7 +28,7 @@
       >
         <div class="size-full overflow-hidden rounded-[20px] bg-lilac shadow-[0_24px_54px_rgba(14,42,71,.12)]">
           <img
-            src="/media/landing/team/team-collaboration.webp"
+            src={asset("/media/landing/team/team-collaboration.webp")}
             alt="Dos integrantes de Simplixity colaboran frente a una laptop en el estudio"
             width="972"
             height="1619"
@@ -44,7 +48,7 @@
         <div class="hero-card-inner relative size-full" data-hero-card-inner>
           <div class="hero-card-face hero-card-front absolute inset-0 overflow-hidden rounded-[22px] bg-sage shadow-[0_30px_60px_rgba(14,42,71,.14)]">
             <img
-              src="/media/landing/team/team-studio.webp"
+              src={asset("/media/landing/team/team-studio.webp")}
               alt="El equipo de Simplixity reunido en el estudio"
               width="887"
               height="1774"
@@ -59,7 +63,7 @@
           <div class="hero-card-face hero-card-back absolute inset-0 overflow-hidden rounded-[22px] bg-navy shadow-[0_30px_60px_rgba(14,42,71,.2)]">
             <video
               class="size-full object-cover"
-              src="/multimedia/reel.webm"
+              src={asset("/multimedia/reel.webm")}
               muted
               loop
               playsinline
@@ -78,7 +82,7 @@
       >
         <div class="size-full overflow-hidden rounded-[20px] bg-cyan shadow-[0_24px_54px_rgba(14,42,71,.12)]">
           <img
-            src="/media/landing/team/team-review.webp"
+            src={asset("/media/landing/team/team-review.webp")}
             alt="Tres integrantes de Simplixity revisan ideas alrededor de una laptop"
             width="1003"
             height="1568"

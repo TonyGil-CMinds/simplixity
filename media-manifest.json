@@ -1,0 +1,80 @@
+{
+  "assets": {
+    "/media/landing/team/team-collaboration.webp": {
+      "size": 103970,
+      "sha256": "29b8df2ee75ade94cb695fcee36c59e67f53a433d76ea127bc9e8364b4330522"
+    },
+    "/media/landing/team/team-review.webp": {
+      "size": 106124,
+      "sha256": "dd1c2aa5f7255a3a6068f55aa423bdab2a0e59e859270969c6a9a0db5ba79182"
+    },
+    "/media/landing/team/team-studio.webp": {
+      "size": 117172,
+      "sha256": "2d83ac51f33bb026bdb6593c9bc30a4ca8027bda390581ec659115efe9b891c9"
+    },
+    "/media/narratives/tech-for-nature/audio/01-para-ti-antes-de-ti.mp3": {
+      "size": 1875405,
+      "sha256": "70ce15c00f22f454e2014c0910a6484560e33627cc96bade300954121081d114"
+    },
+    "/media/narratives/tech-for-nature/audio/02-dzilam-de-bravo.mp3": {
+      "size": 3092781,
+      "sha256": "ea051fae06b0181c0c71d37158f4bed94fd585e9a827f6c0f259832d2b46c249"
+    },
+    "/media/narratives/tech-for-nature/audio/03-te-juro-que-todavia-hay-jaguares.mp3": {
+      "size": 4027199,
+      "sha256": "bc12fb4b12d1a84261ed7478aea4446cd7086d5c7a8a526d0450629bc6db9b3e"
+    },
+    "/media/narratives/tech-for-nature/audio/04-antes-de-nosotros-despues-de-nosotros.mp3": {
+      "size": 4108557,
+      "sha256": "8dc1acbbda4520b16ae5f6aafdf43a557888bf180c4055a9e132cddcafe49b23"
+    },
+    "/media/narratives/tech-for-nature/audio/05-chac-mool.mp3": {
+      "size": 3729354,
+      "sha256": "968f384e25e08ad36aa928e53efae2fd1d90a64a45dfcfc10032d695205e89ce"
+    },
+    "/media/narratives/tech-for-nature/audio/06-el-monte-que-nos-ve.mp3": {
+      "size": 2976525,
+      "sha256": "ee3063df66d7f1ff2762f563596e393fe035cc7046c27682807767dc955b1cfa"
+    },
+    "/media/narratives/tech-for-nature/audio/07-tech4all.mp3": {
+      "size": 5104581,
+      "sha256": "f6d9f6e62976a9d8eb4c9f896b21e0d14cab8dcb7c02d92e3626aa4a642f939d"
+    },
+    "/media/narratives/tech-for-nature/audio/08-bioscanner.mp3": {
+      "size": 4337510,
+      "sha256": "241b2cffe121ebd6a33a9f1c2b2295e3fbd2180f5d1eca3f54e9470c4bd3521a"
+    },
+    "/media/narratives/tech-for-nature/audio/09-roaaar.mp3": {
+      "size": 2999541,
+      "sha256": "fefcfe54d04519f1ef655f491d463915375c15e6ef9be9255304d71da6beb1ab"
+    },
+    "/media/narratives/tech-for-nature/images/community-cover.webp": {
+      "size": 270126,
+      "sha256": "754bb1194f125206e26307ad8ef8bc7e0c379987f7aefdd6c75b2e313da453e3"
+    },
+    "/media/narratives/tech-for-nature/images/dzilam-aerial.webp": {
+      "size": 41666,
+      "sha256": "7188f06dfdfe483b8f5e3df3cd82979bed9a557a598c58b831f5a684e8e680a0"
+    },
+    "/media/narratives/tech-for-nature/images/dzilam-cover.webp": {
+      "size": 291388,
+      "sha256": "a80e3f983665cb5aab562e24dfe6fc4bbc82de944637b7e9bf878e257f741d4a"
+    },
+    "/media/narratives/tech-for-nature/images/legacy-cover.webp": {
+      "size": 340306,
+      "sha256": "2201fa6319fc0c03b994a0094527f722a4e833e42223b7dc2f41211e066ebb14"
+    },
+    "/media/narratives/tech-for-nature/images/soundtrack-cover.webp": {
+      "size": 190432,
+      "sha256": "0bba569eb2b8969c3c2fcfa12d7be7455c24a94e0aab02385464b1a681cf9fcf"
+    },
+    "/media/narratives/tech-for-nature/images/team.webp": {
+      "size": 42716,
+      "sha256": "129d1c7b4fec0033c3e3d9030388ea019fafa239be6b52198722afd2c7acb885"
+    },
+    "/multimedia/reel.webm": {
+      "size": 22639447,
+      "sha256": "56f93e42d645780b81a70c3f7937f51d6a0d07121ba4a91e68fa87ae2601d479"
+    }
+  }
+}

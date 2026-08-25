@@ -1,4 +1,5 @@
 ---
+import { asset } from "../../lib/assets";
 import type { SoundtrackTrack } from "../../data/narratives";
 
 interface Props {
@@ -17,7 +18,7 @@ const { track, class: className = "" } = Astro.props;
   data-audio-artist="Tech4Nature, Banda Sonora Original"
 >
   <span class="capsule-player__tape" aria-hidden="true"></span>
-  <img src="/media/narratives/tech-for-nature/images/soundtrack-cover.webp" alt="Portada de la banda sonora de Tech for Nature México" />
+  <img src={asset("/media/narratives/tech-for-nature/images/soundtrack-cover.webp")} alt="Portada de la banda sonora de Tech for Nature México" />
   <div class="capsule-player__copy">
     <h3>{track.title}</h3>
     <p>apunte sonoro · Tech4Nature</p>

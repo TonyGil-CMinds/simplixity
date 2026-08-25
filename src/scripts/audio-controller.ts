@@ -1,3 +1,5 @@
+import { asset } from "../lib/assets";
+
 declare global {
   interface Window {
     simplixityAudio?: HTMLAudioElement;
@@ -97,7 +99,7 @@ async function toggle(root: HTMLElement) {
       title: activeTitle,
       artist: root.dataset.audioArtist || "Tech4Nature",
       album: "Tech for Nature México, Banda Sonora Original",
-      artwork: [{ src: "/media/narratives/tech-for-nature/images/soundtrack-cover.webp", sizes: "1200x1200", type: "image/webp" }],
+      artwork: [{ src: asset("/media/narratives/tech-for-nature/images/soundtrack-cover.webp"), sizes: "1200x1200", type: "image/webp" }],
     });
   }
 

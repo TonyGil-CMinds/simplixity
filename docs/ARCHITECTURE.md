@@ -29,5 +29,7 @@ El sitio separa contenido, presentación, interacción y recursos para que cada 
 - SVG y fuentes: `public/brand/`.
 - Archivos de referencia que no forman parte del sitio: `docs/references/`.
 - Maestros WAV/PNG: almacenamiento de producción externo, no Git.
+- Los binarios de `public/media/` y `public/multimedia/` se almacenan en Cloudflare R2 y quedan fuera de git; `media-manifest.json` registra ruta, tamaño y sha256 de cada uno.
+- Toda ruta a esos directorios se resuelve con `asset()` (`src/lib/assets.ts`), que antepone `PUBLIC_MEDIA_BASE_URL` en producción y sirve desde `public/` en local.
 
 Para agregar una narrativa, crear una carpeta con slug estable en `public/media/narratives/`, registrar su contenido en `src/data/narratives.ts` y reutilizar los componentes de página y audio existentes.
